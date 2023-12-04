@@ -6,31 +6,15 @@ int main(void) {
 
     struct tm now_tm = *localtime(&now);
 
-    puts(asctime(&now_tm));
+    now_tm.tm_mday = 32;
+    now_tm.tm_min = 69;
 
-    now_tm.tm_sec += 55;
+    struct tm test = now_tm;
 
-    mktime(&now_tm);
+    time_t aa = mktime(&now_tm);
 
-    puts(asctime(&now_tm));
 
-    struct tm my = {0};
-
-    my.tm_isdst = -1;
-    my.tm_hour = 26;
-    my.tm_min = 61;
-    my.tm_sec = 90;
-    my.tm_year = 2004 - 1900;
-    my.tm_mon = 23;
-    my.tm_mday = 3;
-
-    mktime(&my);
-
-    char buffer[1024] = {0};
-    
-    strftime(buffer, 1024, "%a %A %b %B %c %d %H %I %j %m %M %p %S %U %w %W %x %X %y %Y %Z", &my);
-
-    puts(buffer);
+    printf("%d %d | %d %d\n", now_tm.tm_mday, test.tm_mday, now_tm.tm_min, test.tm_min);
 	
     return 0;
 }

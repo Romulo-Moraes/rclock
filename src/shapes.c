@@ -1,6 +1,6 @@
 #include "./../include/shapes.h"
 
-clockPixel digitShapes[10][5][3] = {
+ClockPixel digitShapes[10][5][3] = {
     {
             {COLOR, COLOR, COLOR},
             {COLOR, INVIS, COLOR},
@@ -73,7 +73,7 @@ clockPixel digitShapes[10][5][3] = {
     }
 };
 
-clockPixel colonShape[5][3] = {
+ClockPixel colonShape[5][3] = {
         {INVIS, INVIS, INVIS},
         {INVIS, COLOR, INVIS},
         {INVIS, INVIS, INVIS},
@@ -81,10 +81,10 @@ clockPixel colonShape[5][3] = {
         {INVIS, INVIS, INVIS},
 };
 
-clockPixel (*getClockDigit(unsigned int digit))[3]{
+ClockPixel (*getClockDigit(unsigned int digit))[3]{
     return digitShapes[digit];
 }
 
-clockPixel (*getClockColon())[3]{
+ClockPixel (*getClockColon())[3]{
     return colonShape;
 }
