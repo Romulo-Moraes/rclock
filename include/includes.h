@@ -10,6 +10,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 
+#include "colors.h"
 #include "debug.h"
 #include "shapes.h"
 #include "errors.h"

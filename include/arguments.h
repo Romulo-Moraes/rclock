@@ -19,6 +19,7 @@ struct DatetimeModule{
 
 struct ColorsModule{
     char *digitColor[6];
+    char *globalDigitsColor;
     char *dateColor;
     char *clockColor;
     char *colonColor;

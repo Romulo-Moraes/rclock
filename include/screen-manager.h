@@ -4,6 +4,7 @@
 #include "includes.h"
 
 #define MAX_CLOCK_TIME_WINDOWS 8
+#define MAX_CLOCK_DIGIT_WINDOWS 6
 #define WINDOWS_COUNT_WITH_HIDDEN_SECONDS 5
 #define WINDOWS_COUNT_WITH_VISIBLE_SECONDS 8
 #define EXIT_MESSAGE "Press any key to exit"
