@@ -8,6 +8,10 @@ char *errorMessages[] = {
 };
 
 void issueAnError(unsigned int errorID){
-    printf("ERROR!!! : %d", errorID);
-    // TODO !!!!
+    showProgramError(errorMessages[errorID]);
+
+    getch();
+
+    endwin();
+    exit(1);
 }
