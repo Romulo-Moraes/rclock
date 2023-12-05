@@ -1,19 +1,30 @@
 #include "./../include/colors.h"
 
 struct RclockColor availableColors[] = {
-    (struct RclockColor){.colorName = "black", .id = COLOR_BLACK},
-    (struct RclockColor){.colorName = "red", .id = COLOR_RED},
-    (struct RclockColor){.colorName = "green", .id = COLOR_GREEN},
-    (struct RclockColor){.colorName = "yellow", .id = COLOR_YELLOW},
-    (struct RclockColor){.colorName = "blue", .id = COLOR_BLUE},
-    (struct RclockColor){.colorName = "magenta", .id = COLOR_MAGENTA},
-    (struct RclockColor){.colorName = "cyan", .id = COLOR_CYAN},
-    (struct RclockColor){.colorName = "white", .id = COLOR_WHITE}
+    (struct RclockColor){.colorName = "black", .id = BLACK_ID},
+    (struct RclockColor){.colorName = "red", .id = RED_ID},
+    (struct RclockColor){.colorName = "green", .id = GREEN_ID},
+    (struct RclockColor){.colorName = "yellow", .id = YELLOW_ID},
+    (struct RclockColor){.colorName = "blue", .id = BLUE_ID},
+    (struct RclockColor){.colorName = "magenta", .id = MAGENTA_ID},
+    (struct RclockColor){.colorName = "cyan", .id = CYAN_ID},
+    (struct RclockColor){.colorName = "white", .id = WHITE_ID}
 };
 
 ColorID digitColors[MAX_CLOCK_DIGIT_WINDOWS] = {DEFAULT_COLOR};
 ColorID dateColor = DEFAULT_COLOR;
 ColorID colonsColor = DEFAULT_COLOR;
+
+void loadBuiltinColors(){
+    init_pair(BLACK_ID, COLOR_BLACK, 0);
+    init_pair(RED_ID, COLOR_RED, 0);
+    init_pair(GREEN_ID, COLOR_GREEN, 0);
+    init_pair(YELLOW_ID, COLOR_YELLOW, 0);
+    init_pair(BLUE_ID, COLOR_BLUE, 0);
+    init_pair(MAGENTA_ID, COLOR_MAGENTA, 0);
+    init_pair(CYAN_ID, COLOR_CYAN, 0);
+    init_pair(WHITE_ID, COLOR_WHITE, 0);
+}
 
 void setColorToTheDigits(ColorID newColor){
     for(int i = 0; i < MAX_CLOCK_DIGIT_WINDOWS; i++){

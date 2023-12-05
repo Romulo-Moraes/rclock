@@ -147,3 +147,15 @@ void showProgramError(char *msg){
 
     refresh();
 }
+
+WINDOW *getClockWindow(unsigned int windowIndex){
+    if(windowIndex <= 7){
+        return windows.timeWindows[windowIndex];
+    }else{
+        return NULL;
+    }
+}
+
+WINDOW *getDateWindow(){
+    return windows.dateWindow;;
+}

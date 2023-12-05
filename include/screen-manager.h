@@ -45,6 +45,8 @@ void moveDateWindowToPlaceholder();
 void moveWindowsToPlaceholders();
 void refreshWindows();
 void showProgramError(char *msg);
+WINDOW *getClockWindow(unsigned int windowIndex);
+WINDOW *getDateWindow();
 
 struct RclockWindows getWins();
 struct WindowsPlaceholders getPos();
