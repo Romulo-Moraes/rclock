@@ -13,7 +13,14 @@
 #define UNKNOWN_DIGITS_COLOR 7
 #define UNKNOWN_COLONS_COLOR 8
 #define UNKNOWN_DATE_COLOR 9 
+#define UNKNOWN_SPECIFIC_DIGIT_COLOR 10
+#define USELESS_ERROR_MESSAGE_ARGUMENTS (struct ErrorMessageArguments){}
 
-void issueAnError(unsigned int errorID);
+struct ErrorMessageArguments{
+    int unknownSpecificDigitColor;
+};
+
+void issueAnError(char *errorMsg);
+void generateErrorMessage(unsigned int errorID, struct ErrorMessageArguments arguments);
 
 #endif

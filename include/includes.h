@@ -10,11 +10,11 @@
 #include <ncurses.h>
 #include <unistd.h>
 
-#include "colors.h"
 #include "debug.h"
-#include "shapes.h"
-#include "errors.h"
 #include "arguments.h"
+#include "shapes.h"
 #include "screen-manager.h"
+#include "errors.h"
+#include "colors.h"
 #include "datetime.h"
 #endif

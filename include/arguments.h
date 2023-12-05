@@ -4,6 +4,7 @@
 #include "includes.h"
 
 #define UNDEFINED -1
+#define MAX_DIGIT_COLORS 6
 
 struct DatetimeModule{
     short customHour;
@@ -18,7 +19,7 @@ struct DatetimeModule{
 };
 
 struct ColorsModule{
-    char *digitColor[6];
+    char *digitColor[MAX_DIGIT_COLORS];
     char *globalDigitsColor;
     char *dateColor;
     char *clockColor;

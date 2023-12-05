@@ -12,7 +12,11 @@ struct RclockColor{
     ColorID id;
 };
 
-void setComponentsColors();
-ColorID getComponentColor();
+void setComponentsColors(struct ColorsModule userArguments);
+ColorID getDigitColor(unsigned char digitIndex);
+ColorID getColonColor();
+ColorID getDateColor();
+void setColorToTheClock(ColorID newColor);
+void setColorToTheDigits(ColorID newColor);
 
 #endif

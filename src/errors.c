@@ -10,14 +10,25 @@ char *errorMessages[] = {
     "The given clock color doesn't exist",
     "The given digits color doesn't exist",
     "The given colons color doesn't exist",
-    "The given date color doesn't exist"
+    "The given date color doesn't exist",
+    "The given color of the digit %d doesn't exist"
 };
 
-void issueAnError(unsigned int errorID){
-    showProgramError(errorMessages[errorID]);
+void issueAnError(char *errorMsg){
+    showProgramError(errorMsg);
 
     getch();
 
     endwin();
     exit(1);
+}
+
+void generateErrorMessage(unsigned int errorID, struct ErrorMessageArguments arguments){
+    char errorBuffer[128];
+    if(errorID == UNKNOWN_SPECIFIC_DIGIT_COLOR){
+        sprintf(errorBuffer, errorMessages[UNKNOWN_SPECIFIC_DIGIT_COLOR], arguments.unknownSpecificDigitColor);
+        issueAnError(errorBuffer);
+    }else{
+        issueAnError(errorMessages[errorID]);
+    }
 }

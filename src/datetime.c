@@ -19,7 +19,7 @@ void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArgumen
             datetimeStruct->tm_min = parsedTime.minutes;
             datetimeStruct->tm_sec = parsedTime.seconds;
         }else{
-            issueAnError(CUSTOM_TIME_FORMAT);
+            generateErrorMessage(CUSTOM_TIME_FORMAT, USELESS_ERROR_MESSAGE_ARGUMENTS);
         }
     }
 
