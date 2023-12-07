@@ -18,7 +18,7 @@ void drawSegment(WINDOW *clockWindows[], unsigned short baseSegmentIndex, unsign
     normalizeSegment(numberToDraw, segmentDigits);
 
     for(short i = 0; i < 2; i++){
-        theDigit = getClockDigit(segmentDigits[i]);
+        theDigit = (ClockPixel**) getClockDigit(segmentDigits[i]);
 
         wmove(clockWindows[baseSegmentIndex + i], 0, 0);
         digitColorID = getDigitColor(baseSegmentIndex + i);

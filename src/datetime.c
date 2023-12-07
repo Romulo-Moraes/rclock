@@ -47,7 +47,7 @@ void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArgumen
             datetimeStruct->tm_mon = parsedDate.month - 1;
             datetimeStruct->tm_year = parsedDate.year - 1900;
         }else{
-            issueAnError(CUSTOM_DATE_FORMAT);
+            generateErrorMessage(CUSTOM_DATE_FORMAT, USELESS_ERROR_MESSAGE_ARGUMENTS);
         }
     }
 
@@ -70,11 +70,11 @@ bool verifyForDateAndTimeErrors(struct tm *datetimeStruct){
     mktime(datetimeStruct);
 
     if(datetimeStruct->tm_mday != datetimeStructCopy.tm_mday || datetimeStruct->tm_mon != datetimeStructCopy.tm_mon || datetimeStruct->tm_year != datetimeStructCopy.tm_year){
-        issueAnError(CUSTOM_DATE_RANGE);
+        generateErrorMessage(CUSTOM_DATE_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS);
     }
 
     if(datetimeStruct->tm_hour != datetimeStructCopy.tm_hour || datetimeStruct->tm_min != datetimeStructCopy.tm_min || datetimeStruct->tm_sec != datetimeStructCopy.tm_sec){
-        issueAnError(CUSTOM_TIME_RANGE);
+        generateErrorMessage(CUSTOM_TIME_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS);
     }
 }
 

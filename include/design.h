@@ -7,6 +7,6 @@ typedef unsigned char Digit;
 
 void normalizeSegment(unsigned char number, unsigned char segmentNumbers[2]);
 void drawSegment(WINDOW *clockWindows[], unsigned short baseSegmentIndex, unsigned char numberToDraw);
-void drawDate(struct tm *theTime);
+void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments);
 
 #endif

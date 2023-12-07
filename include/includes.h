@@ -14,6 +14,7 @@
 #include "arguments.h"
 #include "shapes.h"
 #include "screen-manager.h"
+#include "design.h"
 #include "errors.h"
 #include "colors.h"
 #include "datetime.h"
