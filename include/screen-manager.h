@@ -9,7 +9,14 @@
 #define MAX_CLOCK_DIGIT_WINDOWS 6
 #define WINDOWS_COUNT_WITH_HIDDEN_SECONDS 5
 #define WINDOWS_COUNT_WITH_VISIBLE_SECONDS 8
+#define HOURS_SEGMENT 0
+#define MINUTES_SEGMENT 3
+#define SECONDS_SEGMENT 6
+#define FIRST_CLOCK_COLON 2
+#define SECOND_CLOCK_COLON 5
 #define EXIT_MESSAGE "Press any key to exit"
+
+typedef unsigned char SegmentIndex;
 
 struct RclockWindows{
     WINDOW *dateWindow;
@@ -47,7 +54,7 @@ void moveDateWindowToPlaceholder();
 void moveWindowsToPlaceholders();
 void refreshWindows();
 void showProgramError(char *msg);
-WINDOW *getClockWindow(unsigned int windowIndex);
+WINDOW **getClockSegment(unsigned int windowIndex);
 WINDOW *getDateWindow();
 
 struct RclockWindows getWins();

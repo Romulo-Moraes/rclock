@@ -11,19 +11,19 @@ struct RclockColor availableColors[] = {
     (struct RclockColor){.colorName = "white", .id = WHITE_ID}
 };
 
-ColorID digitColors[MAX_CLOCK_DIGIT_WINDOWS] = {DEFAULT_COLOR};
-ColorID dateColor = DEFAULT_COLOR;
-ColorID colonsColor = DEFAULT_COLOR;
+ColorID digitColors[MAX_CLOCK_DIGIT_WINDOWS] = {BLUE_ID};
+ColorID dateColor = BLUE_ID;
+ColorID colonsColor = BLUE_ID;
 
 void loadBuiltinColors(){
-    init_pair(BLACK_ID, COLOR_BLACK, 0);
-    init_pair(RED_ID, COLOR_RED, 0);
-    init_pair(GREEN_ID, COLOR_GREEN, 0);
-    init_pair(YELLOW_ID, COLOR_YELLOW, 0);
-    init_pair(BLUE_ID, COLOR_BLUE, 0);
-    init_pair(MAGENTA_ID, COLOR_MAGENTA, 0);
-    init_pair(CYAN_ID, COLOR_CYAN, 0);
-    init_pair(WHITE_ID, COLOR_WHITE, 0);
+    init_pair(BLACK_ID, 0, COLOR_BLACK);
+    init_pair(RED_ID, 0, COLOR_RED);
+    init_pair(GREEN_ID, 0, COLOR_GREEN);
+    init_pair(YELLOW_ID, 0, COLOR_YELLOW);
+    init_pair(BLUE_ID, 0, COLOR_BLUE);
+    init_pair(MAGENTA_ID, 0, COLOR_MAGENTA);
+    init_pair(CYAN_ID, 0, COLOR_CYAN);
+    init_pair(WHITE_ID, 0, COLOR_WHITE);
 }
 
 void setColorToTheDigits(ColorID newColor){

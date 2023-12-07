@@ -11,7 +11,9 @@
 typedef unsigned char Digit;
 
 void normalizeSegment(unsigned char number, unsigned char segmentNumbers[2]);
-void drawSegment(WINDOW *clockWindows[], unsigned short baseSegmentIndex, unsigned char numberToDraw);
+void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw);
 void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments);
+void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID);
+void fillClockColons();
 
 #endif

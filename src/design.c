@@ -10,31 +10,45 @@ void normalizeSegment(unsigned char number, Digit segmentDigits[2]){
     }
 }
 
-void drawSegment(WINDOW *clockWindows[], unsigned short baseSegmentIndex, unsigned char numberToDraw){
+void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
     Digit segmentDigits[2];
-    ClockPixel **theDigit;
+    ClockPixel (*theDigit)[3];
     ColorID digitColorID;
 
     normalizeSegment(numberToDraw, segmentDigits);
 
     for(short i = 0; i < 2; i++){
-        theDigit = (ClockPixel**) getClockDigit(segmentDigits[i]);
+        theDigit = getDigitShape(segmentDigits[i]);
+        digitColorID = getDigitColor(0);
 
-        wmove(clockWindows[baseSegmentIndex + i], 0, 0);
-        digitColorID = getDigitColor(baseSegmentIndex + i);
+        drawClockWindow(clockWindows[i], theDigit, digitColorID);
+    }
+}
 
-        for(short j = 0; j < 5; j++){
-            for(short k = 0; k < 3; k++){
-                if(theDigit[j][k] == COLOR){
-                    attron(COLOR_PAIR(digitColorID));
-                    wprintw(clockWindows[baseSegmentIndex + i], "  ");
-                    attroff(COLOR_PAIR(digitColorID));
-                }else{
-                    wprintw(clockWindows[baseSegmentIndex + i], "  ");
-                }
+void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID){
+    wmove(targetWindow, 0, 0);
+
+    for(short j = 0; j < 5; j++){
+        for(short k = 0; k < 3; k++){
+            if(shapeToBeDrawn[j][k] == COLOR){
+                wattron(targetWindow, COLOR_PAIR(digitColorID));
+                wprintw(targetWindow, "  ");
+                wattroff(targetWindow, COLOR_PAIR(digitColorID));
+                wrefresh(targetWindow);
+            }else{
+                wprintw(targetWindow, "  ");
+                wrefresh(targetWindow);
             }
         }
     }
+}
+
+void fillClockColons(){
+    ClockPixel (*colonShape)[3] = getColonShape();
+    ColorID colonColor = getColonColor();
+
+    drawClockWindow(getClockSegment(FIRST_CLOCK_COLON)[0], colonShape, colonColor);
+    drawClockWindow(getClockSegment(SECOND_CLOCK_COLON)[0], colonShape, colonColor);
 }
 
 void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments){
@@ -45,12 +59,12 @@ void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments){
     dateWindow = getDateWindow();
 
     generateDateString(*theTime, datetimeArguments, dateBuffer);
-    dateStringLen = strlen(dateBuffer);
+    dateStringLen = strlen(dateBuffer) + 2;
 
     setDateStringLength(dateStringLen);
     moveDateWindowToPlaceholder();
     
-    mvwprintw(dateWindow, 1, 0, dateBuffer);
+    mvwprintw(dateWindow, 1, 1, dateBuffer);
     wrefresh(dateWindow);
     refresh();
 }

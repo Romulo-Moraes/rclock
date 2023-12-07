@@ -64,7 +64,7 @@ void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArgumen
     }
 }
 
-bool verifyForDateAndTimeErrors(struct tm *datetimeStruct){
+void verifyForDateAndTimeErrors(struct tm *datetimeStruct){
     struct tm datetimeStructCopy = *datetimeStruct;
 
     mktime(datetimeStruct);

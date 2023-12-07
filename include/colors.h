@@ -7,7 +7,7 @@
 #include "errors.h"
 #include "screen-manager.h"
 
-#define DEFAULT_COLOR COLOR_BLUE
+#define DEFAULT_COLOR "blue"
 #define BLACK_ID 1
 #define RED_ID 2
 #define GREEN_ID 3

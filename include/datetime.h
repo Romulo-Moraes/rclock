@@ -24,7 +24,7 @@ struct TimeStruct{
 struct tm* generateDateAndTime();
 void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments);
 void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments);
-bool verifyForDateAndTimeErrors(struct tm *datetimeStruct);
+void verifyForDateAndTimeErrors(struct tm *datetimeStruct);
 struct DateStruct parseDate(struct DatetimeModule datetimeArguments);
 struct TimeStruct parseTime(struct DatetimeModule datetimeArguments);
 char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer);
