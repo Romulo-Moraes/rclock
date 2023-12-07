@@ -24,7 +24,7 @@ struct RclockColor{
     ColorID id;
 };
 
-void setComponentsColors(struct ColorsModule userArguments);
+void setComponentsColors(struct ColorsModule userArguments, char* errorOutput);
 ColorID getDigitColor(unsigned char digitIndex);
 ColorID getColonColor();
 ColorID getDateColor();

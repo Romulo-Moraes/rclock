@@ -14,6 +14,7 @@ char *errorMessages[] = {
     "The given color of the digit %d doesn't exist"
 };
 
+/*
 void issueAnError(char *errorMsg){
     showProgramError(errorMsg);
 
@@ -22,13 +23,12 @@ void issueAnError(char *errorMsg){
     endwin();
     exit(1);
 }
+*/
 
-void generateErrorMessage(unsigned int errorID, struct ErrorMessageArguments arguments){
-    char errorBuffer[128];
+void generateErrorMessage(unsigned int errorID, struct ErrorMessageArguments arguments, char* errorOutput){
     if(errorID == UNKNOWN_SPECIFIC_DIGIT_COLOR){
-        sprintf(errorBuffer, errorMessages[UNKNOWN_SPECIFIC_DIGIT_COLOR], arguments.unknownSpecificDigitColor);
-        issueAnError(errorBuffer);
+        sprintf(errorOutput, errorMessages[UNKNOWN_SPECIFIC_DIGIT_COLOR], arguments.unknownSpecificDigitColor);
     }else{
-        issueAnError(errorMessages[errorID]);
+        strcpy(errorOutput, errorMessages[errorID]);
     }
 }

@@ -51,7 +51,21 @@ struct RclockColor* searchForColor(char *colorName){
     return NULL;
 }
 
-void setComponentsColors(struct ColorsModule userArguments){
+void setGlobalDigitsColor(struct ColorsModule userArguments, char *errorOutput){
+    struct RclockColor *colorSearchResult;
+
+   if(userArguments.globalDigitsColor != NULL){
+        colorSearchResult = searchForColor(userArguments.globalDigitsColor);
+
+        if(colorSearchResult != NULL){
+            setColorToTheDigits(colorSearchResult->id);
+        }else{
+            generateErrorMessage(UNKNOWN_DIGITS_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+        }
+    }
+}
+
+void setClockColor(struct ColorsModule userArguments, char *errorOutput){
     struct RclockColor *colorSearchResult;
 
     if(userArguments.clockColor != NULL){
@@ -60,19 +74,13 @@ void setComponentsColors(struct ColorsModule userArguments){
         if(colorSearchResult != NULL){
             setColorToTheClock(colorSearchResult->id);
         }else{
-            generateErrorMessage(UNKNOWN_CLOCK_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS);
+            generateErrorMessage(UNKNOWN_CLOCK_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
         }
     }
+}
 
-    if(userArguments.globalDigitsColor != NULL){
-        colorSearchResult = searchForColor(userArguments.globalDigitsColor);
-
-        if(colorSearchResult != NULL){
-            setColorToTheDigits(colorSearchResult->id);
-        }else{
-            generateErrorMessage(UNKNOWN_DIGITS_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS);
-        }
-    }
+void setDateColor(struct ColorsModule userArguments, char* errorOutput){
+    struct RclockColor *colorSearchResult;
 
     if(userArguments.dateColor != NULL){
         colorSearchResult = searchForColor(userArguments.dateColor);
@@ -80,9 +88,13 @@ void setComponentsColors(struct ColorsModule userArguments){
         if(colorSearchResult != NULL){
             dateColor = colorSearchResult->id;
         }else{
-            generateErrorMessage(UNKNOWN_DATE_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS);
+            generateErrorMessage(UNKNOWN_DATE_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
         }
     }
+}
+
+void setColonColor(struct ColorsModule userArguments, char* errorOutput){
+    struct RclockColor *colorSearchResult;
 
     if(userArguments.colonColor != NULL){
         colorSearchResult = searchForColor(userArguments.colonColor);
@@ -90,9 +102,14 @@ void setComponentsColors(struct ColorsModule userArguments){
         if(colorSearchResult != NULL){
             colonsColor = colorSearchResult->id;
         }else{
-            generateErrorMessage(UNKNOWN_COLONS_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS);
+            generateErrorMessage(UNKNOWN_COLONS_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+            return;
         }
     }
+}
+
+void setColorForEachClockDigit(struct ColorsModule userArguments, char* errorOutput){
+    struct RclockColor *colorSearchResult;
 
     for(int i = 0; i < MAX_DIGIT_COLORS; i++){
         if(userArguments.digitColor[i] != NULL){
@@ -101,10 +118,23 @@ void setComponentsColors(struct ColorsModule userArguments){
             if(colorSearchResult != NULL){
                 digitColors[i] = colorSearchResult->id;
             }else{
-                generateErrorMessage(UNKNOWN_SPECIFIC_DIGIT_COLOR, (struct ErrorMessageArguments){.unknownSpecificDigitColor = i + 1});
+                generateErrorMessage(UNKNOWN_SPECIFIC_DIGIT_COLOR, (struct ErrorMessageArguments){.unknownSpecificDigitColor = i + 1}, errorOutput);
             }
         }
     }
+}
+
+void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
+
+    setGlobalDigitsColor(userArguments, errorOutput);
+
+    setClockColor(userArguments, errorOutput);
+
+    setDateColor(userArguments, errorOutput);
+
+    setColonColor(userArguments, errorOutput);
+
+    setColorForEachClockDigit(userArguments, errorOutput);
 }
 
 ColorID getDigitColor(unsigned char digitIndex){

@@ -2,7 +2,6 @@
 #define ERRORS_GUARD
 
 #include "global-includes.h"
-#include "screen-manager.h"
 
 #define MONTH_DAY_OUT_OF_RANGE 0
 #define MONTH_OUT_OF_RANGE 1
@@ -21,7 +20,7 @@ struct ErrorMessageArguments{
     int unknownSpecificDigitColor;
 };
 
-void issueAnError(char *errorMsg);
-void generateErrorMessage(unsigned int errorID, struct ErrorMessageArguments arguments);
+//void issueAnError(char *errorMsg);
+void generateErrorMessage(unsigned int errorID, struct ErrorMessageArguments argumentsg, char* errorOutput);
 
 #endif
