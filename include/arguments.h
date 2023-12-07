@@ -2,6 +2,7 @@
 #define ARGUMENTS_GUARD
 
 #include "global-includes.h"
+#include "colors.h"
 
 #define UNDEFINED -1
 #define MAX_DIGIT_COLORS 6

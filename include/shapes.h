@@ -8,7 +8,7 @@
 
 typedef int ClockPixel;
 
-ClockPixel (*getClockDigit(unsigned int digit))[3];
-ClockPixel (*getClockColon())[3];
+ClockPixel (*getDigitShape(unsigned int digit))[3];
+ClockPixel (*getColonShape())[3];
 
 #endif 

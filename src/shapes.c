@@ -81,10 +81,10 @@ ClockPixel colonShape[5][3] = {
         {INVIS, INVIS, INVIS},
 };
 
-ClockPixel (*getClockDigit(unsigned int digit))[3]{
+ClockPixel (*getDigitShape(unsigned int digit))[3]{
     return digitShapes[digit];
 }
 
-ClockPixel (*getClockColon())[3]{
+ClockPixel (*getColonShape())[3]{
     return colonShape;
 }

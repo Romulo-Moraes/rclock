@@ -35,16 +35,16 @@ void setPlaceHolders(){
     int firstWindowXPosition;
 
     if(windows.timeWindowsCount == WINDOWS_COUNT_WITH_VISIBLE_SECONDS){
-        firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_VISIBLE_SECONDS)) / 2;
+        firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_VISIBLE_SECONDS)) / 2 - 7;
     }else{
-        firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_HIDDEN_SECONDS)) / 2;
+        firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_HIDDEN_SECONDS)) / 2 - 4;
     }
 
     for(int i = 0; i < windows.timeWindowsCount; i++){
         windowsPositions.timeWindowsPositions[i].y = windowsYPosition;
         windowsPositions.timeWindowsPositions[i].x = firstWindowXPosition;
 
-        firstWindowXPosition += TIME_WINDOW_WIDTH;
+        firstWindowXPosition += TIME_WINDOW_WIDTH + 1;
     }
 
     // The X position of the date can't be calculated now, this value
@@ -148,9 +148,9 @@ void showProgramError(char *msg){
     refresh();
 }
 
-WINDOW *getClockWindow(unsigned int windowIndex){
+WINDOW **getClockSegment(unsigned int windowIndex){
     if(windowIndex <= 7){
-        return windows.timeWindows[windowIndex];
+        return &windows.timeWindows[windowIndex];
     }else{
         return NULL;
     }
