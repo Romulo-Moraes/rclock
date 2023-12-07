@@ -97,7 +97,7 @@ struct DateStruct parseDate(struct DatetimeModule datetimeArguments){
 
     if(strlen(datetimeArguments.customDate) == 10){
         if(checkIfDateAndTimeSegmentsAreDigits(datetimeArguments.customDate) == true){
-            parsedDateItems = sscanf(datetimeArguments.customDate, "%d/%d/%d", &fetchedDate.day, &fetchedDate.month, &fetchedDate.year);
+            parsedDateItems = sscanf(datetimeArguments.customDate, "%hhu/%hhu/%u", &fetchedDate.day, &fetchedDate.month, &fetchedDate.year);
 
             if(parsedDateItems != 3){
                 fetchedDate.error = true;

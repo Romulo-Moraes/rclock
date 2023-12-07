@@ -1,0 +1,94 @@
+Build started at 2023-12-07T11:09:02.665770
+Main binary: /usr/bin/python
+Build Options: 
+Python system: Linux
+The Meson build system
+Version: 1.3.0
+Source dir: /home/romulo/Desktop/languages/computer_languages/c_programming_language/my_projects/r-clock
+Build dir: /home/romulo/Desktop/languages/computer_languages/c_programming_language/my_projects/r-clock/build
+Build type: native build
+Project name: R-clock
+Project version: undefined
+C compiler for the host machine: cc (gcc 13.2.1 "cc (GCC) 13.2.1 20230801")
+C linker for the host machine: cc ld.bfd 2.41.0
+-----------
+Detecting linker via: `gcc-ar --version` -> 0
+stdout:
+GNU ar (GNU Binutils) 2.41.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) any later version.
+This program has absolutely no warranty.
+-----------
+C compiler for the build machine: cc (gcc 13.2.1 "cc (GCC) 13.2.1 20230801")
+C linker for the build machine: cc ld.bfd 2.41.0
+-----------
+Detecting linker via: `gcc-ar --version` -> 0
+stdout:
+GNU ar (GNU Binutils) 2.41.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) any later version.
+This program has absolutely no warranty.
+-----------
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Target machine cpu family: x86_64
+Target machine cpu: x86_64
+Pkg-config binary missing from cross or native file, or env var undefined.
+Trying a default Pkg-config fallback at pkg-config
+Found pkg-config: YES (/usr/bin/pkg-config) 2.0.3
+Determining dependency 'ncurses' with pkg-config executable '/usr/bin/pkg-config'
+env[PKG_CONFIG_PATH]: 
+env[PKG_CONFIG]: /usr/bin/pkg-config
+-----------
+Called: `/usr/bin/pkg-config --modversion ncurses` -> 0
+stdout:
+6.4.20230520
+-----------
+env[PKG_CONFIG_PATH]: 
+env[PKG_CONFIG]: /usr/bin/pkg-config
+-----------
+Called: `/usr/bin/pkg-config --cflags ncurses` -> 0
+stdout:
+-D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600
+-----------
+env[PKG_CONFIG_ALLOW_SYSTEM_LIBS]: 1
+env[PKG_CONFIG_PATH]: 
+env[PKG_CONFIG]: /usr/bin/pkg-config
+-----------
+Called: `/usr/bin/pkg-config --libs ncurses` -> 0
+stdout:
+-lncursesw
+-----------
+env[PKG_CONFIG_PATH]: 
+env[PKG_CONFIG]: /usr/bin/pkg-config
+-----------
+Called: `/usr/bin/pkg-config --libs ncurses` -> 0
+stdout:
+-lncursesw
+-----------
+Running compile:
+Working directory:  /home/romulo/Desktop/languages/computer_languages/c_programming_language/my_projects/r-clock/build/meson-private/tmpk113pvkl
+Code:
+ int main(void) { return 0; }
+
+-----------
+Command line: `cc /home/romulo/Desktop/languages/computer_languages/c_programming_language/my_projects/r-clock/build/meson-private/tmpk113pvkl/testfile.c -o /home/romulo/Desktop/languages/computer_languages/c_programming_language/my_projects/r-clock/build/meson-private/tmpk113pvkl/output.exe -D_FILE_OFFSET_BITS=64 -O0 -Wl,--start-group -lncursesw -Wl,--end-group -Wl,--allow-shlib-undefined` -> 0
+Run-time dependency ncurses found: YES 6.4.20230520
+Build targets in project: 1
+
+Found ninja-1.11.1 at /usr/bin/ninja
+Running compile:
+Working directory:  /home/romulo/Desktop/languages/computer_languages/c_programming_language/my_projects/r-clock/build/meson-private/tmplev5h7vq
+Code:
+ 
+-----------
+Command line: `cc /home/romulo/Desktop/languages/computer_languages/c_programming_language/my_projects/r-clock/build/meson-private/tmplev5h7vq/testfile.c -o /home/romulo/Desktop/languages/computer_languages/c_programming_language/my_projects/r-clock/build/meson-private/tmplev5h7vq/output.obj -c -D_FILE_OFFSET_BITS=64 -O0 --print-search-dirs` -> 0
+stdout:
+install: /usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/
+programs: =/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu/13.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../x86_64-pc-linux-gnu/bin/
+libraries: =/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../x86_64-pc-linux-gnu/lib/x86_64-pc-linux-gnu/13.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../x86_64-pc-linux-gnu/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/../../../x86_64-pc-linux-gnu/13.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../lib/:/lib/x86_64-pc-linux-gnu/13.2.1/:/lib/../lib/:/usr/lib/x86_64-pc-linux-gnu/13.2.1/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../x86_64-pc-linux-gnu/lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/../../../:/lib/:/usr/lib/
+-----------

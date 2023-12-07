@@ -1,0 +1,1 @@
+[{"name": "ncurses", "type": "pkgconfig", "version": "6.4.20230520", "compile_args": ["-D_DEFAULT_SOURCE", "-D_XOPEN_SOURCE=600"], "link_args": ["-lncursesw"], "include_directories": [], "sources": [], "extra_files": [], "dependencies": [], "depends": [], "meson_variables": ["deps"]}]

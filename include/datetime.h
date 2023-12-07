@@ -1,7 +1,9 @@
 #ifndef DATETIME_GUARD
 #define DATETIME_GUARD
 
-#include "includes.h"
+#include "global-includes.h"
+#include "arguments.h"
+#include "errors.h"
 
 #define MAX_CLOCK_DATE_BUFFER_LEN 512
 

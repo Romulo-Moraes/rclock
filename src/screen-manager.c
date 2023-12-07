@@ -157,5 +157,5 @@ WINDOW *getClockWindow(unsigned int windowIndex){
 }
 
 WINDOW *getDateWindow(){
-    return windows.dateWindow;;
+    return windows.dateWindow;
 }

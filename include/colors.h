@@ -1,7 +1,11 @@
 #ifndef COLORS_GUARD
 #define COLORS_GUARD
 
-#include "includes.h"
+// #include "includes.h"
+#include "global-includes.h"
+#include "arguments.h"
+#include "errors.h"
+#include "screen-manager.h"
 
 #define DEFAULT_COLOR COLOR_BLUE
 #define BLACK_ID 1

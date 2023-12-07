@@ -1,8 +1,7 @@
 #ifndef ARGUMENTS_GUARD
 #define ARGUMENTS_GUARD
 
-#include <stdbool.h>
-#include <stdio.h>
+#include "global-includes.h"
 
 #define UNDEFINED -1
 #define MAX_DIGIT_COLORS 6

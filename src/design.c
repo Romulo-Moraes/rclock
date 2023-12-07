@@ -42,12 +42,15 @@ void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments){
     WINDOW *dateWindow;
     size_t dateStringLen;
 
+    dateWindow = getDateWindow();
+
     generateDateString(*theTime, datetimeArguments, dateBuffer);
     dateStringLen = strlen(dateBuffer);
 
     setDateStringLength(dateStringLen);
     moveDateWindowToPlaceholder();
     
-    wprintw(dateWindow, dateBuffer);
+    mvwprintw(dateWindow, 1, 0, dateBuffer);
     wrefresh(dateWindow);
+    refresh();
 }

@@ -1,5 +1,11 @@
-#include "./../../include/includes.h"
-
+#include "./../../include/global-includes.h"
+#include "./../../include/arguments.h"
+#include "./../../include/shapes.h"
+#include "./../../include/screen-manager.h"
+#include "./../../include/design.h"
+#include "./../../include/errors.h"
+#include "./../../include/colors.h"
+#include "./../../include/datetime.h"
 #define DATEE "Monday, 04 Dec 2023"
 
 int main(void){

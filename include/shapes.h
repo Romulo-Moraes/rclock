@@ -1,8 +1,6 @@
 #ifndef SHAPES_GUARD
 #define SHAPES_GUARD
 
-#include "includes.h"
-
 #define COLOR 1
 #define INVIS 0
 #define TIME_WINDOW_WIDTH 6

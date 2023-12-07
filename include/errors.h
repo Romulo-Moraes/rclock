@@ -1,7 +1,8 @@
 #ifndef ERRORS_GUARD
 #define ERRORS_GUARD
 
-#include "includes.h"
+#include "global-includes.h"
+#include "screen-manager.h"
 
 #define MONTH_DAY_OUT_OF_RANGE 0
 #define MONTH_OUT_OF_RANGE 1

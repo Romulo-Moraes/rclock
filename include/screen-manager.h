@@ -1,7 +1,9 @@
 #ifndef SCREEN_MANAGER_GUARD
 #define SCREEN_MANAGER_GUARD
 
-#include "includes.h"
+#include "global-includes.h"
+#include "arguments.h"
+#include "shapes.h"
 
 #define MAX_CLOCK_TIME_WINDOWS 8
 #define MAX_CLOCK_DIGIT_WINDOWS 6
