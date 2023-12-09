@@ -169,3 +169,12 @@ void incrementClockSecond(struct tm *datetimeStruct){
         mktime(datetimeStruct);
     }
 }
+
+void sleepClock(){
+    struct timespec sleepTime, t;
+
+    sleepTime.tv_sec = 0;
+    sleepTime.tv_nsec = SLEEP_TIME_IN_NANOSECONDS;
+
+    nanosleep(&sleepTime, &t);
+}

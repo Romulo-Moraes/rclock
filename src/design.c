@@ -44,6 +44,13 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
     }
 }
 
+void drawAllClockWindows(struct tm *timeStruct){
+    fillClockSegment(getClockSegment(HOURS_SEGMENT), timeStruct->tm_hour);
+    fillClockSegment(getClockSegment(MINUTES_SEGMENT), timeStruct->tm_min);
+    fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
+    fillClockColons();
+}
+
 void fillClockColons(){
     ClockPixel (*colonShape)[3] = getColonShape();
     ColorID colonColor = getColonColor();
@@ -52,7 +59,7 @@ void fillClockColons(){
     drawClockWindow(getClockSegment(SECOND_CLOCK_COLON)[0], colonShape, colonColor);
 }
 
-void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments){
+void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struct ColorsModule colorArguments){
     char dateBuffer[MAX_CLOCK_DATE_BUFFER_LEN + 1];
     WINDOW *dateWindow;
     size_t dateStringLen;
@@ -65,7 +72,9 @@ void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments){
     setDateStringLength(dateStringLen);
     moveDateWindowToPlaceholder();
     
+    wattron(dateWindow, COLOR_PAIR(getDateColor()));
     mvwprintw(dateWindow, 1, 1, dateBuffer);
+    wattroff(dateWindow, COLOR_PAIR(getDateColor()));
     wrefresh(dateWindow);
     refresh();
 }

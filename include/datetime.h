@@ -6,6 +6,7 @@
 #include "errors.h"
 
 #define MAX_CLOCK_DATE_BUFFER_LEN 512
+#define SLEEP_TIME_IN_NANOSECONDS 250000000L
 
 struct DateStruct{
     unsigned char day;
@@ -26,5 +27,6 @@ void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArgumen
 void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput);
 char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer);
 void incrementClockSecond(struct tm *datetimeStruct);
+void sleepClock();
 
 #endif

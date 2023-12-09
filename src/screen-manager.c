@@ -72,9 +72,9 @@ void setPlaceHolders(){
     int firstWindowXPosition;
 
     if(windows.timeWindowsCount == WINDOWS_COUNT_WITH_VISIBLE_SECONDS){
-        firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_VISIBLE_SECONDS)) / 2 - 7;
+        firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_VISIBLE_SECONDS)) / 2 - 3;
     }else{
-        firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_HIDDEN_SECONDS)) / 2 - 4;
+        firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_HIDDEN_SECONDS)) / 2 - 2;
     }
 
     for(int i = 0; i < windows.timeWindowsCount; i++){

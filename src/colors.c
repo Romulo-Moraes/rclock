@@ -1,22 +1,23 @@
 #include "./../include/colors.h"
 
 struct RclockColor availableColors[] = {
-    (struct RclockColor){.colorName = "black", .id = BLACK_ID},
-    (struct RclockColor){.colorName = "red", .id = RED_ID},
-    (struct RclockColor){.colorName = "green", .id = GREEN_ID},
-    (struct RclockColor){.colorName = "yellow", .id = YELLOW_ID},
-    (struct RclockColor){.colorName = "blue", .id = BLUE_ID},
-    (struct RclockColor){.colorName = "magenta", .id = MAGENTA_ID},
-    (struct RclockColor){.colorName = "cyan", .id = CYAN_ID},
-    (struct RclockColor){.colorName = "white", .id = WHITE_ID}
+    (struct RclockColor){.colorName = "black", .clockID = BLACK_ID, .dateID = DATE_BLACK_ID},
+    (struct RclockColor){.colorName = "red", .clockID = RED_ID, .dateID = DATE_RED_ID},
+    (struct RclockColor){.colorName = "green", .clockID = GREEN_ID, .dateID = DATE_GREEN_ID},
+    (struct RclockColor){.colorName = "yellow", .clockID = YELLOW_ID, .dateID = DATE_YELLOW_ID},
+    (struct RclockColor){.colorName = "blue", .clockID = BLUE_ID, .dateID = DATE_BLUE_ID},
+    (struct RclockColor){.colorName = "magenta", .clockID = MAGENTA_ID, .dateID = DATE_MAGENTA_ID},
+    (struct RclockColor){.colorName = "cyan", .clockID = CYAN_ID, .dateID = DATE_CYAN_ID},
+    (struct RclockColor){.colorName = "white", .clockID = WHITE_ID, .dateID = DATE_WHITE_ID}
 };
 
-ColorID digitColors[MAX_CLOCK_DIGIT_WINDOWS] = {BLUE_ID};
-ColorID dateColor = BLUE_ID;
-ColorID colonsColor = BLUE_ID;
+ColorID digitColors[MAX_CLOCK_DIGIT_WINDOWS];
+ColorID dateColor;
+ColorID colonsColor;
 
 void loadBuiltinColors(){
-    init_pair(BLACK_ID, 0, COLOR_BLACK);;
+    // Colors for clock
+    init_pair(BLACK_ID, 0, COLOR_BLACK);
     init_pair(RED_ID, 0, COLOR_RED);
     init_pair(GREEN_ID, 0, COLOR_GREEN);
     init_pair(YELLOW_ID, 0, COLOR_YELLOW);
@@ -24,6 +25,16 @@ void loadBuiltinColors(){
     init_pair(MAGENTA_ID, 0, COLOR_MAGENTA);
     init_pair(CYAN_ID, 0, COLOR_CYAN);
     init_pair(WHITE_ID, 0, COLOR_WHITE);
+    
+    // Colors for date
+    init_pair(DATE_BLACK_ID, COLOR_BLACK, -1);
+    init_pair(DATE_RED_ID, COLOR_RED, -1);
+    init_pair(DATE_GREEN_ID, COLOR_GREEN, -1);
+    init_pair(DATE_YELLOW_ID, COLOR_YELLOW, -1);
+    init_pair(DATE_BLUE_ID, COLOR_BLUE, -1);
+    init_pair(DATE_MAGENTA_ID, COLOR_MAGENTA, -1);
+    init_pair(DATE_CYAN_ID, COLOR_CYAN, -1);
+    init_pair(DATE_WHITE_ID, COLOR_WHITE, -1);
 }
 
 void setColorToTheDigits(ColorID newColor){
@@ -58,7 +69,7 @@ void setGlobalDigitsColor(struct ColorsModule userArguments, char *errorOutput){
         colorSearchResult = searchForColor(userArguments.globalDigitsColor);
 
         if(colorSearchResult != NULL){
-            setColorToTheDigits(colorSearchResult->id);
+            setColorToTheDigits(colorSearchResult->clockID);
         }else{
             generateErrorMessage(UNKNOWN_DIGITS_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
         }
@@ -72,7 +83,7 @@ void setClockColor(struct ColorsModule userArguments, char *errorOutput){
         colorSearchResult = searchForColor(userArguments.clockColor);
 
         if(colorSearchResult != NULL){
-            setColorToTheClock(colorSearchResult->id);
+            setColorToTheClock(colorSearchResult->clockID);
         }else{
             generateErrorMessage(UNKNOWN_CLOCK_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
         }
@@ -86,7 +97,7 @@ void setDateColor(struct ColorsModule userArguments, char* errorOutput){
         colorSearchResult = searchForColor(userArguments.dateColor);
 
         if(colorSearchResult != NULL){
-            dateColor = colorSearchResult->id;
+            dateColor = colorSearchResult->dateID;
         }else{
             generateErrorMessage(UNKNOWN_DATE_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
         }
@@ -100,7 +111,7 @@ void setColonColor(struct ColorsModule userArguments, char* errorOutput){
         colorSearchResult = searchForColor(userArguments.colonColor);
 
         if(colorSearchResult != NULL){
-            colonsColor = colorSearchResult->id;
+            colonsColor = colorSearchResult->clockID;
         }else{
             generateErrorMessage(UNKNOWN_COLONS_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
             return;
@@ -116,7 +127,7 @@ void setColorForEachClockDigit(struct ColorsModule userArguments, char* errorOut
             colorSearchResult = searchForColor(userArguments.digitColor[i]);
 
             if(colorSearchResult != NULL){
-                digitColors[i] = colorSearchResult->id;
+                digitColors[i] = colorSearchResult->clockID;
             }else{
                 generateErrorMessage(UNKNOWN_SPECIFIC_DIGIT_COLOR, (struct ErrorMessageArguments){.unknownSpecificDigitColor = i + 1}, errorOutput);
             }

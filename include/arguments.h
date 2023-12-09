@@ -5,6 +5,9 @@
 
 #define UNDEFINED -1
 #define MAX_DIGIT_COLORS 6
+#define DEFAULT_CLOCK_COLOR "blue"
+#define DEFAULT_HIDE_THE_DATE_STATE false
+#define DEFAULT_HIDE_THE_SECONDS_STATE false
 
 struct DatetimeModule{
     short customHour;
