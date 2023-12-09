@@ -12,7 +12,6 @@ typedef unsigned char Digit;
 
 void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw);
 void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struct ColorsModule colorArguments);
-void fillClockColons();
-void drawAllClockWindows(struct tm *timeStruct);
+void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments);
 
 #endif

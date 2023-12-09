@@ -12,10 +12,7 @@ int main(int argc, char *argv[]){
     ProgramArguments arguments = fetchProgramArguments();
     timeStruct = generateDateAndTime();
     struct tm timeStructCopy = *timeStruct;
-    WINDOW **segment;
-    SegmentIndex possibleSegments[] = {HOURS_SEGMENT, MINUTES_SEGMENT, SECONDS_SEGMENT};
     char errorBuffer[512];
-    size_t possibleSegmentsLen = sizeof(possibleSegments) / sizeof(possibleSegments[0]);
 
     initscr();
     cbreak();
@@ -35,13 +32,14 @@ int main(int argc, char *argv[]){
     moveTimeWindowsToPlaceholders();
     moveDateWindowToPlaceholder();
 
-    drawAllClockWindows(timeStruct);
+    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
 
     signal(SIGALRM, signalHandler);
 
     alarm(1);
 
     while(true){
+        // For each terminal resize, the clock is redrawn
         if(detectTerminalResizes()){
             wclear(stdscr);
             refresh();
@@ -49,30 +47,24 @@ int main(int argc, char *argv[]){
             moveTimeWindowsToPlaceholders();
             moveDateWindowToPlaceholder();
 
-            drawAllClockWindows(timeStruct);
+            drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
 
             drawDate(timeStruct, arguments.datetime, arguments.colors);
         }
 
 
-        if(timeStruct->tm_sec != timeStructCopy.tm_sec){
-            for(short i = 0; i < possibleSegmentsLen; i++){
-                segment = getClockSegment(possibleSegments[i]);
 
-                switch(possibleSegments[i]){
-                    case HOURS_SEGMENT:
-                        if(timeStruct->tm_hour != timeStructCopy.tm_hour)
-                            fillClockSegment(segment, timeStruct->tm_hour);
-                        break;
-                    case MINUTES_SEGMENT:
-                        if(timeStruct->tm_min != timeStructCopy.tm_min)
-                            fillClockSegment(segment, timeStruct->tm_min);
-                        break;
-                    case SECONDS_SEGMENT:
-                            fillClockSegment(segment, timeStruct->tm_sec);
-                        break;
-                }
-            }
+        // The main loop run more than once in a second
+        // there's no need of run this everytime
+        if(timeStruct->tm_sec != timeStructCopy.tm_sec){
+
+            if(timeStruct->tm_hour != timeStructCopy.tm_hour)
+                fillClockSegment(getClockSegment(HOURS_SEGMENT), timeStruct->tm_hour);
+        
+            if(timeStruct->tm_min != timeStructCopy.tm_min)
+                fillClockSegment(getClockSegment(MINUTES_SEGMENT), timeStruct->tm_min);
+
+            fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
         }
 
 
@@ -80,6 +72,8 @@ int main(int argc, char *argv[]){
         refreshWindows();
 
         timeStructCopy = *timeStruct;
+
+        // Sleeps for SLEEP_TIME_IN_NANOSECONDS nano seconds
         sleepClock();
     }    
 

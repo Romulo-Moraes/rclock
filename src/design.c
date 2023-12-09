@@ -44,19 +44,24 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
     }
 }
 
-void drawAllClockWindows(struct tm *timeStruct){
-    fillClockSegment(getClockSegment(HOURS_SEGMENT), timeStruct->tm_hour);
-    fillClockSegment(getClockSegment(MINUTES_SEGMENT), timeStruct->tm_min);
-    fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
-    fillClockColons();
-}
-
-void fillClockColons(){
+void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments){
     ClockPixel (*colonShape)[3] = getColonShape();
     ColorID colonColor = getColonColor();
 
     drawClockWindow(getClockSegment(FIRST_CLOCK_COLON)[0], colonShape, colonColor);
-    drawClockWindow(getClockSegment(SECOND_CLOCK_COLON)[0], colonShape, colonColor);
+
+    if(userArguments.hideTheSeconds == false)
+        drawClockWindow(getClockSegment(SECOND_CLOCK_COLON)[0], colonShape, colonColor);
+}
+
+void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments){
+    fillClockSegment(getClockSegment(HOURS_SEGMENT), timeStruct->tm_hour);
+    fillClockSegment(getClockSegment(MINUTES_SEGMENT), timeStruct->tm_min);
+
+    if(userArguments.hideTheSeconds == false)
+        fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
+
+    fillClockColons(userArguments);
 }
 
 void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struct ColorsModule colorArguments){
