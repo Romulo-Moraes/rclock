@@ -22,13 +22,9 @@ struct TimeStruct{
 };
 
 struct tm* generateDateAndTime();
-void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments);
-void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments);
-void verifyForDateAndTimeErrors(struct tm *datetimeStruct);
-struct DateStruct parseDate(struct DatetimeModule datetimeArguments);
-struct TimeStruct parseTime(struct DatetimeModule datetimeArguments);
+void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput);
+void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput);
 char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer);
 void incrementClockSecond(struct tm *datetimeStruct);
-bool checkIfDateAndTimeSegmentsAreDigits(char *customTime);
 
 #endif

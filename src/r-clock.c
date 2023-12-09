@@ -2,6 +2,7 @@
 #include "../include/arguments.h"
 #include "../include/screen-manager.h"
 #include "../include/design.h"
+#include "../include/datetime.h"
 
 #define DATE "Wednesday, 10 Dec 2023"
 
@@ -12,6 +13,7 @@ int main(int argc, char *argv[]){
     struct tm *timeStruct = localtime(&currentTime);
     WINDOW **segment;
     SegmentIndex possibleSegments[] = {HOURS_SEGMENT, MINUTES_SEGMENT, SECONDS_SEGMENT};
+    char errorBuffer[512];
     size_t possibleSegmentsLen = sizeof(possibleSegments) / sizeof(possibleSegments[0]);
 
     initscr();
@@ -22,7 +24,7 @@ int main(int argc, char *argv[]){
 
     loadBuiltinColors();
 
-    setComponentsColors(arguments.colors);
+    setComponentsColors(arguments.colors, errorBuffer);
 
     generateWindows(arguments.DatetimeScreenManagerDesigner);
     setPlaceHolders();

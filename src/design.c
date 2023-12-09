@@ -10,20 +10,6 @@ void normalizeSegment(unsigned char number, Digit segmentDigits[2]){
     }
 }
 
-void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
-    Digit segmentDigits[2];
-    ClockPixel (*theDigit)[3];
-    ColorID digitColorID;
-
-    normalizeSegment(numberToDraw, segmentDigits);
-
-    for(short i = 0; i < 2; i++){
-        theDigit = getDigitShape(segmentDigits[i]);
-        digitColorID = getDigitColor(0);
-
-        drawClockWindow(clockWindows[i], theDigit, digitColorID);
-    }
-}
 
 void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID){
     wmove(targetWindow, 0, 0);
@@ -40,6 +26,21 @@ void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], Colo
                 wrefresh(targetWindow);
             }
         }
+    }
+}
+
+void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
+    Digit segmentDigits[2];
+    ClockPixel (*theDigit)[3];
+    ColorID digitColorID;
+
+    normalizeSegment(numberToDraw, segmentDigits);
+
+    for(short i = 0; i < 2; i++){
+        theDigit = getDigitShape(segmentDigits[i]);
+        digitColorID = getDigitColor(0);
+
+        drawClockWindow(clockWindows[i], theDigit, digitColorID);
     }
 }
 

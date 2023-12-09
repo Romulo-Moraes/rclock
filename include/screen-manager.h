@@ -46,19 +46,14 @@ struct WindowsPlaceholders{
 
 void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments);
 void setPlaceHolders();
-void getTerminalSize();
+//void getTerminalSize();
 bool detectTerminalResizes();
 void moveTimeWindowsToPlaceholders();
 void setDateStringLength(size_t newLength);
 void moveDateWindowToPlaceholder();
-void moveWindowsToPlaceholders();
 void refreshWindows();
 void showProgramError(char *msg);
 WINDOW **getClockSegment(unsigned int windowIndex);
 WINDOW *getDateWindow();
-
-struct RclockWindows getWins();
-struct WindowsPlaceholders getPos();
-struct WindowSize getWinSz();
 
 #endif

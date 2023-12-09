@@ -20,7 +20,6 @@ struct ErrorMessageArguments{
     int unknownSpecificDigitColor;
 };
 
-//void issueAnError(char *errorMsg);
 void generateErrorMessage(unsigned int errorID, struct ErrorMessageArguments argumentsg, char* errorOutput);
 
 #endif

@@ -16,6 +16,43 @@ struct WindowSize getWinSz(){
     return winSize;
 }
 
+void getTerminalSize(){
+    getmaxyx(stdscr, winSize.height, winSize.width);
+}
+
+void moveTimeWindowsToPlaceholders(){
+    refresh();
+
+    #ifdef DEBUG
+    #pragma message ("DEBUG MODE ON! The box of each time window will be clean on each move")
+        for(int i = 0; i < windows.timeWindowsCount; i++){
+            wborder(windows.timeWindows[i], ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+            wrefresh(windows.timeWindows[i]);
+        }
+    #endif
+
+    for(int i = 0; i < windows.timeWindowsCount; i++){
+        mvwin(windows.timeWindows[i], windowsPositions.timeWindowsPositions[i].y,
+                                    windowsPositions.timeWindowsPositions[i].x);
+    }
+
+}
+
+void moveDateWindowToPlaceholder(){
+    int dateWindowXPosition = winSize.width / 2 - windowsPositions.dateWindowPosition.dateStringLength / 2;
+
+    refresh();
+
+    #ifdef DEBUG
+    #pragma comment ("DEBUG MODE ON! The box of the date window will be clean on each move")
+        wborder(windows.dateWindow, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');   
+        wrefresh(windows.dateWindow);
+    #endif
+
+    wresize(windows.dateWindow, 3, windowsPositions.dateWindowPosition.dateStringLength);
+    mvwin(windows.dateWindow, windowsPositions.dateWindowPosition.y, dateWindowXPosition);
+}
+
 void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments){
     windows.timeWindowsCount = userArguments.hideTheSeconds == true ? WINDOWS_COUNT_WITH_HIDDEN_SECONDS : WINDOWS_COUNT_WITH_VISIBLE_SECONDS;
 
@@ -52,9 +89,7 @@ void setPlaceHolders(){
     windowsPositions.dateWindowPosition.y = windowsYPosition + TIME_WINDOW_HEIGHT;
 }
 
-void getTerminalSize(){
-    getmaxyx(stdscr, winSize.height, winSize.width);
-}
+
 
 bool detectTerminalResizes(){
     int newHeight, newWidth;
@@ -68,32 +103,12 @@ bool detectTerminalResizes(){
     return false;
 }
 
-void moveTimeWindowsToPlaceholders(){
-    refresh();
 
-    #ifdef DEBUG
-    #pragma message ("DEBUG MODE ON! The box of each time window will be clean on each move")
-        for(int i = 0; i < windows.timeWindowsCount; i++){
-            wborder(windows.timeWindows[i], ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-            wrefresh(windows.timeWindows[i]);
-        }
-    #endif
-
-    for(int i = 0; i < windows.timeWindowsCount; i++){
-        mvwin(windows.timeWindows[i], windowsPositions.timeWindowsPositions[i].y,
-                                    windowsPositions.timeWindowsPositions[i].x);
-    }
-
-}
 
 void setDateStringLength(size_t newLength){
     windowsPositions.dateWindowPosition.dateStringLength = newLength;
 }
 
-void moveWindowsToPlaceholders(){
-    moveTimeWindowsToPlaceholders();
-    moveDateWindowToPlaceholder();
-}
 
 void refreshWindows(){
     for(int i = 0; i < windows.timeWindowsCount; i++){
@@ -111,20 +126,7 @@ void refreshWindows(){
     wrefresh(windows.dateWindow);    
 }
 
-void moveDateWindowToPlaceholder(){
-    int dateWindowXPosition = winSize.width / 2 - windowsPositions.dateWindowPosition.dateStringLength / 2;
 
-    refresh();
-
-    #ifdef DEBUG
-    #pragma comment ("DEBUG MODE ON! The box of the date window will be clean on each move")
-        wborder(windows.dateWindow, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');   
-        wrefresh(windows.dateWindow);
-    #endif
-
-    wresize(windows.dateWindow, 3, windowsPositions.dateWindowPosition.dateStringLength);
-    mvwin(windows.dateWindow, windowsPositions.dateWindowPosition.y, dateWindowXPosition);
-}
 
 void showProgramError(char *msg){
     WINDOW *errorWindow, *exitMessageWindow;

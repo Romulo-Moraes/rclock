@@ -16,7 +16,7 @@ ColorID dateColor = BLUE_ID;
 ColorID colonsColor = BLUE_ID;
 
 void loadBuiltinColors(){
-    init_pair(BLACK_ID, 0, COLOR_BLACK);
+    init_pair(BLACK_ID, 0, COLOR_BLACK);;
     init_pair(RED_ID, 0, COLOR_RED);
     init_pair(GREEN_ID, 0, COLOR_GREEN);
     init_pair(YELLOW_ID, 0, COLOR_YELLOW);
@@ -124,19 +124,6 @@ void setColorForEachClockDigit(struct ColorsModule userArguments, char* errorOut
     }
 }
 
-void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
-
-    setGlobalDigitsColor(userArguments, errorOutput);
-
-    setClockColor(userArguments, errorOutput);
-
-    setDateColor(userArguments, errorOutput);
-
-    setColonColor(userArguments, errorOutput);
-
-    setColorForEachClockDigit(userArguments, errorOutput);
-}
-
 ColorID getDigitColor(unsigned char digitIndex){
     if(digitIndex >= 0 && digitIndex <= 5){
         return digitColors[digitIndex];
@@ -151,4 +138,17 @@ ColorID getColonColor(){
 
 ColorID getDateColor(){
     return dateColor;
+}
+
+void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
+
+    setGlobalDigitsColor(userArguments, errorOutput);
+
+    setClockColor(userArguments, errorOutput);
+
+    setDateColor(userArguments, errorOutput);
+
+    setColonColor(userArguments, errorOutput);
+
+    setColorForEachClockDigit(userArguments, errorOutput);
 }

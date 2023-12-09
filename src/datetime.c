@@ -8,76 +8,6 @@ struct tm* generateDateAndTime(){
     return timeStruct;
 }
 
-void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments){
-    struct TimeStruct parsedTime;
-
-    if(dateTimeArguments.customTime != NULL){
-        parsedTime = parseTime(dateTimeArguments);
-
-        if(parsedTime.error != true){
-            datetimeStruct->tm_hour = parsedTime.hours;
-            datetimeStruct->tm_min = parsedTime.minutes;
-            datetimeStruct->tm_sec = parsedTime.seconds;
-        }else{
-            generateErrorMessage(CUSTOM_TIME_FORMAT, USELESS_ERROR_MESSAGE_ARGUMENTS);
-        }
-    }
-
-    if(dateTimeArguments.customHour != UNDEFINED){
-        datetimeStruct->tm_hour = dateTimeArguments.customHour;
-    }
-
-    if(dateTimeArguments.customMinute != UNDEFINED){
-        datetimeStruct->tm_min = dateTimeArguments.customMinute;
-    }
-
-    if(dateTimeArguments.customSecond != UNDEFINED){
-        datetimeStruct->tm_sec = dateTimeArguments.customSecond;
-    }
-}
-
-void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments){
-    struct DateStruct parsedDate;
-
-    if(datetimeArguments.customDate != NULL){
-        parsedDate = parseDate(datetimeArguments);
-
-        if(parsedDate.error != true){
-            datetimeStruct->tm_mday = parsedDate.day;
-            datetimeStruct->tm_mon = parsedDate.month - 1;
-            datetimeStruct->tm_year = parsedDate.year - 1900;
-        }else{
-            generateErrorMessage(CUSTOM_DATE_FORMAT, USELESS_ERROR_MESSAGE_ARGUMENTS);
-        }
-    }
-
-    if(datetimeArguments.customDay != UNDEFINED){
-        datetimeStruct->tm_mday = datetimeArguments.customDay;
-    }
-
-    if(datetimeArguments.customMonth != UNDEFINED){
-        datetimeStruct->tm_mon = datetimeArguments.customMonth - 1;
-    }
-
-    if(datetimeArguments.customYear != UNDEFINED){
-        datetimeStruct->tm_year = datetimeArguments.customYear - 1900;
-    }
-}
-
-void verifyForDateAndTimeErrors(struct tm *datetimeStruct){
-    struct tm datetimeStructCopy = *datetimeStruct;
-
-    mktime(datetimeStruct);
-
-    if(datetimeStruct->tm_mday != datetimeStructCopy.tm_mday || datetimeStruct->tm_mon != datetimeStructCopy.tm_mon || datetimeStruct->tm_year != datetimeStructCopy.tm_year){
-        generateErrorMessage(CUSTOM_DATE_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS);
-    }
-
-    if(datetimeStruct->tm_hour != datetimeStructCopy.tm_hour || datetimeStruct->tm_min != datetimeStructCopy.tm_min || datetimeStruct->tm_sec != datetimeStructCopy.tm_sec){
-        generateErrorMessage(CUSTOM_TIME_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS);
-    }
-}
-
 bool checkIfDateAndTimeSegmentsAreDigits(char *customDateTime){
     size_t dateTimeLen = strlen(customDateTime);
     for(int i = 0; i < dateTimeLen; i++){
@@ -131,6 +61,95 @@ struct TimeStruct parseTime(struct DatetimeModule datetimeArguments){
     }
 
     return fetchedTime;
+}
+
+void setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
+    struct TimeStruct parsedTime;
+
+    if(dateTimeArguments.customTime != NULL){
+        parsedTime = parseTime(dateTimeArguments);
+
+        if(parsedTime.error != true){
+            datetimeStruct->tm_hour = parsedTime.hours;
+            datetimeStruct->tm_min = parsedTime.minutes;
+            datetimeStruct->tm_sec = parsedTime.seconds;
+        }else{
+            generateErrorMessage(CUSTOM_TIME_FORMAT, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+        }
+    }
+}
+
+void setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments){
+    if(dateTimeArguments.customHour != UNDEFINED){
+        datetimeStruct->tm_hour = dateTimeArguments.customHour;
+    }
+
+    if(dateTimeArguments.customMinute != UNDEFINED){
+        datetimeStruct->tm_min = dateTimeArguments.customMinute;
+    }
+
+    if(dateTimeArguments.customSecond != UNDEFINED){
+        datetimeStruct->tm_sec = dateTimeArguments.customSecond;
+    }
+}
+
+void setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
+    struct DateStruct parsedDate;
+
+    if(datetimeArguments.customDate != NULL){
+        parsedDate = parseDate(datetimeArguments);
+
+        if(parsedDate.error != true){
+            datetimeStruct->tm_mday = parsedDate.day;
+            datetimeStruct->tm_mon = parsedDate.month - 1;
+            datetimeStruct->tm_year = parsedDate.year - 1900;
+        }else{
+            generateErrorMessage(CUSTOM_DATE_FORMAT, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+        }
+    }
+}
+
+void setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments){
+
+    if(datetimeArguments.customDay != UNDEFINED){
+        datetimeStruct->tm_mday = datetimeArguments.customDay;
+    }
+
+    if(datetimeArguments.customMonth != UNDEFINED){
+        datetimeStruct->tm_mon = datetimeArguments.customMonth - 1;
+    }
+
+    if(datetimeArguments.customYear != UNDEFINED){
+        datetimeStruct->tm_year = datetimeArguments.customYear - 1900;
+    }
+}
+
+void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
+    
+    setCustomTime(datetimeStruct, dateTimeArguments, errorOutput);
+
+    setCustomHourMinuteAndSecond(datetimeStruct, dateTimeArguments);
+}
+
+void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
+    
+    setCustomDate(datetimeStruct, datetimeArguments, errorOutput);
+
+    setCustomDayMonthAndYear(datetimeStruct, datetimeArguments);
+}
+
+void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput){
+    struct tm datetimeStructCopy = *datetimeStruct;
+
+    mktime(datetimeStruct);
+
+    if(datetimeStruct->tm_mday != datetimeStructCopy.tm_mday || datetimeStruct->tm_mon != datetimeStructCopy.tm_mon || datetimeStruct->tm_year != datetimeStructCopy.tm_year){
+        generateErrorMessage(CUSTOM_DATE_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+    }
+
+    if(datetimeStruct->tm_hour != datetimeStructCopy.tm_hour || datetimeStruct->tm_min != datetimeStructCopy.tm_min || datetimeStruct->tm_sec != datetimeStructCopy.tm_sec){
+        generateErrorMessage(CUSTOM_TIME_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+    }
 }
 
 char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer){

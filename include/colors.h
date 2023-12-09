@@ -3,11 +3,10 @@
 
 // #include "includes.h"
 #include "global-includes.h"
-#include "arguments.h"
 #include "errors.h"
 #include "screen-manager.h"
+#include "arguments.h"
 
-#define DEFAULT_COLOR "blue"
 #define BLACK_ID 1
 #define RED_ID 2
 #define GREEN_ID 3
@@ -16,6 +15,7 @@
 #define MAGENTA_ID 6 
 #define CYAN_ID 7
 #define WHITE_ID 8
+#define DEFAULT_COLOR BLUE_ID
 
 typedef int ColorID;
 
@@ -28,7 +28,6 @@ void setComponentsColors(struct ColorsModule userArguments, char* errorOutput);
 ColorID getDigitColor(unsigned char digitIndex);
 ColorID getColonColor();
 ColorID getDateColor();
-void setColorToTheClock(ColorID newColor);
-void setColorToTheDigits(ColorID newColor);
+void loadBuiltinColors();
 
 #endif
