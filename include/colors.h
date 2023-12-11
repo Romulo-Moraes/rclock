@@ -4,7 +4,6 @@
 // #include "includes.h"
 #include "global-includes.h"
 #include "errors.h"
-#include "screen-manager.h"
 #include "arguments.h"
 
 #define BLACK_ID 1
@@ -23,8 +22,10 @@
 #define DATE_MAGENTA_ID 14
 #define DATE_CYAN_ID 15
 #define DATE_WHITE_ID 16
+#define ERROR_MESSAGE_RED_ID 17
 #define DEFAULT_COLOR BLUE_ID
 #define DEFAULT_DATE_COLOR DATE_BLUE_ID
+#define MAX_DIGIT_COLORS 6
 
 typedef int ColorID;
 
@@ -35,9 +36,10 @@ struct RclockColor{
 };
 
 void setComponentsColors(struct ColorsModule userArguments, char* errorOutput);
+void loadBuiltinColors();
 ColorID getDigitColor(unsigned char digitIndex);
 ColorID getColonColor();
 ColorID getDateColor();
-void loadBuiltinColors();
+
 
 #endif

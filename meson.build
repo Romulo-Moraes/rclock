@@ -2,7 +2,10 @@ project('R-clock', 'c')
 
 includes = include_directories('include')
 
-deps = dependency('ncurses')
+cc = meson.get_compiler('c')
+
+deps = [dependency('ncurses')]
+deps += cc.find_library('m', required : true)
 
 src = files()
 

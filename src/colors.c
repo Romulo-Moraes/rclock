@@ -11,11 +11,39 @@ struct RclockColor availableColors[] = {
     (struct RclockColor){.colorName = "white", .clockID = WHITE_ID, .dateID = DATE_WHITE_ID}
 };
 
-ColorID digitColors[MAX_CLOCK_DIGIT_WINDOWS];
+ColorID digitColors[MAX_DIGIT_COLORS];
 ColorID dateColor;
 ColorID colonsColor;
 
+// Forward declarations
+void setColorToTheDigits(ColorID newColor);
+void setColorToTheClock(ColorID newColor);
+struct RclockColor* searchForColor(char *colorName);
+void setGlobalDigitsColor(struct ColorsModule userArguments, char *errorOutput);
+void setClockColor(struct ColorsModule userArguments, char *errorOutput);
+void setDateColor(struct ColorsModule userArguments, char* errorOutput);
+void setColonColor(struct ColorsModule userArguments, char* errorOutput);
+void setColorForEachClockDigit(struct ColorsModule userArguments, char* errorOutput);
+
+
+// Public functions
+
+void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
+
+    setGlobalDigitsColor(userArguments, errorOutput);
+
+    setClockColor(userArguments, errorOutput);
+
+    setDateColor(userArguments, errorOutput);
+
+    setColonColor(userArguments, errorOutput);
+
+    setColorForEachClockDigit(userArguments, errorOutput);
+}
+
 void loadBuiltinColors(){
+    init_color(19, 850, 0, 0);
+
     // Colors for clock
     init_pair(BLACK_ID, 0, COLOR_BLACK);
     init_pair(RED_ID, 0, COLOR_RED);
@@ -35,10 +63,32 @@ void loadBuiltinColors(){
     init_pair(DATE_MAGENTA_ID, COLOR_MAGENTA, -1);
     init_pair(DATE_CYAN_ID, COLOR_CYAN, -1);
     init_pair(DATE_WHITE_ID, COLOR_WHITE, -1);
+
+    // Error message
+    init_pair(ERROR_MESSAGE_RED_ID, 19, -1);
 }
 
+ColorID getDigitColor(unsigned char digitIndex){
+    if(digitIndex >= 0 && digitIndex <= 5){
+        return digitColors[digitIndex];
+    }else{
+        return DEFAULT_COLOR;
+    }
+}
+
+ColorID getColonColor(){
+    return colonsColor;
+}
+
+ColorID getDateColor(){
+    return dateColor;
+}
+
+
+// Private functions
+
 void setColorToTheDigits(ColorID newColor){
-    for(int i = 0; i < MAX_CLOCK_DIGIT_WINDOWS; i++){
+    for(int i = 0; i < MAX_DIGIT_COLORS; i++){
         digitColors[i] = newColor;
     }
 }
@@ -133,33 +183,4 @@ void setColorForEachClockDigit(struct ColorsModule userArguments, char* errorOut
             }
         }
     }
-}
-
-ColorID getDigitColor(unsigned char digitIndex){
-    if(digitIndex >= 0 && digitIndex <= 5){
-        return digitColors[digitIndex];
-    }else{
-        return DEFAULT_COLOR;
-    }
-}
-
-ColorID getColonColor(){
-    return colonsColor;
-}
-
-ColorID getDateColor(){
-    return dateColor;
-}
-
-void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
-
-    setGlobalDigitsColor(userArguments, errorOutput);
-
-    setClockColor(userArguments, errorOutput);
-
-    setDateColor(userArguments, errorOutput);
-
-    setColonColor(userArguments, errorOutput);
-
-    setColorForEachClockDigit(userArguments, errorOutput);
 }

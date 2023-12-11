@@ -7,12 +7,26 @@
 struct tm *timeStruct;
 
 void signalHandler(int signal);
+void redrawTheEntireClock(ProgramArguments arguments, ClockState clocksSizeState){
+    wclear(stdscr);
+    refresh();
+    setPlaceHolders();
+    moveTimeWindowsToPlaceholders();
+    moveDateWindowToPlaceholder();
+
+    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, clocksSizeState);
+
+    drawDate(timeStruct, arguments.datetime, arguments.colors);
+
+    printw("sijjfsdijfdsui");
+}
 
 int main(int argc, char *argv[]){
     ProgramArguments arguments = fetchProgramArguments();
     timeStruct = generateDateAndTime();
     struct tm timeStructCopy = *timeStruct;
     char errorBuffer[512];
+    ClockState clocksSizeState;
 
     initscr();
     cbreak();
@@ -24,35 +38,50 @@ int main(int argc, char *argv[]){
 
     setComponentsColors(arguments.colors, errorBuffer);
 
+    loadInitialTerminalSize();  
+
     generateWindows(arguments.DatetimeScreenManagerDesigner);
+
+    hideAndShowSecondsIfTerminalsTooSmall();
+
     setPlaceHolders();
+
+    showErrorMessageIfTerminalIsExtremelySmall(arguments.DatetimeScreenManagerDesigner);
 
     drawDate(timeStruct, arguments.datetime, arguments.colors);
 
     moveTimeWindowsToPlaceholders();
     moveDateWindowToPlaceholder();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
-
     signal(SIGALRM, signalHandler);
 
     alarm(1);
 
+    if(arguments.DatetimeScreenManagerDesigner.hideTheSeconds == false)
+        clocksSizeState = hideAndShowSecondsIfTerminalsTooSmall();
+
+    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, clocksSizeState);
+
     while(true){
-        // For each terminal resize, the clock is redrawn
-        if(detectTerminalResizes()){
-            wclear(stdscr);
-            refresh();
-            setPlaceHolders();
-            moveTimeWindowsToPlaceholders();
-            moveDateWindowToPlaceholder();
 
-            drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
+        if(showErrorMessageIfTerminalIsExtremelySmall(arguments.DatetimeScreenManagerDesigner) == true){
+            clocksSizeState = hideAndShowSecondsIfTerminalsTooSmall();;
+            redrawTheEntireClock(arguments, clocksSizeState);
 
-            drawDate(timeStruct, arguments.datetime, arguments.colors);
+            refreshWindows();
         }
 
+        // For each terminal resize, the clock is redrawn
+        if(detectTerminalResizes()){
 
+            if(arguments.DatetimeScreenManagerDesigner.hideTheSeconds == false){
+                clocksSizeState = hideAndShowSecondsIfTerminalsTooSmall();
+            }            
+
+           redrawTheEntireClock(arguments, clocksSizeState);
+        }
+
+       
 
         // The main loop run more than once in a second
         // there's no need of run this everytime
@@ -64,7 +93,8 @@ int main(int argc, char *argv[]){
             if(timeStruct->tm_min != timeStructCopy.tm_min)
                 fillClockSegment(getClockSegment(MINUTES_SEGMENT), timeStruct->tm_min);
 
-            fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
+            if(clocksSizeState != SMALL_CLOCK && arguments.DatetimeScreenManagerDesigner.hideTheSeconds != true)
+                fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
         }
 
 

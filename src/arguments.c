@@ -8,7 +8,7 @@ ProgramArguments defaultProgramArguments = {
                   .customMinute = UNDEFINED, .customMonth = UNDEFINED, .customSecond = UNDEFINED,
                   .customTime = NULL, .customYear = UNDEFINED, .dateFormat = NULL},
 
-     .DatetimeScreenManagerDesigner = {.hideTheDate = DEFAULT_HIDE_THE_DATE_STATE, .hideTheSeconds = DEFAULT_HIDE_THE_SECONDS_STATE}
+     .DatetimeScreenManagerDesigner = {.hideTheDate = false/*DEFAULT_HIDE_THE_DATE_STATE*/, .hideTheSeconds = DEFAULT_HIDE_THE_SECONDS_STATE}
  };
 
 void createProgramArguments( ){

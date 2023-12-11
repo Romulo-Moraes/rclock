@@ -1,32 +1,20 @@
 #include "./../include/design.h"
 
-void normalizeSegment(unsigned char number, Digit segmentDigits[2]){
-    if(number < 10){
-        segmentDigits[0] = 0;
-        segmentDigits[1] = number;
-    }else{
-        segmentDigits[0] = ((int)(number / 10));
-        segmentDigits[1] = (number % 10);
-    }
-}
+// Forward declarations
+void normalizeSegment(unsigned char number, Digit segmentDigits[2]);
+void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID);
+void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments, ClockState state);
 
+// Public functions
 
-void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID){
-    wmove(targetWindow, 0, 0);
+void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments, ClockState state){
+    fillClockSegment(getClockSegment(HOURS_SEGMENT), timeStruct->tm_hour);
+    fillClockSegment(getClockSegment(MINUTES_SEGMENT), timeStruct->tm_min);
 
-    for(short j = 0; j < 5; j++){
-        for(short k = 0; k < 3; k++){
-            if(shapeToBeDrawn[j][k] == COLOR){
-                wattron(targetWindow, COLOR_PAIR(digitColorID));
-                wprintw(targetWindow, "  ");
-                wattroff(targetWindow, COLOR_PAIR(digitColorID));
-                wrefresh(targetWindow);
-            }else{
-                wprintw(targetWindow, "  ");
-                wrefresh(targetWindow);
-            }
-        }
-    }
+    if(userArguments.hideTheSeconds == false && state == LARGE_CLOCK)
+        fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
+
+    fillClockColons(userArguments, state);
 }
 
 void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
@@ -42,26 +30,6 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
 
         drawClockWindow(clockWindows[i], theDigit, digitColorID);
     }
-}
-
-void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments){
-    ClockPixel (*colonShape)[3] = getColonShape();
-    ColorID colonColor = getColonColor();
-
-    drawClockWindow(getClockSegment(FIRST_CLOCK_COLON)[0], colonShape, colonColor);
-
-    if(userArguments.hideTheSeconds == false)
-        drawClockWindow(getClockSegment(SECOND_CLOCK_COLON)[0], colonShape, colonColor);
-}
-
-void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments){
-    fillClockSegment(getClockSegment(HOURS_SEGMENT), timeStruct->tm_hour);
-    fillClockSegment(getClockSegment(MINUTES_SEGMENT), timeStruct->tm_min);
-
-    if(userArguments.hideTheSeconds == false)
-        fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
-
-    fillClockColons(userArguments);
 }
 
 void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struct ColorsModule colorArguments){
@@ -82,4 +50,44 @@ void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struc
     wattroff(dateWindow, COLOR_PAIR(getDateColor()));
     wrefresh(dateWindow);
     refresh();
+}
+
+// Private functions
+
+void normalizeSegment(unsigned char number, Digit segmentDigits[2]){
+    if(number < 10){
+        segmentDigits[0] = 0;
+        segmentDigits[1] = number;
+    }else{
+        segmentDigits[0] = ((int)(number / 10));
+        segmentDigits[1] = (number % 10);
+    }
+}
+
+void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID){
+    wmove(targetWindow, 0, 0);
+
+    for(short j = 0; j < 5; j++){
+        for(short k = 0; k < 3; k++){
+            if(shapeToBeDrawn[j][k] == COLOR){
+                wattron(targetWindow, COLOR_PAIR(digitColorID));
+                wprintw(targetWindow, "  ");
+                wattroff(targetWindow, COLOR_PAIR(digitColorID));
+                wrefresh(targetWindow);
+            }else{
+                wprintw(targetWindow, "  ");
+                wrefresh(targetWindow);
+            }
+        }
+    }
+}
+
+void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments, ClockState state){
+    ClockPixel (*colonShape)[3] = getColonShape();
+    ColorID colonColor = getColonColor();
+
+    drawClockWindow(getClockSegment(FIRST_CLOCK_COLON)[0], colonShape, colonColor);
+
+    if(userArguments.hideTheSeconds == false && state == LARGE_CLOCK)
+        drawClockWindow(getClockSegment(SECOND_CLOCK_COLON)[0], colonShape, colonColor);
 }

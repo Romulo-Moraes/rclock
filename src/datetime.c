@@ -1,5 +1,17 @@
 #include "./../include/datetime.h"
 
+// Forward declarations
+bool checkIfDateAndTimeSegmentsAreDigits(char *customDateTime);
+struct DateStruct parseDate(struct DatetimeModule datetimeArguments);
+struct TimeStruct parseTime(struct DatetimeModule datetimeArguments);
+void setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput);
+void setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments);
+void setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput);
+void setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments);
+void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput);
+
+// Public functions
+
 struct tm* generateDateAndTime(){
     time_t currentTime = time(NULL);
     
@@ -7,6 +19,49 @@ struct tm* generateDateAndTime(){
 
     return timeStruct;
 }
+
+void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
+    
+    setCustomTime(datetimeStruct, dateTimeArguments, errorOutput);
+
+    setCustomHourMinuteAndSecond(datetimeStruct, dateTimeArguments);
+}
+
+void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
+    
+    setCustomDate(datetimeStruct, datetimeArguments, errorOutput);
+
+    setCustomDayMonthAndYear(datetimeStruct, datetimeArguments);
+}
+
+char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer){
+    if(datetimeArguments.dateFormat != NULL){
+        strftime(outputBuffer, MAX_CLOCK_DATE_BUFFER_LEN, datetimeArguments.dateFormat, &datetimeStruct);
+    }else{
+        strftime(outputBuffer, MAX_CLOCK_DATE_BUFFER_LEN, "%A, %b %d %Y", &datetimeStruct);
+    }
+
+    return outputBuffer;
+}
+
+void incrementClockSecond(struct tm *datetimeStruct){
+    datetimeStruct->tm_sec += 1;
+
+    if(datetimeStruct->tm_sec >= 60){
+        mktime(datetimeStruct);
+    }
+}
+
+void sleepClock(){
+    struct timespec sleepTime, t;
+
+    sleepTime.tv_sec = 0;
+    sleepTime.tv_nsec = SLEEP_TIME_IN_NANOSECONDS;
+
+    nanosleep(&sleepTime, &t);
+}
+
+// Private functions
 
 bool checkIfDateAndTimeSegmentsAreDigits(char *customDateTime){
     size_t dateTimeLen = strlen(customDateTime);
@@ -124,20 +179,6 @@ void setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule d
     }
 }
 
-void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
-    
-    setCustomTime(datetimeStruct, dateTimeArguments, errorOutput);
-
-    setCustomHourMinuteAndSecond(datetimeStruct, dateTimeArguments);
-}
-
-void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
-    
-    setCustomDate(datetimeStruct, datetimeArguments, errorOutput);
-
-    setCustomDayMonthAndYear(datetimeStruct, datetimeArguments);
-}
-
 void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput){
     struct tm datetimeStructCopy = *datetimeStruct;
 
@@ -150,31 +191,4 @@ void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput){
     if(datetimeStruct->tm_hour != datetimeStructCopy.tm_hour || datetimeStruct->tm_min != datetimeStructCopy.tm_min || datetimeStruct->tm_sec != datetimeStructCopy.tm_sec){
         generateErrorMessage(CUSTOM_TIME_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
     }
-}
-
-char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer){
-    if(datetimeArguments.dateFormat != NULL){
-        strftime(outputBuffer, MAX_CLOCK_DATE_BUFFER_LEN, datetimeArguments.dateFormat, &datetimeStruct);
-    }else{
-        strftime(outputBuffer, MAX_CLOCK_DATE_BUFFER_LEN, "%A, %b %d %Y", &datetimeStruct);
-    }
-
-    return outputBuffer;
-}
-
-void incrementClockSecond(struct tm *datetimeStruct){
-    datetimeStruct->tm_sec += 1;
-
-    if(datetimeStruct->tm_sec >= 60){
-        mktime(datetimeStruct);
-    }
-}
-
-void sleepClock(){
-    struct timespec sleepTime, t;
-
-    sleepTime.tv_sec = 0;
-    sleepTime.tv_nsec = SLEEP_TIME_IN_NANOSECONDS;
-
-    nanosleep(&sleepTime, &t);
 }

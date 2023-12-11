@@ -12,5 +12,6 @@
 #include <string.h>
 #include <ncurses.h>
 #include <unistd.h>
+#include <math.h>
 
 #endif
