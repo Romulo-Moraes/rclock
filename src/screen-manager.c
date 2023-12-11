@@ -239,13 +239,8 @@ int getLastWhitespaceBeforeOverflow(char *msg, size_t maxColumns){
 }
 
 void writeErrorMessageOnErrorWindow(char *msg, size_t windowWidth, WINDOW *errorWindow){
-    char *lines[ERROR_MESSAGE_WINDOW_HEIGHT];
-    unsigned short requiredLines;
-    unsigned short lastLineLeftPadding;
     size_t msgLen = strlen(msg);
     size_t i = 0, strLenToWrite, line = 0;
-
-    calculateErrorMessageLinesAndPositions(msg, lines, &requiredLines, &lastLineLeftPadding, windowWidth);
 
     wclear(errorWindow);
     wrefresh(errorWindow);
