@@ -8,13 +8,17 @@ void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments, 
 // Public functions
 
 void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments, ClockState state){
-    fillClockSegment(getClockSegment(HOURS_SEGMENT), timeStruct->tm_hour);
-    fillClockSegment(getClockSegment(MINUTES_SEGMENT), timeStruct->tm_min);
+    WINDOW *segmentToFill[2];
 
-    if(userArguments.hideTheSeconds == false && state == LARGE_CLOCK)
-        fillClockSegment(getClockSegment(SECONDS_SEGMENT), timeStruct->tm_sec);
+    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour);
+    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min);
+
+    if(userArguments.hideTheSeconds == false && state == NORMAL_CLOCK)
+        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec);
 
     fillClockColons(userArguments, state);
+
+    refreshWindows();
 }
 
 void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
@@ -85,9 +89,10 @@ void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], Colo
 void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments, ClockState state){
     ClockPixel (*colonShape)[3] = getColonShape();
     ColorID colonColor = getColonColor();
+    WINDOW *segmentToFill[2];
 
-    drawClockWindow(getClockSegment(FIRST_CLOCK_COLON)[0], colonShape, colonColor);
+    drawClockWindow(getClockSegment(FIRST_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor);
 
-    if(userArguments.hideTheSeconds == false && state == LARGE_CLOCK)
-        drawClockWindow(getClockSegment(SECOND_CLOCK_COLON)[0], colonShape, colonColor);
+    if(userArguments.hideTheSeconds == false && state == NORMAL_CLOCK)
+        drawClockWindow(getClockSegment(SECOND_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor);
 }

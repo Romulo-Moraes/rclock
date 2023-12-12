@@ -8,9 +8,10 @@
 #include "colors.h"
 #include "datetime.h"
 
+#define DEFAULT_CLOCK_HEIGHT 12
+#define DEFAULT_CLOCK_WIDTH 60
 #define MINIMUM_TERMINAL_WIDTH 35
-#define MINIMUM_TERMINAL_HEIGHT_WITH_DATE 12
-#define MINIMUM_TERMINAL_HEIGHT_WITHOUT_DATE 7
+#define MINIMUM_TERMINAL_HEIGHT 7
 #define MAX_CLOCK_TIME_WINDOWS 8
 #define MAX_CLOCK_DIGIT_WINDOWS 6
 #define WINDOWS_COUNT_WITH_HIDDEN_SECONDS 5
@@ -21,43 +22,44 @@
 #define FIRST_CLOCK_COLON 2
 #define SECOND_CLOCK_COLON 5
 #define SMALL_CLOCK 0
-#define LARGE_CLOCK 1
+#define NORMAL_CLOCK 1
 #define ERROR_MESSAGE_WINDOW_HEIGHT 5
 #define EXIT_MESSAGE_WINDOW_HEIGHT 3
 #define EXIT_MESSAGE "Press any key to exit"
 
 typedef unsigned char SegmentIndex;
 typedef unsigned char ClockState;
-
-struct RclockWindows{
-    WINDOW *dateWindow;
-    WINDOW *timeWindows[MAX_CLOCK_TIME_WINDOWS];
-    unsigned short timeWindowsCount;
-};
+typedef unsigned char WindowRole;
 
 struct WindowSize{
     unsigned int width;
     unsigned int height;
 };
 
-struct TimeWindowPosition{
+struct WindowPosition{
     int x;
     int y;
-};
-
-struct DateWindowPosition{
-    int y;
-    size_t dateStringLength;
-};
-
-struct WindowsPlaceholders{
-    struct TimeWindowPosition timeWindowsPositions[MAX_CLOCK_TIME_WINDOWS];
-    struct DateWindowPosition dateWindowPosition;
 };
 
 struct ErrorWindows{
     WINDOW *errorWindow;
     WINDOW *exitMessageWindow;
+};
+
+struct RclockWindow{
+    WINDOW *window;
+    struct WindowPosition position;
+};
+
+struct WindowsAttributes{
+    short clockWindowsCount;
+    short dateStringLength;
+};
+
+struct Windows{
+    struct RclockWindow clockWindows[8];
+    struct RclockWindow dateWindow;
+    struct WindowsAttributes windowsAttributes;
 };
 
 struct ErrorWindowsMeasures{
@@ -68,30 +70,33 @@ struct ErrorWindowsMeasures{
     size_t exitMessageWindowWidth;
 };
 
-ClockState hideAndShowSecondsIfTerminalsTooSmall();
-bool showErrorMessageIfTerminalIsExtremelySmall(struct DatetimeScreenManagerDesignerModules userArguments);
+struct TerminalSizeError{
+    bool thereIsAnError;
+    ErrorID errorID;
+    bool (*validationCallback)(void *arguments);
+};
+
+bool checkIfTheDateShouldBeInvisible();
+bool checkIfTheSecondsShouldBeInvisible();
+bool showTerminalIsExtremelySmallErrorMessage(struct DatetimeScreenManagerDesignerModules userArguments, struct TerminalSizeError errorStruct);
 struct ErrorWindows showProgramError(char *msg, float errorWindowWidthFraction, bool enableExitMessage);
 void moveTimeWindowsToPlaceholders();
 void moveDateWindowToPlaceholder();
 void loadInitialTerminalSize();
 bool detectTerminalResizes();
-WINDOW **getClockSegment(unsigned int windowIndex);
+WINDOW** getClockSegment(unsigned int windowIndex, WINDOW *output[2]);
 void setDateStringLength(size_t newLength);
 WINDOW *getDateWindow();
 void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments);
-void setPlaceHolders();
+void setPlaceHolders(ProgramArguments arguments);
 void refreshWindows();
-
-
-
-
-
-
-
-
-
-
+bool checkIfTerminalHeightIsCritical(void *arguments);
+bool checkIfTerminalWidthIsCritical(void *arguments);
+void toggleSecondsVisibility();
+void toggleDatesVisibility();
 void getTerminalSize(unsigned int *width, unsigned int *height);
+void setValuesForClockStates(ClockState *widthState, ClockState *heightState);
+void destroyRclockWindows(ProgramArguments arguments);
 
 
 #endif
