@@ -21,7 +21,9 @@ int main(int argc, char *argv[]){
     char errorBuffer[512];
     ClockState clockWidthState, clockHeightState;
     struct TerminalSizeError sizeError;
+    struct ErrorWindows errorWindows;
     bool terminalSizeErrorFlag;
+    struct UpdateErrorFramesCallbackArguments callbackArguments;
     WINDOW *segmentToFill[2];
 
     configureNcurses();
@@ -34,24 +36,30 @@ int main(int argc, char *argv[]){
     while(true){
         // For each terminal resize, the clock is redrawn
         if(detectTerminalResizes()){
-            checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner, &clockWidthState, &clockHeightState);
-
+        
             terminalSizeErrorFlag = false;
 
             do{
                 sizeError = checkIfTerminalSizeIsCritical(arguments);
 
-                if(sizeError.thereIsAnError == true){                    
-                    showTerminalIsExtremelySmallErrorMessage(arguments.DatetimeScreenManagerDesigner, sizeError);
+                if(sizeError.thereIsAnError == true){
+                    errorWindows =  generateErrorWindows(generateErrorMessage(sizeError.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer), 0.75, false);
+
+                    callbackArguments = (struct UpdateErrorFramesCallbackArguments){.windows = errorWindows, .errorMsg = errorBuffer, .exitErrorMsg = NULL};
+
+                    updateErrorMessageFrames(errorWindows, 0.75, errorBuffer, drawProgramErrorCallback, &callbackArguments, sizeError.validationCallback, false);
+
                     terminalSizeErrorFlag = true;
-                    
                 }
 
                 
             }while(sizeError.thereIsAnError == true);
 
+            checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner, &clockWidthState, &clockHeightState);
+
             redrawTheEntireClock(arguments, clockWidthState, clockHeightState, terminalSizeErrorFlag);
         }else{
+
             // The main loop run more than once in a second
             // there's no need of run this everytime
             if(timeStruct->tm_sec != timeStructCopy.tm_sec){
@@ -99,6 +107,9 @@ void configureRclock(ProgramArguments arguments, char *errorBuffer, ClockState *
 
 void initializeTheClock(ProgramArguments arguments, ClockState *clockWidthState, ClockState *clockHeightState){
     struct TerminalSizeError error;
+    struct ErrorWindows errorWindows;
+    char errorBuffer[512];
+    struct UpdateErrorFramesCallbackArguments callbackArguments;
 
     generateWindows(arguments.DatetimeScreenManagerDesigner);
 
@@ -111,16 +122,27 @@ void initializeTheClock(ProgramArguments arguments, ClockState *clockWidthState,
         error = checkIfTerminalSizeIsCritical(arguments);
 
         if(error.thereIsAnError == true){
-            showTerminalIsExtremelySmallErrorMessage(arguments.DatetimeScreenManagerDesigner, error);
+            errorWindows =  generateErrorWindows(generateErrorMessage(error.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer), 0.75, false);
+
+            callbackArguments = (struct UpdateErrorFramesCallbackArguments){.windows = errorWindows, .errorMsg = errorBuffer, .exitErrorMsg = NULL};
+
+            updateErrorMessageFrames(errorWindows, 0.75, errorBuffer, drawProgramErrorCallback, &callbackArguments, error.validationCallback, false);
         }
     }while(error.thereIsAnError == true);
     
-    drawDate(timeStruct, arguments.datetime, arguments.colors);
 
     moveTimeWindowsToPlaceholders();
-    moveDateWindowToPlaceholder();
+    
+
+    if(arguments.DatetimeScreenManagerDesigner.hideTheDate == false && *clockHeightState == NORMAL_CLOCK){
+        drawDate(timeStruct, arguments.datetime, arguments.colors);
+        moveDateWindowToPlaceholder();
+    }
+    
+    refresh();
 
     drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, *clockWidthState);
+
 }
 
 void signalHandler(int signal){

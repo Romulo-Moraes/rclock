@@ -21,6 +21,7 @@
 
 typedef unsigned char ErrorID;
 
+
 struct Error{
     char *message;
     ErrorID id;

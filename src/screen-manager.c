@@ -7,10 +7,7 @@ bool theClocksDateIsVisible;
 
 // Forward declarations
 void getTerminalSize(unsigned int *width, unsigned int *height);
-int getLastWhitespaceBeforeOverflow(char *msg, size_t maxColumns);
-void writeErrorMessageOnErrorWindow(char *msg, size_t windowWidth, WINDOW *errorWindow);
 struct ErrorWindowsMeasures calculateErrorWindowsMeasures(float errorWindowWidthFraction);
-void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, bool (*extraClearErrorParam)(void *arguments), void *extraParamArguments, bool enableExitMessage);
 
 // Public functions
 
@@ -65,7 +62,7 @@ bool checkIfTheSecondsShouldBeInvisible(){
     return winSize.width < DEFAULT_CLOCK_WIDTH;
 }
 
-
+/*
 bool showTerminalIsExtremelySmallErrorMessage(struct DatetimeScreenManagerDesignerModules userArguments, struct TerminalSizeError errorStruct){
     struct ErrorWindows windows;
     char errorBuffer[MAX_ERROR_BUFFER_SZ + 1];
@@ -76,33 +73,21 @@ bool showTerminalIsExtremelySmallErrorMessage(struct DatetimeScreenManagerDesign
 
     return true;
 }
+*/
 
-struct ErrorWindows showProgramError(char *msg, float errorWindowWidthFraction, bool enableExitMessage){
-    WINDOW *errorWindow, *exitMessageWindow;
-    struct ErrorWindowsMeasures measures;
+struct ErrorWindows generateErrorWindows(char *msg, float errorWindowWidthFraction, bool enableExitMessage){
+    struct ErrorWindows errorWindows;
 
     getTerminalSize(&winSize.width, &winSize.height);
 
-    measures = calculateErrorWindowsMeasures(errorWindowWidthFraction);
-        
-    wclear(stdscr);
-    refresh();
+    errorWindows.measures = calculateErrorWindowsMeasures(errorWindowWidthFraction);
 
-    errorWindow = newwin(ERROR_MESSAGE_WINDOW_HEIGHT, measures.errorWindowWidth, measures.errorWindowTop, measures.errorWindowLeft);
+    errorWindows.errorWindow = newwin(ERROR_MESSAGE_WINDOW_HEIGHT, errorWindows.measures.errorWindowWidth, errorWindows.measures.errorWindowTop, errorWindows.measures.errorWindowLeft);
     if(enableExitMessage){
-        exitMessageWindow = newwin(EXIT_MESSAGE_WINDOW_HEIGHT, measures.exitMessageWindowWidth, measures.exitMessageWindowTop, 0);
-
-        mvwprintw(exitMessageWindow, 0, measures.exitMessageWindowWidth / 2 - sizeof(EXIT_MESSAGE) / 2, EXIT_MESSAGE);
-        wrefresh(exitMessageWindow);
+        errorWindows.exitMessageWindow = newwin(EXIT_MESSAGE_WINDOW_HEIGHT, errorWindows.measures.exitMessageWindowWidth, errorWindows.measures.exitMessageWindowTop, 0);
     }
 
-    writeErrorMessageOnErrorWindow(msg, measures.errorWindowWidth - 2, errorWindow);
-
-    wrefresh(errorWindow);
-
-    refresh();
-
-    return (struct ErrorWindows){.errorWindow = errorWindow, .exitMessageWindow = exitMessageWindow};
+    return errorWindows;
 }
 
 void moveTimeWindowsToPlaceholders(){
@@ -236,11 +221,11 @@ void refreshWindows(){
     refresh();
 }
 
-bool checkIfTerminalHeightIsCritical(void *arguments){
+bool checkIfTerminalHeightIsCritical(){
     return !(winSize.height >= MINIMUM_TERMINAL_HEIGHT);
 }
 
-bool checkIfTerminalWidthIsCritical(void *arguments){
+bool checkIfTerminalWidthIsCritical(){
     return !(winSize.width >= MINIMUM_TERMINAL_WIDTH);
 }
 
@@ -251,44 +236,6 @@ void getTerminalSize(unsigned int *width, unsigned int *height){
     getmaxyx(stdscr, *height, *width);
 }
 
-int getLastWhitespaceBeforeOverflow(char *msg, size_t maxColumns){
-    size_t stringLenUntilWhitespace = 0;
-
-    for(size_t i = 0; i < maxColumns; i++){
-        if(msg[i] == ' ' || msg[i] == '\0'){
-            stringLenUntilWhitespace = i;
-        }
-
-        if(msg[i] == '\0'){
-            break;
-        }
-    }
-
-    return stringLenUntilWhitespace == 0 ? maxColumns : stringLenUntilWhitespace;
-}
-
-void writeErrorMessageOnErrorWindow(char *msg, size_t windowWidth, WINDOW *errorWindow){
-    size_t msgLen = strlen(msg);
-    size_t i = 0, strLenToWrite, line = 0;
-
-    wclear(errorWindow);
-    wrefresh(errorWindow);
-
-    wattron(errorWindow, COLOR_PAIR(ERROR_MESSAGE_RED_ID));    
-
-    while(i < msgLen){
-        strLenToWrite = getLastWhitespaceBeforeOverflow(msg, windowWidth);
-        mvwaddnstr(errorWindow, line++ + 1, windowWidth / 2 - strLenToWrite / 2, msg, strLenToWrite);
-
-        msg += (strLenToWrite + 1);
-        i += strLenToWrite;
-    }
-    
-    wattroff(errorWindow, COLOR_PAIR(ERROR_MESSAGE_RED_ID));
-
-    wrefresh(errorWindow);
-    refresh();
-}
 
 struct ErrorWindowsMeasures calculateErrorWindowsMeasures(float errorWindowWidthFraction){
     struct ErrorWindowsMeasures measures;
@@ -302,50 +249,48 @@ struct ErrorWindowsMeasures calculateErrorWindowsMeasures(float errorWindowWidth
     return measures;
 }
 
-void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, bool (*extraClearErrorParam)(void *arguments), void *extraParamArguments, bool enableExitMessage){
+void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage){
     struct ErrorWindowsMeasures measures;
+    bool firstLoop = true;
 
     timeout(1000);
 
     while(true){
 
-        wclear(windows.errorWindow);
-        wrefresh(windows.errorWindow);
-            
-        if(enableExitMessage){
-            wclear(windows.exitMessageWindow);
-            wrefresh(windows.exitMessageWindow);
-        }
+        if(detectTerminalResizes() || firstLoop == true){
+            firstLoop = false;
 
-        refresh();
+            getTerminalSize(&winSize.width, &winSize.height);
 
-        getTerminalSize(&winSize.width, &winSize.height);
+            measures = calculateErrorWindowsMeasures(errorWindowWidthFraction);
 
-        measures = calculateErrorWindowsMeasures(errorWindowWidthFraction);
+            mvwin(windows.errorWindow, measures.errorWindowTop, measures.errorWindowLeft);
+            wresize(windows.errorWindow, 5, measures.errorWindowWidth);
 
-        mvwin(windows.errorWindow, measures.errorWindowTop, measures.errorWindowLeft);
-        wresize(windows.errorWindow, 5, measures.errorWindowWidth);
+            if(enableExitMessage){
+                mvwin(windows.exitMessageWindow, measures.exitMessageWindowTop, 0);
+                wresize(windows.exitMessageWindow, 3, measures.exitMessageWindowWidth);
+            }
 
-        if(enableExitMessage){
-            mvwin(windows.exitMessageWindow, measures.exitMessageWindowTop, 0);
-            wresize(windows.exitMessageWindow, 3, measures.exitMessageWindowWidth);
-        }
+            wrefresh(windows.errorWindow);
 
-        writeErrorMessageOnErrorWindow(errorMessage, measures.errorWindowWidth - 2, windows.errorWindow);
-
-        wrefresh(windows.errorWindow);
-        
-        if(enableExitMessage)
-            wrefresh(windows.exitMessageWindow);
-
-        refresh();
-
-        if(!extraClearErrorParam(extraParamArguments)){
-            delwin(windows.errorWindow);
             if(enableExitMessage)
-                delwin(windows.exitMessageWindow);
+                wrefresh(windows.exitMessageWindow);
 
-            break;
+            refresh();
+
+            // Update the measures for each loop
+            ((struct UpdateErrorFramesCallbackArguments*) drawErrorArguments)->windows.measures = measures;
+
+            drawProgramErrorCallback(drawErrorArguments);
+
+            if(!errorVerificationCallback()){
+                delwin(windows.errorWindow);
+                if(enableExitMessage)
+                    delwin(windows.exitMessageWindow);
+
+                break;
+            }
         }
 
 

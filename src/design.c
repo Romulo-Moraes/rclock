@@ -4,6 +4,7 @@
 void normalizeSegment(unsigned char number, Digit segmentDigits[2]);
 void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID);
 void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments, ClockState state);
+int getLastWhitespaceBeforeOverflow(char *msg, size_t remainingColumns);
 
 // Public functions
 
@@ -56,7 +57,69 @@ void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struc
     refresh();
 }
 
+void writeErrorMessageOnErrorWindow(char *msg, size_t windowWidth, WINDOW *errorWindow){
+    size_t msgLen = strlen(msg);
+    size_t requiredLines;
+    size_t remainder;
+    short i;
+    
+
+    wclear(errorWindow);
+    wrefresh(errorWindow);
+
+    requiredLines = msgLen / (float) windowWidth;
+    remainder = msgLen % windowWidth;
+
+    wattron(errorWindow, COLOR_PAIR(ERROR_MESSAGE_RED_ID));
+
+    for(i = 1; i <= requiredLines; i++){
+        mvwaddnstr(errorWindow, i, 0, msg, windowWidth);
+
+        msg += windowWidth;
+    }
+
+    mvwaddnstr(errorWindow, i, windowWidth / 2 - remainder / 2, msg, remainder);
+
+    wattroff(errorWindow, COLOR_PAIR(ERROR_MESSAGE_RED_ID));
+
+    wrefresh(errorWindow);
+    refresh();
+}
+
+void drawProgramErrorCallback(void *arguments){
+    struct UpdateErrorFramesCallbackArguments *typecastedArguments = (struct UpdateErrorFramesCallbackArguments*) arguments;
+
+    clear();
+    refresh();
+    
+    if(false){
+        wclear(typecastedArguments->windows.exitMessageWindow);
+        wrefresh(typecastedArguments->windows.exitMessageWindow);
+    }
+
+    writeErrorMessageOnErrorWindow(typecastedArguments->errorMsg, typecastedArguments->windows.measures.errorWindowWidth, typecastedArguments->windows.errorWindow);
+
+    refresh();
+}
+
 // Private functions
+
+
+int getLastWhitespaceBeforeOverflow(char *msg, size_t remainingColumns){
+    size_t stringLenUntilWhitespace = 0;
+
+    for(size_t i = 0; i < remainingColumns; i++){
+        if(msg[i] == ' ' || msg[i] == '\0'){
+            stringLenUntilWhitespace = i;
+        }
+
+        if(msg[i] == '\0'){
+            break;
+        }
+    }
+
+    return stringLenUntilWhitespace;
+}
 
 void normalizeSegment(unsigned char number, Digit segmentDigits[2]){
     if(number < 10){

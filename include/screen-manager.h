@@ -41,11 +41,6 @@ struct WindowPosition{
     int y;
 };
 
-struct ErrorWindows{
-    WINDOW *errorWindow;
-    WINDOW *exitMessageWindow;
-};
-
 struct RclockWindow{
     WINDOW *window;
     struct WindowPosition position;
@@ -70,16 +65,28 @@ struct ErrorWindowsMeasures{
     size_t exitMessageWindowWidth;
 };
 
+struct ErrorWindows{
+    WINDOW *errorWindow;
+    WINDOW *exitMessageWindow;
+    struct ErrorWindowsMeasures measures;   
+};
+
 struct TerminalSizeError{
     bool thereIsAnError;
     ErrorID errorID;
     bool (*validationCallback)(void *arguments);
 };
 
+struct UpdateErrorFramesCallbackArguments{
+  struct ErrorWindows windows;
+  char *errorMsg;
+  char *exitErrorMsg;
+};
+
 bool checkIfTheDateShouldBeInvisible();
 bool checkIfTheSecondsShouldBeInvisible();
 bool showTerminalIsExtremelySmallErrorMessage(struct DatetimeScreenManagerDesignerModules userArguments, struct TerminalSizeError errorStruct);
-struct ErrorWindows showProgramError(char *msg, float errorWindowWidthFraction, bool enableExitMessage);
+struct ErrorWindows generateErrorWindows(char *msg, float errorWindowWidthFraction, bool enableExitMessage);
 void moveTimeWindowsToPlaceholders();
 void moveDateWindowToPlaceholder();
 void loadInitialTerminalSize();
@@ -90,13 +97,14 @@ WINDOW *getDateWindow();
 void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments);
 void setPlaceHolders(ProgramArguments arguments);
 void refreshWindows();
-bool checkIfTerminalHeightIsCritical(void *arguments);
-bool checkIfTerminalWidthIsCritical(void *arguments);
+bool checkIfTerminalHeightIsCritical();
+bool checkIfTerminalWidthIsCritical();
 void toggleSecondsVisibility();
 void toggleDatesVisibility();
 void getTerminalSize(unsigned int *width, unsigned int *height);
 void setValuesForClockStates(ClockState *widthState, ClockState *heightState);
 void destroyRclockWindows(ProgramArguments arguments);
+void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage);
 
 
 #endif
