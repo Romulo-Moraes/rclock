@@ -21,14 +21,11 @@
 #define SECONDS_SEGMENT 6
 #define FIRST_CLOCK_COLON 2
 #define SECOND_CLOCK_COLON 5
-#define SMALL_CLOCK 0
-#define NORMAL_CLOCK 1
 #define ERROR_MESSAGE_WINDOW_HEIGHT 5
 #define EXIT_MESSAGE_WINDOW_HEIGHT 3
 #define EXIT_MESSAGE "Press any key to exit"
 
 typedef unsigned char SegmentIndex;
-typedef unsigned char ClockState;
 typedef unsigned char WindowRole;
 
 struct WindowSize{
@@ -85,7 +82,6 @@ struct UpdateErrorFramesCallbackArguments{
 
 bool checkIfTheDateShouldBeInvisible();
 bool checkIfTheSecondsShouldBeInvisible();
-bool showTerminalIsExtremelySmallErrorMessage(struct DatetimeScreenManagerDesignerModules userArguments, struct TerminalSizeError errorStruct);
 struct ErrorWindows generateErrorWindows(char *msg, float errorWindowWidthFraction, bool enableExitMessage);
 void moveTimeWindowsToPlaceholders();
 void moveDateWindowToPlaceholder();
@@ -102,9 +98,11 @@ bool checkIfTerminalWidthIsCritical();
 void toggleSecondsVisibility();
 void toggleDatesVisibility();
 void getTerminalSize(unsigned int *width, unsigned int *height);
-void setValuesForClockStates(ClockState *widthState, ClockState *heightState);
+void setValuesForClockStates();
 void destroyRclockWindows(ProgramArguments arguments);
 void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage);
+bool checkIfTheSecondsIsVisible();
+bool checkIfTheDateIsVisible();
 
 
 #endif

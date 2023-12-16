@@ -24,20 +24,16 @@ void destroyRclockWindows(ProgramArguments arguments){
     refresh();
 }   
 
-void setValuesForClockStates(ClockState *widthState, ClockState *heightState){
+void setValuesForClockStates(){
     if(checkIfTheSecondsShouldBeInvisible() == true){
-        *widthState = SMALL_CLOCK;
         theClocksSecondsIsVisible = false;
     }else{
-        *widthState = NORMAL_CLOCK;
         theClocksSecondsIsVisible = true;
     }
 
     if(checkIfTheDateShouldBeInvisible() == true){
-        *heightState = SMALL_CLOCK;
         theClocksDateIsVisible = false;
     }else{
-        *heightState = NORMAL_CLOCK;
         theClocksDateIsVisible = true;
     }
 }
@@ -62,19 +58,8 @@ bool checkIfTheSecondsShouldBeInvisible(){
     return winSize.width < DEFAULT_CLOCK_WIDTH;
 }
 
-/*
-bool showTerminalIsExtremelySmallErrorMessage(struct DatetimeScreenManagerDesignerModules userArguments, struct TerminalSizeError errorStruct){
-    struct ErrorWindows windows;
-    char errorBuffer[MAX_ERROR_BUFFER_SZ + 1];
-
-    windows = showProgramError(generateErrorMessage(errorStruct.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer), 0.75, false);
-
-    updateErrorMessageFrames(windows, 0.75, errorBuffer, errorStruct.validationCallback, (void*) &userArguments , false);
-
-    return true;
-}
-*/
-
+// Generates error and exit message windows that will be the place to
+// draw the respective messages
 struct ErrorWindows generateErrorWindows(char *msg, float errorWindowWidthFraction, bool enableExitMessage){
     struct ErrorWindows errorWindows;
 
@@ -138,6 +123,8 @@ bool detectTerminalResizes(){
     return false;
 }
 
+
+// Returns the windows that correspond to a clock segment
 WINDOW** getClockSegment(unsigned int windowIndex, WINDOW *output[2]){
     if(windowIndex <= 7){
         output[0] = programWindows.clockWindows[windowIndex].window;
@@ -169,6 +156,9 @@ void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments){
     }
 }
 
+// This procedure will calculate and create placeholders on screen
+// with the goal of align everything to the center. This procedure is aware
+// of hidden seconds and date
 void setPlaceHolders(ProgramArguments arguments){
     getTerminalSize(&winSize.width, &winSize.height);
     size_t windowsLimit;
@@ -229,25 +219,14 @@ bool checkIfTerminalWidthIsCritical(){
     return !(winSize.width >= MINIMUM_TERMINAL_WIDTH);
 }
 
-
-// Private functions
-
-void getTerminalSize(unsigned int *width, unsigned int *height){
-    getmaxyx(stdscr, *height, *width);
+bool checkIfTheSecondsIsVisible(){
+    return theClocksSecondsIsVisible;
 }
 
-
-struct ErrorWindowsMeasures calculateErrorWindowsMeasures(float errorWindowWidthFraction){
-    struct ErrorWindowsMeasures measures;
-
-    measures.errorWindowWidth = winSize.width * (errorWindowWidthFraction <= 0 ? 0.5 : errorWindowWidthFraction);
-    measures.errorWindowTop = winSize.height / 2 - 2;
-    measures.errorWindowLeft = winSize.width * (1 - errorWindowWidthFraction) / 2;
-    measures.exitMessageWindowWidth = winSize.width;
-    measures.exitMessageWindowTop = winSize.height / 2 + 3;
-
-    return measures;
+bool checkIfTheDateIsVisible(){
+    return theClocksDateIsVisible;
 }
+
 
 void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage){
     struct ErrorWindowsMeasures measures;
@@ -300,4 +279,23 @@ void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidt
             break;
         }*/
     }
+}
+
+// Private functions
+
+void _getTerminalSize(unsigned int *width, unsigned int *height){
+    getmaxyx(stdscr, *height, *width);
+}
+
+
+struct ErrorWindowsMeasures calculateErrorWindowsMeasures(float errorWindowWidthFraction){
+    struct ErrorWindowsMeasures measures;
+
+    measures.errorWindowWidth = winSize.width * (errorWindowWidthFraction <= 0 ? 0.5 : errorWindowWidthFraction);
+    measures.errorWindowTop = winSize.height / 2 - 2;
+    measures.errorWindowLeft = winSize.width * (1 - errorWindowWidthFraction) / 2;
+    measures.exitMessageWindowWidth = winSize.width;
+    measures.exitMessageWindowTop = winSize.height / 2 + 3;
+
+    return measures;
 }

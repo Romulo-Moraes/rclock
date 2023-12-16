@@ -28,16 +28,25 @@ void setColorForEachClockDigit(struct ColorsModule userArguments, char* errorOut
 
 // Public functions
 
+
 void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
 
-    setGlobalDigitsColor(userArguments, errorOutput);
+    // The color arguments have priority order,
+    // from specific to general
 
+    // For the digits and colons - Low priority order
     setClockColor(userArguments, errorOutput);
 
+    // For all digit windows
+    setGlobalDigitsColor(userArguments, errorOutput);
+
+    // For the date
     setDateColor(userArguments, errorOutput);
 
+    // For the colons
     setColonColor(userArguments, errorOutput);
 
+    // For each clock digit - High priority order
     setColorForEachClockDigit(userArguments, errorOutput);
 }
 
@@ -101,7 +110,6 @@ void setColorToTheClock(ColorID newColor){
 
 struct RclockColor* searchForColor(char *colorName){
     size_t colorsArraySize = sizeof(availableColors) / sizeof(availableColors[0]);
-
 
     for(short i = 0; i < colorsArraySize; i++){
         if(strcmp(colorName, availableColors[i].colorName) == 0){

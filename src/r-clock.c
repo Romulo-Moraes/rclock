@@ -7,30 +7,31 @@
 struct tm *timeStruct;
 
 void signalHandler(int signal);
-void redrawTheEntireClock(ProgramArguments arguments, ClockState clockWidthState, ClockState clockHeightState, bool destroyTheWindows);
+void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows);
 void configureNcurses();
-void configureRclock();
-void checkIfTheClockShouldBeSmaller();
+void configureRclock(ProgramArguments arguments, char *errorBuffer);
+void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModules arguments);
 struct TerminalSizeError checkIfTerminalSizeIsCritical(ProgramArguments arguments);
-void initializeTheClock();
+void initializeTheClock(ProgramArguments arguments);
+void createTerminalSizeError(struct TerminalSizeError sizeError);
 
 int main(int argc, char *argv[]){
     ProgramArguments arguments = fetchProgramArguments();
     timeStruct = generateDateAndTime();
     struct tm timeStructCopy = *timeStruct;
     char errorBuffer[512];
-    ClockState clockWidthState, clockHeightState;
     struct TerminalSizeError sizeError;
-    struct ErrorWindows errorWindows;
     bool terminalSizeErrorFlag;
-    struct UpdateErrorFramesCallbackArguments callbackArguments;
     WINDOW *segmentToFill[2];
 
     configureNcurses();
-    configureRclock(arguments, errorBuffer, &clockWidthState, &clockHeightState);
+    configureRclock(arguments, errorBuffer);
 
-    initializeTheClock(arguments, &clockWidthState, &clockHeightState);
+    initializeTheClock(arguments);
 
+    // The seconds aren't updated by a loop, the alarm signal
+    // will trigger a procedure for each second, and that
+    // procedure will update the time struct
     alarm(1);
 
     while(true){
@@ -39,29 +40,32 @@ int main(int argc, char *argv[]){
         
             terminalSizeErrorFlag = false;
 
+            // A loop to check if the terminal size is safe to render the clock
             do{
                 sizeError = checkIfTerminalSizeIsCritical(arguments);
 
                 if(sizeError.thereIsAnError == true){
-                    errorWindows =  generateErrorWindows(generateErrorMessage(sizeError.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer), 0.75, false);
-
-                    callbackArguments = (struct UpdateErrorFramesCallbackArguments){.windows = errorWindows, .errorMsg = errorBuffer, .exitErrorMsg = NULL};
-
-                    updateErrorMessageFrames(errorWindows, 0.75, errorBuffer, drawProgramErrorCallback, &callbackArguments, sizeError.validationCallback, false);
+                    // Issue an error if the size isn't safe
+                    createTerminalSizeError(sizeError);
 
                     terminalSizeErrorFlag = true;
                 }
 
-                
             }while(sizeError.thereIsAnError == true);
 
-            checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner, &clockWidthState, &clockHeightState);
+            // This procedure will manipulate flags that will tell
+            // the screen-manager and designer modules that the
+            // clock's date or seconds must be hidden
+            checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner);
 
-            redrawTheEntireClock(arguments, clockWidthState, clockHeightState, terminalSizeErrorFlag);
+            // After each error screen, the clock is redraw
+            redrawTheEntireClock(arguments, terminalSizeErrorFlag);
         }else{
 
-            // The main loop run more than once in a second
-            // there's no need of run this everytime
+            // Every time that the alarm triggers the procedure 
+            // that update the seconds, the timeStruct will be 
+            // compared with its older version, the timeStructCopy,
+            // if both are different, the clock is updated
             if(timeStruct->tm_sec != timeStructCopy.tm_sec){
 
                 if(timeStruct->tm_hour != timeStructCopy.tm_hour)
@@ -70,15 +74,17 @@ int main(int argc, char *argv[]){
                 if(timeStruct->tm_min != timeStructCopy.tm_min)
                     fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min);
 
-                if(clockWidthState != SMALL_CLOCK && arguments.DatetimeScreenManagerDesigner.hideTheSeconds != true){
+                if(checkIfTheSecondsIsVisible() == true && arguments.DatetimeScreenManagerDesigner.hideTheSeconds != true){
                     fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec);
                 }
+
+                // Making both have the same value for the next alarm
+                timeStructCopy = *timeStruct;
             }
         }
 
         refreshWindows();
         refresh();
-        timeStructCopy = *timeStruct;
 
         // Sleeps for SLEEP_TIME_IN_NANOSECONDS nano seconds
         sleepClock();
@@ -89,6 +95,8 @@ int main(int argc, char *argv[]){
     return EXIT_SUCCESS;
 }
 
+// Calls a couple of functions that will load
+// all features that the Rclock requires
 void configureNcurses(){
     initscr();
     cbreak();
@@ -97,56 +105,70 @@ void configureNcurses(){
     curs_set(0);
 }
 
-void configureRclock(ProgramArguments arguments, char *errorBuffer, ClockState *widthState, ClockState *heightState){
+// Calls a couple of functions that will load
+// default values and populate control variables
+void configureRclock(ProgramArguments arguments, char *errorBuffer){
     loadBuiltinColors();
     setComponentsColors(arguments.colors, errorBuffer);
     loadInitialTerminalSize();
-    setValuesForClockStates(widthState, heightState);
+    setValuesForClockStates();
     signal(SIGALRM, signalHandler);
 }
 
-void initializeTheClock(ProgramArguments arguments, ClockState *clockWidthState, ClockState *clockHeightState){
-    struct TerminalSizeError error;
-    struct ErrorWindows errorWindows;
-    char errorBuffer[512];
-    struct UpdateErrorFramesCallbackArguments callbackArguments;
-
+void initializeTheClock(ProgramArguments arguments){
+    struct TerminalSizeError sizeError;
+    
     generateWindows(arguments.DatetimeScreenManagerDesigner);
 
-    // TODO !!! check if placeholders is affected by the state flags
     setPlaceHolders(arguments);
 
-    checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner, clockWidthState, clockHeightState);
+    checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner);
 
     do{
-        error = checkIfTerminalSizeIsCritical(arguments);
+        sizeError = checkIfTerminalSizeIsCritical(arguments);
 
-        if(error.thereIsAnError == true){
-            errorWindows =  generateErrorWindows(generateErrorMessage(error.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer), 0.75, false);
-
-            callbackArguments = (struct UpdateErrorFramesCallbackArguments){.windows = errorWindows, .errorMsg = errorBuffer, .exitErrorMsg = NULL};
-
-            updateErrorMessageFrames(errorWindows, 0.75, errorBuffer, drawProgramErrorCallback, &callbackArguments, error.validationCallback, false);
+        if(sizeError.thereIsAnError == true){
+            createTerminalSizeError(sizeError);
         }
-    }while(error.thereIsAnError == true);
+    }while(sizeError.thereIsAnError == true);
     
 
     moveTimeWindowsToPlaceholders();
     
 
-    if(arguments.DatetimeScreenManagerDesigner.hideTheDate == false && *clockHeightState == NORMAL_CLOCK){
+    if(arguments.DatetimeScreenManagerDesigner.hideTheDate == false && checkIfTheDateIsVisible() == true){
         drawDate(timeStruct, arguments.datetime, arguments.colors);
         moveDateWindowToPlaceholder();
     }
     
     refresh();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, *clockWidthState);
+    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
 
 }
 
+
+// Create and call update routines to show an error screen 
+// of a terminal size trouble
+void createTerminalSizeError(struct TerminalSizeError sizeError){
+    char errorBuffer[512];
+    struct ErrorWindows errorWindows;
+    struct UpdateErrorFramesCallbackArguments callbackArguments;
+
+    errorWindows =  generateErrorWindows(generateErrorMessage(sizeError.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer), 0.75, false);
+
+    callbackArguments = (struct UpdateErrorFramesCallbackArguments){.windows = errorWindows, .errorMsg = errorBuffer, .exitErrorMsg = NULL};
+
+    updateErrorMessageFrames(errorWindows, 0.75, errorBuffer, drawProgramErrorCallback, &callbackArguments, sizeError.validationCallback, false);
+}
+
+// Procedure that handle all signal that the
+// program may receive
 void signalHandler(int signal){
     switch(signal){
+        // The SIGALRM is the signal that is
+        // triggered once in 1 second and
+        // update the time struct
         case SIGALRM:
             incrementClockSecond(timeStruct);
             alarm(1);
@@ -154,6 +176,10 @@ void signalHandler(int signal){
     }
 }
 
+// Function used to generate a terminal size error, it is 
+// basically a wrapper that calls two other functions that
+// check both width and height. Zero or one error is given by
+// a call to this function.
 struct TerminalSizeError checkIfTerminalSizeIsCritical(ProgramArguments arguments){
     struct TerminalSizeError errorStruct;
 
@@ -168,19 +194,21 @@ struct TerminalSizeError checkIfTerminalSizeIsCritical(ProgramArguments argument
     return errorStruct;
 }
 
-void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModules arguments, ClockState *widthState, ClockState *heightState){
+// The project's requirements have a item that specifies that
+// the clock shall hide the seconds or the date if the 
+// terminal dimensions aren't great enough to support them.
+// This procedure checks the dimentions and set control variables
+void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModules arguments){
 
     // If the seconds is already not being shown
     // this is useless
     if(arguments.hideTheSeconds == false){
         if(checkIfTheSecondsShouldBeInvisible() == true){
-            if(*widthState == NORMAL_CLOCK){
-                *widthState = SMALL_CLOCK;
+            if(checkIfTheSecondsIsVisible() == true){
                 toggleSecondsVisibility();
             }
         }else{
-            if(*widthState == SMALL_CLOCK){
-                *widthState = NORMAL_CLOCK;
+            if(checkIfTheSecondsIsVisible() == false){
                 toggleSecondsVisibility();
             }
         }
@@ -190,20 +218,21 @@ void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModules 
     // this is useless
     if(arguments.hideTheDate == false){
         if(checkIfTheDateShouldBeInvisible() == true){
-            if(*heightState == NORMAL_CLOCK){
-                *heightState = SMALL_CLOCK;
+            if(checkIfTheDateIsVisible() == true){
                 toggleDatesVisibility();
             }
         }else{
-            if(*heightState == SMALL_CLOCK){
-                *heightState = NORMAL_CLOCK;
+            if(checkIfTheDateIsVisible() == false){
                 toggleDatesVisibility();
             }
         }
     }
 }
 
-void redrawTheEntireClock(ProgramArguments arguments, ClockState clockWidthState, ClockState clockHeightState, bool destroyTheWindows){
+// This subroutine is always called after a possible program error that is recoverable,
+// if necessary, it will destroy the clock windows and recreate again, else it will 
+// just update the windows to display the time again
+void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows){
 
     wclear(stdscr);
     refresh();
@@ -217,16 +246,17 @@ void redrawTheEntireClock(ProgramArguments arguments, ClockState clockWidthState
     setPlaceHolders(arguments);
     moveTimeWindowsToPlaceholders();
 
-    if(clockHeightState == NORMAL_CLOCK){
+    if(checkIfTheDateIsVisible() == true){
         moveDateWindowToPlaceholder();
     }
 
     refreshWindows();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, clockWidthState);
+    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
 
-    if(arguments.DatetimeScreenManagerDesigner.hideTheDate == false && clockHeightState == NORMAL_CLOCK)
+    if(arguments.DatetimeScreenManagerDesigner.hideTheDate == false && checkIfTheDateIsVisible() == true){
         drawDate(timeStruct, arguments.datetime, arguments.colors);
+    }
 
     refreshWindows();
     refresh();
