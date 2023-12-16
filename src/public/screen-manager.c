@@ -1,15 +1,63 @@
-#include "./../include/screen-manager.h"
+#include "./../../include/public/screen-manager.h"
+#include "./../../include/private/screen-manager.h"
 
 struct Windows programWindows;
 struct WindowSize winSize;
 bool theClocksSecondsIsVisible;
 bool theClocksDateIsVisible;
 
-// Forward declarations
-void getTerminalSize(unsigned int *width, unsigned int *height);
-struct ErrorWindowsMeasures calculateErrorWindowsMeasures(float errorWindowWidthFraction);
 
 // Public functions
+
+bool checkIfTerminalHeightIsCritical(){
+    return !(winSize.height >= MINIMUM_TERMINAL_HEIGHT);
+}
+
+bool checkIfTerminalWidthIsCritical(){
+    return !(winSize.width >= MINIMUM_TERMINAL_WIDTH);
+}
+
+bool checkIfTheSecondsIsVisible(){
+    return theClocksSecondsIsVisible;
+}
+
+bool checkIfTheDateIsVisible(){
+    return theClocksDateIsVisible;
+}
+
+void toggleDatesVisibility(){
+    theClocksDateIsVisible ^= 1;
+}
+
+void toggleSecondsVisibility(){
+    theClocksSecondsIsVisible ^= 1;
+}
+
+
+bool checkIfTheDateShouldBeInvisible(){
+    // The default height follows the premise
+    // that the date isn't hidden
+    return winSize.height < DEFAULT_CLOCK_HEIGHT;
+}
+
+bool checkIfTheSecondsShouldBeInvisible(){
+    // The default width follows the premise
+    // that the seconds isn't hidden
+    return winSize.width < DEFAULT_CLOCK_WIDTH;
+}
+
+void loadInitialTerminalSize(){
+    _getTerminalSize(&winSize.width, &winSize.height);
+    
+}
+
+void setDateStringLength(size_t newLength){
+    programWindows.windowsAttributes.dateStringLength = newLength;
+}
+
+WINDOW *getDateWindow(){
+    return programWindows.dateWindow.window;
+}
 
 void destroyRclockWindows(ProgramArguments arguments){
     for(size_t i = 0; i < programWindows.windowsAttributes.clockWindowsCount; i++){
@@ -38,34 +86,14 @@ void setValuesForClockStates(){
     }
 }
 
-void toggleDatesVisibility(){
-    theClocksDateIsVisible ^= 1;
-}
-
-void toggleSecondsVisibility(){
-    theClocksSecondsIsVisible ^= 1;
-}
-
-bool checkIfTheDateShouldBeInvisible(){
-    // The default height follows the premise
-    // that the date isn't hidden
-    return winSize.height < DEFAULT_CLOCK_HEIGHT;
-}
-
-bool checkIfTheSecondsShouldBeInvisible(){
-    // The default width follows the premise
-    // that the seconds isn't hidden
-    return winSize.width < DEFAULT_CLOCK_WIDTH;
-}
-
 // Generates error and exit message windows that will be the place to
 // draw the respective messages
 struct ErrorWindows generateErrorWindows(char *msg, float errorWindowWidthFraction, bool enableExitMessage){
     struct ErrorWindows errorWindows;
 
-    getTerminalSize(&winSize.width, &winSize.height);
+    _getTerminalSize(&winSize.width, &winSize.height);
 
-    errorWindows.measures = calculateErrorWindowsMeasures(errorWindowWidthFraction);
+    errorWindows.measures = _calculateErrorWindowsMeasures(errorWindowWidthFraction, winSize);
 
     errorWindows.errorWindow = newwin(ERROR_MESSAGE_WINDOW_HEIGHT, errorWindows.measures.errorWindowWidth, errorWindows.measures.errorWindowTop, errorWindows.measures.errorWindowLeft);
     if(enableExitMessage){
@@ -107,9 +135,6 @@ void moveDateWindowToPlaceholder(){
     mvwin(programWindows.dateWindow.window, programWindows.dateWindow.position.y, dateWindowXPosition);
 }
 
-void loadInitialTerminalSize(){
-    getTerminalSize(&winSize.width, &winSize.height);
-}
 
 bool detectTerminalResizes(){
     int newHeight, newWidth;
@@ -136,13 +161,6 @@ WINDOW** getClockSegment(unsigned int windowIndex, WINDOW *output[2]){
     }
 }
 
-void setDateStringLength(size_t newLength){
-    programWindows.windowsAttributes.dateStringLength = newLength;
-}
-
-WINDOW *getDateWindow(){
-    return programWindows.dateWindow.window;
-}
 
 void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments){
     programWindows.windowsAttributes.clockWindowsCount = userArguments.hideTheSeconds == true ? WINDOWS_COUNT_WITH_HIDDEN_SECONDS : WINDOWS_COUNT_WITH_VISIBLE_SECONDS;
@@ -160,7 +178,7 @@ void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments){
 // with the goal of align everything to the center. This procedure is aware
 // of hidden seconds and date
 void setPlaceHolders(ProgramArguments arguments){
-    getTerminalSize(&winSize.width, &winSize.height);
+    _getTerminalSize(&winSize.width, &winSize.height);
     size_t windowsLimit;
 
     int windowsYPosition = winSize.height / 2 - (int)((TIME_WINDOW_HEIGHT / 2));
@@ -211,37 +229,20 @@ void refreshWindows(){
     refresh();
 }
 
-bool checkIfTerminalHeightIsCritical(){
-    return !(winSize.height >= MINIMUM_TERMINAL_HEIGHT);
-}
-
-bool checkIfTerminalWidthIsCritical(){
-    return !(winSize.width >= MINIMUM_TERMINAL_WIDTH);
-}
-
-bool checkIfTheSecondsIsVisible(){
-    return theClocksSecondsIsVisible;
-}
-
-bool checkIfTheDateIsVisible(){
-    return theClocksDateIsVisible;
-}
-
 
 void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage){
     struct ErrorWindowsMeasures measures;
-    bool firstLoop = true;
+    //bool firstLoop = true;
 
     timeout(1000);
 
     while(true){
 
-        if(detectTerminalResizes() || firstLoop == true){
-            firstLoop = false;
+            //firstLoop = false;
 
-            getTerminalSize(&winSize.width, &winSize.height);
+            _getTerminalSize(&winSize.width, &winSize.height);
 
-            measures = calculateErrorWindowsMeasures(errorWindowWidthFraction);
+            measures = _calculateErrorWindowsMeasures(errorWindowWidthFraction, winSize);
 
             mvwin(windows.errorWindow, measures.errorWindowTop, measures.errorWindowLeft);
             wresize(windows.errorWindow, 5, measures.errorWindowWidth);
@@ -270,32 +271,15 @@ void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidt
 
                 break;
             }
-        }
 
 
-        getch();
+        wrefresh(windows.errorWindow);
+        refresh();
+
+        sleepClock(250);
 
         /*if(getch() != ERR && (extraClearErrorParam != NULL ? extraClearErrorParam() : true)){
             break;
         }*/
     }
-}
-
-// Private functions
-
-void _getTerminalSize(unsigned int *width, unsigned int *height){
-    getmaxyx(stdscr, *height, *width);
-}
-
-
-struct ErrorWindowsMeasures calculateErrorWindowsMeasures(float errorWindowWidthFraction){
-    struct ErrorWindowsMeasures measures;
-
-    measures.errorWindowWidth = winSize.width * (errorWindowWidthFraction <= 0 ? 0.5 : errorWindowWidthFraction);
-    measures.errorWindowTop = winSize.height / 2 - 2;
-    measures.errorWindowLeft = winSize.width * (1 - errorWindowWidthFraction) / 2;
-    measures.exitMessageWindowWidth = winSize.width;
-    measures.exitMessageWindowTop = winSize.height / 2 + 3;
-
-    return measures;
 }

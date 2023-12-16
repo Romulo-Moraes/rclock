@@ -1,0 +1,1 @@
+src += files(['colors.c', 'datetime.c', 'design.c', 'screen-manager.c'])

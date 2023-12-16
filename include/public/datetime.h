@@ -27,6 +27,6 @@ void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArgumen
 void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput);
 char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer);
 void incrementClockSecond(struct tm *datetimeStruct);
-void sleepClock();
+void sleepClock(unsigned int milliseconds);
 
 #endif

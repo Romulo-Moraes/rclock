@@ -1,9 +1,5 @@
-#include "./../include/design.h"
-
-// Forward declarations
-void normalizeSegment(unsigned char number, Digit segmentDigits[2]);
-void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID);
-void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments);
+#include "./../../include/public/design.h"
+#include "./../../include/private/design.h"
 
 // Public functions
 
@@ -16,7 +12,7 @@ void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesi
     if(userArguments.hideTheSeconds == false && checkIfTheSecondsIsVisible() == true)
         fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec);
 
-    fillClockColons(userArguments);
+    _fillClockColons(userArguments);
 
     refreshWindows();
 }
@@ -26,13 +22,13 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
     ClockPixel (*theDigit)[3];
     ColorID digitColorID;
 
-    normalizeSegment(numberToDraw, segmentDigits);
+    _normalizeSegment(numberToDraw, segmentDigits);
 
     for(short i = 0; i < 2; i++){
         theDigit = getDigitShape(segmentDigits[i]);
         digitColorID = getDigitColor(0);
 
-        drawClockWindow(clockWindows[i], theDigit, digitColorID);
+        _drawClockWindow(clockWindows[i], theDigit, digitColorID);
     }
 }
 
@@ -109,50 +105,4 @@ void drawProgramErrorCallback(void *arguments){
     writeErrorMessageOnErrorWindow(typecastedArguments->errorMsg, typecastedArguments->windows.measures.errorWindowWidth, typecastedArguments->windows.errorWindow);
 
     refresh();
-}
-
-// Private functions
-
-// Procedure that split a number into two digits, if the number is smaller than 10
-// a zero will placed before the number. For instance: 9 -> 09, 4 -> 04
-void normalizeSegment(unsigned char number, Digit segmentDigits[2]){
-    if(number < 10){
-        segmentDigits[0] = 0;
-        segmentDigits[1] = number;
-    }else{
-        segmentDigits[0] = ((int)(number / 10));
-        segmentDigits[1] = (number % 10);
-    }
-}
-
-// Draws the given digit shape to the given window
-void drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID){
-    wmove(targetWindow, 0, 0);
-
-    for(short j = 0; j < 5; j++){
-        for(short k = 0; k < 3; k++){
-            if(shapeToBeDrawn[j][k] == COLOR){
-                wattron(targetWindow, COLOR_PAIR(digitColorID));
-                wprintw(targetWindow, "  ");
-                wattroff(targetWindow, COLOR_PAIR(digitColorID));
-                wrefresh(targetWindow);
-            }else{
-                wprintw(targetWindow, "  ");
-                wrefresh(targetWindow);
-            }
-        }
-    }
-}
-
-// Draws the colons of the clock
-void fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments){
-    ClockPixel (*colonShape)[3] = getColonShape();
-    ColorID colonColor = getColonColor();
-    WINDOW *segmentToFill[2];
-
-    drawClockWindow(getClockSegment(FIRST_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor);
-
-    // The last colon is drawn only if the seconds is visible
-    if(userArguments.hideTheSeconds == false && checkIfTheSecondsIsVisible() == true)
-        drawClockWindow(getClockSegment(SECOND_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor);
 }

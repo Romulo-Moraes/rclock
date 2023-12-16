@@ -1,4 +1,4 @@
-#include "./../include/shapes.h"
+#include "./../../include/public/shapes.h"
 
 ClockPixel digitShapes[10][5][3] = {
     {

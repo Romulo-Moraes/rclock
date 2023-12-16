@@ -11,4 +11,4 @@ src = files()
 
 subdir('src')
 
-executable('rclock', src, include_directories : includes, dependencies : deps)
+executable('rclock', src, include_directories : includes, dependencies : deps, install : true)

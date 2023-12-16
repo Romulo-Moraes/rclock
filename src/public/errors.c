@@ -1,4 +1,4 @@
-#include "./../include/errors.h"
+#include "./../../include/public/errors.h"
 
 struct Error errors[] = {
     (struct Error){.message = "The custom day was out of range", .id = MONTH_DAY_OUT_OF_RANGE},
@@ -36,5 +36,3 @@ char* generateErrorMessage(ErrorID errorID, struct ErrorMessageArguments argumen
 
     return errorOutput;
 }
-
-// Private functions

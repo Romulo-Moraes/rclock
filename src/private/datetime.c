@@ -1,85 +1,9 @@
-#include "./../include/datetime.h"
-
-// Forward declarations
-bool checkIfDateOrTimesSegmentsAreDigits(char *customDateTime);
-struct DateStruct parseDate(struct DatetimeModule datetimeArguments);
-struct TimeStruct parseTime(struct DatetimeModule datetimeArguments);
-void setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput);
-void setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments);
-void setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput);
-void setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments);
-void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput);
-
-// Public functions
-
-struct tm* generateDateAndTime(){
-    time_t currentTime = time(NULL);
-    
-    struct tm *timeStruct = localtime(&currentTime);
-
-    return timeStruct;
-}
-
-// Wrapper procedure to set custom time
-void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
-    
-    // The time arguments have priority order, from specific to general
-
-    // Set new time by xx:xx:xx format    
-    setCustomTime(datetimeStruct, dateTimeArguments, errorOutput);
-
-    // Set new time by specifying each clock segment
-    setCustomHourMinuteAndSecond(datetimeStruct, dateTimeArguments);
-}
-
-// Wrapper procedure to set custom date
-void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
-    
-    // The date arguments have priority order, from specific to general
-
-    // Set new date by DD/MM/YYY format
-    setCustomDate(datetimeStruct, datetimeArguments, errorOutput);
-
-    // Set new date by specifying the day, month and year
-    setCustomDayMonthAndYear(datetimeStruct, datetimeArguments);
-}
-
-// Function that returns the date that will be shown below the clock
-// if the user provided a custom date format, the new format will be
-// used instead of the default one
-char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer){
-    if(datetimeArguments.dateFormat != NULL){
-        strftime(outputBuffer, MAX_CLOCK_DATE_BUFFER_LEN, datetimeArguments.dateFormat, &datetimeStruct);
-    }else{
-        strftime(outputBuffer, MAX_CLOCK_DATE_BUFFER_LEN, "%A, %b %d %Y", &datetimeStruct);
-    }
-
-    return outputBuffer;
-}
-
-void incrementClockSecond(struct tm *datetimeStruct){
-    datetimeStruct->tm_sec += 1;
-
-    if(datetimeStruct->tm_sec >= 60){
-        mktime(datetimeStruct);
-    }
-}
-
-void sleepClock(){
-    struct timespec sleepTime, t;
-
-    sleepTime.tv_sec = 0;
-    sleepTime.tv_nsec = SLEEP_TIME_IN_NANOSECONDS;
-
-    nanosleep(&sleepTime, &t);
-}
-
-// Private functions
+#include "./../../include/private/datetime.h"
 
 // This function will validate the full date and the
 // full time given by the user. Both values have a similar
 // structure that is xx?xx?xx(xx). Examples: 12:12:12 and 01/01/1970
-bool checkIfDateOrTimesSegmentsAreDigits(char *customDateTime){
+bool _checkIfDateOrTimesSegmentsAreDigits(char *customDateTime){
     size_t dateTimeLen = strlen(customDateTime);
 
     for(int i = 0; i < dateTimeLen; i++){
@@ -96,12 +20,12 @@ bool checkIfDateOrTimesSegmentsAreDigits(char *customDateTime){
 // This function parses the date given with the DD/MM/YYYY format.
 // string length and digits checking are used to make sure that it is
 // a valid value
-struct DateStruct parseDate(struct DatetimeModule datetimeArguments){
+struct DateStruct _parseDate(struct DatetimeModule datetimeArguments){
     struct DateStruct fetchedDate = {0};
     int parsedDateItems;
 
     if(strlen(datetimeArguments.customDate) == 10){
-        if(checkIfDateOrTimesSegmentsAreDigits(datetimeArguments.customDate) == true){
+        if(_checkIfDateOrTimesSegmentsAreDigits(datetimeArguments.customDate) == true){
             parsedDateItems = sscanf(datetimeArguments.customDate, "%hhu/%hhu/%u", &fetchedDate.day, &fetchedDate.month, &fetchedDate.year);
 
             if(parsedDateItems != 3){
@@ -117,12 +41,12 @@ struct DateStruct parseDate(struct DatetimeModule datetimeArguments){
     return fetchedDate;
 }
 
-struct TimeStruct parseTime(struct DatetimeModule datetimeArguments){
+struct TimeStruct _parseTime(struct DatetimeModule datetimeArguments){
     struct TimeStruct fetchedTime = {0};
     int fetchedTimeItems;
 
     if(strlen(datetimeArguments.customTime) == 8){
-        if(checkIfDateAndTimeSegmentsAreDigits(datetimeArguments.customTime) == true){
+        if(_checkIfDateOrTimesSegmentsAreDigits(datetimeArguments.customTime) == true){
             fetchedTimeItems = sscanf(datetimeArguments.customTime, "%hhu:%hhu:%hhu", &fetchedTime.hours, &fetchedTime.minutes, &fetchedTime.seconds);
 
             if(fetchedTimeItems != 3){
@@ -138,11 +62,11 @@ struct TimeStruct parseTime(struct DatetimeModule datetimeArguments){
     return fetchedTime;
 }
 
-void setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
+void _setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
     struct TimeStruct parsedTime;
 
     if(dateTimeArguments.customTime != NULL){
-        parsedTime = parseTime(dateTimeArguments);
+        parsedTime = _parseTime(dateTimeArguments);
 
         if(parsedTime.error != true){
             datetimeStruct->tm_hour = parsedTime.hours;
@@ -154,7 +78,7 @@ void setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArgu
     }
 }
 
-void setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments){
+void _setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments){
     if(dateTimeArguments.customHour != UNDEFINED){
         datetimeStruct->tm_hour = dateTimeArguments.customHour;
     }
@@ -168,11 +92,11 @@ void setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModu
     }
 }
 
-void setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
+void _setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
     struct DateStruct parsedDate;
 
     if(datetimeArguments.customDate != NULL){
-        parsedDate = parseDate(datetimeArguments);
+        parsedDate = _parseDate(datetimeArguments);
 
         if(parsedDate.error != true){
             datetimeStruct->tm_mday = parsedDate.day;
@@ -184,7 +108,7 @@ void setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArgu
     }
 }
 
-void setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments){
+void _setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments){
 
     if(datetimeArguments.customDay != UNDEFINED){
         datetimeStruct->tm_mday = datetimeArguments.customDay;
@@ -201,7 +125,7 @@ void setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule d
 
 // Normalize a copy of the datetime struct and check if both are equal,
 // if they aren't equal, the new date/time given by the user is out of range
-void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput){
+void _verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput){
     struct tm datetimeStructCopy = *datetimeStruct;
 
     mktime(datetimeStruct);

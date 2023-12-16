@@ -1,1 +1,4 @@
-src += files(['r-clock.c', 'arguments.c', 'colors.c', 'datetime.c', 'design.c', 'errors.c', 'screen-manager.c', 'shapes.c'])
+src += files(['r-clock.c'])
+
+subdir('public')
+subdir('private')

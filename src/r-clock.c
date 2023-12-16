@@ -1,8 +1,8 @@
-#include "../include/global-includes.h"
-#include "../include/arguments.h"
-#include "../include/screen-manager.h"
-#include "../include/design.h"
-#include "../include/datetime.h"
+#include "../include/public/global-includes.h"
+#include "../include/public/arguments.h"
+#include "../include/public/screen-manager.h"
+#include "../include/public/design.h"
+#include "../include/public/datetime.h"
 
 struct tm *timeStruct;
 
@@ -86,8 +86,8 @@ int main(int argc, char *argv[]){
         refreshWindows();
         refresh();
 
-        // Sleeps for SLEEP_TIME_IN_NANOSECONDS nano seconds
-        sleepClock();
+        // Sleeps for milliseconds
+        sleepClock(50);
     }    
 
     endwin();

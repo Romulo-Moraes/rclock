@@ -1,4 +1,4 @@
-#include "./../include/arguments.h"
+#include "./../../include/public/arguments.h"
 
 ProgramArguments defaultProgramArguments = {
      .colors = {.clockColor = DEFAULT_CLOCK_COLOR, .colonColor = NULL, .dateColor = DEFAULT_CLOCK_COLOR , .digitColor = {NULL},
