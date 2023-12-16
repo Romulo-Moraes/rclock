@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
     struct tm timeStructCopy = *timeStruct;
     char errorBuffer[512];
     struct TerminalSizeError sizeError;
-    bool terminalSizeErrorFlag;
+    bool windowsNeedToBeDestroiyed;
     WINDOW *segmentToFill[2];
 
     configureNcurses();
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
         // For each terminal resize, the clock is redrawn
         if(detectTerminalResizes()){
         
-            terminalSizeErrorFlag = false;
+            windowsNeedToBeDestroiyed = false;
 
             // A loop to check if the terminal size is safe to render the clock
             do{
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
                     // Issue an error if the size isn't safe
                     createTerminalSizeError(sizeError);
 
-                    terminalSizeErrorFlag = true;
+                    windowsNeedToBeDestroiyed = true;
                 }
 
             }while(sizeError.thereIsAnError == true);
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
             checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner);
 
             // After each error screen, the clock is redraw
-            redrawTheEntireClock(arguments, terminalSizeErrorFlag);
+            redrawTheEntireClock(arguments, windowsNeedToBeDestroiyed);
         }else{
 
             // Every time that the alarm triggers the procedure 

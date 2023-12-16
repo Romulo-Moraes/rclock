@@ -1,6 +1,6 @@
 project('R-clock', 'c')
 
-includes = include_directories('include')
+includes = include_directories('include', 'lib/Anemone/public')
 
 cc = meson.get_compiler('c')
 
@@ -10,5 +10,6 @@ deps += cc.find_library('m', required : true)
 src = files()
 
 subdir('src')
+subdir('lib')
 
 executable('rclock', src, include_directories : includes, dependencies : deps, install : true)

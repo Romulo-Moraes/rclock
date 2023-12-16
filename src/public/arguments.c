@@ -13,11 +13,43 @@ ProgramArguments defaultProgramArguments = {
 
 // This procedure uses the Anemone third-party library to define all
 // user arguments that will be fetched by the fetchProgramArguments()
-void createProgramArguments( ){
+void createProgramArguments(int argc, char *argv[]){
+    anemone_struct anemone;
 
+    initialize_lib(&anemone, "Rclock", "1.0", "Digital terminal clock", "Rômulo Moraes (Cypher)", NULL, NULL);
+
+    create_optional_argument(&anemone, "--hide-date", "-h", ANEMONE_FALSE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--clock-color", "-c", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--date-color" , "-d", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--color-I" , "-q", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--color-II" , "-Q", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--color-III" , "-P", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--color-IV" , "-p", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--color-V" , "-K", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--color-VI" , "-k", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--colon-color", "-o", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--digits-color", "-l", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--date-format" , "-f", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--custom-hour", "-H", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--custom-minute", "-M", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--custom-second", "-S", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--custom-time", "-T", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--custom-day", "-D", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--custom-month", "-O", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--custom-year", "-Y", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--custom-date", "-D", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--hide-seconds", "-i", ANEMONE_TRUE, ANEMONE_FALSE);
+
+    compile(&anemone, argc, argv);
 }
 
 // This function will fetch and return all user arguments given by command-line arguments
-ProgramArguments fetchProgramArguments(){
+ProgramArguments fetchProgramArguments(anemone_struct *anemone){
+    anemone_optional_return_value argument;
+        
+    if((argument = get_optional_argument(*anemone, "--hide-date")).set == ANEMONE_TRUE){
+        defaultProgramArguments.DatetimeScreenManagerDesigner.hideTheDate = true;
+    }
+
     return defaultProgramArguments;
 }
