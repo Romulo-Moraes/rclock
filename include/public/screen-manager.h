@@ -98,7 +98,7 @@ bool checkIfTerminalWidthIsCritical();
 void toggleSecondsVisibility();
 void toggleDatesVisibility();
 void getTerminalSize(unsigned int *width, unsigned int *height);
-void setValuesForClockStates();
+void setValuesForClockStates(ProgramArguments arguments);
 void destroyRclockWindows(ProgramArguments arguments);
 void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage);
 bool checkIfTheSecondsIsVisible();

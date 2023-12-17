@@ -72,14 +72,14 @@ void destroyRclockWindows(ProgramArguments arguments){
     refresh();
 }   
 
-void setValuesForClockStates(){
-    if(checkIfTheSecondsShouldBeInvisible() == true){
+void setValuesForClockStates(ProgramArguments arguments){
+    if(checkIfTheSecondsShouldBeInvisible() == true || arguments.DatetimeScreenManagerDesigner.hideTheSeconds == true){
         theClocksSecondsIsVisible = false;
     }else{
         theClocksSecondsIsVisible = true;
     }
 
-    if(checkIfTheDateShouldBeInvisible() == true){
+    if(checkIfTheDateShouldBeInvisible() == true || arguments.DatetimeScreenManagerDesigner.hideTheDate == true){
         theClocksDateIsVisible = false;
     }else{
         theClocksDateIsVisible = true;

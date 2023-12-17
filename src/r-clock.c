@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
     struct tm timeStructCopy = *timeStruct;
     char errorBuffer[512];
     struct TerminalSizeError sizeError;
-    bool windowsNeedToBeDestroiyed;
+    bool windowsNeedToBeDestroyed;
     WINDOW *segmentToFill[2];
 
     anemone = createProgramArguments(argc, argv);
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
         // For each terminal resize, the clock is redrawn
         if(detectTerminalResizes()){
         
-            windowsNeedToBeDestroiyed = false;
+            windowsNeedToBeDestroyed = false;
 
             // A loop to check if the terminal size is safe to render the clock
             do{
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
                     // Issue an error if the size isn't safe
                     createTerminalSizeError(sizeError);
 
-                    windowsNeedToBeDestroiyed = true;
+                    windowsNeedToBeDestroyed = true;
                 }
 
             }while(sizeError.thereIsAnError == true);
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
             checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner);
 
             // After each error screen, the clock is redraw
-            redrawTheEntireClock(arguments, windowsNeedToBeDestroiyed);
+            redrawTheEntireClock(arguments, windowsNeedToBeDestroyed);
         }else{
 
             // Every time that the alarm triggers the procedure 
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
                 if(timeStruct->tm_min != timeStructCopy.tm_min)
                     fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX);
 
-                if(checkIfTheSecondsIsVisible() == true && arguments.DatetimeScreenManagerDesigner.hideTheSeconds != true){
+                if(checkIfTheSecondsIsVisible() == true){
                     fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec, SECONDS_INDEX);
                 }
 
@@ -119,7 +119,7 @@ void configureRclock(ProgramArguments arguments, char *errorBuffer){
     loadBuiltinColors();
     setComponentsColors(arguments.colors, errorBuffer);
     loadInitialTerminalSize();
-    setValuesForClockStates();
+    setValuesForClockStates(arguments);
     signal(SIGALRM, signalHandler);
 }
 
@@ -144,7 +144,7 @@ void initializeTheClock(ProgramArguments arguments){
     moveTimeWindowsToPlaceholders();
     
 
-    if(arguments.DatetimeScreenManagerDesigner.hideTheDate == false && checkIfTheDateIsVisible() == true){
+    if(checkIfTheDateIsVisible() == true){
         drawDate(timeStruct, arguments.datetime, arguments.colors);
         moveDateWindowToPlaceholder();
     }
@@ -262,7 +262,7 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows){
 
     drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
 
-    if(arguments.DatetimeScreenManagerDesigner.hideTheDate == false && checkIfTheDateIsVisible() == true){
+    if(checkIfTheDateIsVisible() == true){
         drawDate(timeStruct, arguments.datetime, arguments.colors);
     }
 
