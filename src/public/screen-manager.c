@@ -232,13 +232,8 @@ void refreshWindows(){
 
 void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage){
     struct ErrorWindowsMeasures measures;
-    //bool firstLoop = true;
-
-    timeout(1000);
 
     while(true){
-
-            //firstLoop = false;
 
             _getTerminalSize(&winSize.width, &winSize.height);
 

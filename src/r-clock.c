@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
     // procedure will update the time struct
     alarm(1);
 
-    while(true){
+    while(getch() != 10){
         // For each terminal resize, the clock is redrawn
         if(detectTerminalResizes()){
         
@@ -111,6 +111,7 @@ void configureNcurses(){
     start_color();
     use_default_colors();
     curs_set(0);
+    timeout(100);
 }
 
 // Calls a couple of functions that will load
