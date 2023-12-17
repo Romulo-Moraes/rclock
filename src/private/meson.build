@@ -1,1 +1,1 @@
-src += files(['colors.c', 'datetime.c', 'design.c', 'screen-manager.c'])
+src += files(['colors.c', 'datetime.c', 'design.c', 'screen-manager.c', 'arguments.c'])

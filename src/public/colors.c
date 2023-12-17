@@ -12,7 +12,7 @@ struct RclockColor availableColors[] = {
     (struct RclockColor){.colorName = "white", .clockID = WHITE_ID, .dateID = DATE_WHITE_ID}
 };
 
-ColorID digitColors[MAX_DIGIT_COLORS];
+ColorID digitColors[MAX_DIGIT_COLORS] = {BLUE_ID};
 ColorID dateColor;
 ColorID colonsColor;
 
@@ -37,8 +37,29 @@ void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
     // For the colons
     _setColonColor(userArguments, errorOutput, &colonsColor, availableColors, sizeof(availableColors));
 
+/*
+    for(int i = 0; i < 6; i++){
+        if(userArguments.digitColor[i] != NULL){
+            printw("%s ", userArguments.digitColor[i]);
+        }else{
+            printw("NULL ");
+        }
+
+        refresh();
+    }
+
+    sleep(10);
+    */
+
     // For each clock digit - High priority order
     _setColorForEachClockDigit(userArguments, errorOutput, digitColors, availableColors, sizeof(availableColors));
+
+    // for(int i = 0; i < MAX_DIGIT_COLORS; i++){
+    //     printw("%d ", digitColors[i]);
+    // }
+    // refresh();
+
+    // sleep(10);
 }
 
 void loadBuiltinColors(){

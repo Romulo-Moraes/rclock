@@ -13,6 +13,9 @@ struct Error errors[] = {
     (struct Error){.message = "The given date color doesn't exist", .id = UNKNOWN_DATE_COLOR},
     (struct Error){.message = "The terminal width is extremely small", .id = TERMINAL_WIDTH_TOO_SMALL},
     (struct Error){.message = "The terminal height is extremely small", .id = TERMINAL_HEIGHT_TOO_SMALL},
+    (struct Error){.message = "The provided custom hour wasn't numeric", .id = CUSTOM_HOUR_ISNT_NUMERIC},
+    (struct Error){.message = "The provided custom minute wasn't numeric", .id = CUSTOM_MINUTE_ISNT_NUMERIC},
+    (struct Error){.message = "The provided custom second wasn't numeric", .id = CUSTOM_SECOND_ISNT_NUMERIC},
 };
 
 struct Error specificDigitColorError = (struct Error){.message = "The given color of the digit %d doesn't exist", .id = UNKNOWN_SPECIFIC_DIGIT_COLOR};

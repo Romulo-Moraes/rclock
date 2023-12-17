@@ -2,7 +2,7 @@
 #define ARGUMENTS_GUARD
 
 #include "global-includes.h"
-#include "./../../lib/Anemone/public/anemone_ap.h"
+#include "errors.h"
 
 #define UNDEFINED -1
 #define MAX_DIGIT_COLORS 6
@@ -41,7 +41,7 @@ typedef struct{
     struct DatetimeScreenManagerDesignerModules DatetimeScreenManagerDesigner;
 } ProgramArguments;
 
-void createProgramArguments( );
-ProgramArguments fetchProgramArguments( );
+anemone_struct createProgramArguments(int argc, char *argv[]);
+ProgramArguments fetchProgramArguments(anemone_struct *anemone, char *errorOutput);
 
 #endif

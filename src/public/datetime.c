@@ -70,3 +70,19 @@ void sleepClock(unsigned int milliseconds){
         sleepTime.tv_nsec = remainingTime.tv_nsec;
     }while(sleepStatus != 0);
 }
+
+// Normalize a copy of the datetime struct and check if both are equal,
+// if they aren't equal, the new date/time given by the user is out of range
+void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput){
+    struct tm datetimeStructCopy = *datetimeStruct;
+
+    mktime(datetimeStruct);
+
+    if(datetimeStruct->tm_mday != datetimeStructCopy.tm_mday || datetimeStruct->tm_mon != datetimeStructCopy.tm_mon || datetimeStruct->tm_year != datetimeStructCopy.tm_year){
+        generateErrorMessage(CUSTOM_DATE_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+    }
+
+    if(datetimeStruct->tm_hour != datetimeStructCopy.tm_hour || datetimeStruct->tm_min != datetimeStructCopy.tm_min || datetimeStruct->tm_sec != datetimeStructCopy.tm_sec){
+        generateErrorMessage(CUSTOM_TIME_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+    }
+}

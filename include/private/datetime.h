@@ -10,6 +10,5 @@ void _setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArg
 void _setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments);
 void _setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput);
 void _setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments);
-void _verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput);
 
 #endif

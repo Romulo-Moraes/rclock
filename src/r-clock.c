@@ -14,15 +14,23 @@ void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModules 
 struct TerminalSizeError checkIfTerminalSizeIsCritical(ProgramArguments arguments);
 void initializeTheClock(ProgramArguments arguments);
 void createTerminalSizeError(struct TerminalSizeError sizeError);
+void setCustomDateAndTime(ProgramArguments arguments);
 
 int main(int argc, char *argv[]){
-    ProgramArguments arguments = fetchProgramArguments();
+    ProgramArguments arguments;
+    anemone_struct anemone;
     timeStruct = generateDateAndTime();
     struct tm timeStructCopy = *timeStruct;
     char errorBuffer[512];
     struct TerminalSizeError sizeError;
     bool windowsNeedToBeDestroiyed;
     WINDOW *segmentToFill[2];
+
+    anemone = createProgramArguments(argc, argv);
+    
+    arguments = fetchProgramArguments(&anemone, errorBuffer);
+    
+    setCustomDateAndTime(arguments);
 
     configureNcurses();
     configureRclock(arguments, errorBuffer);
@@ -69,13 +77,13 @@ int main(int argc, char *argv[]){
             if(timeStruct->tm_sec != timeStructCopy.tm_sec){
 
                 if(timeStruct->tm_hour != timeStructCopy.tm_hour)
-                    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour);
+                    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour, HOURS_INDEX);
         
                 if(timeStruct->tm_min != timeStructCopy.tm_min)
-                    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min);
+                    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX);
 
                 if(checkIfTheSecondsIsVisible() == true && arguments.DatetimeScreenManagerDesigner.hideTheSeconds != true){
-                    fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec);
+                    fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec, SECONDS_INDEX);
                 }
 
                 // Making both have the same value for the next alarm
@@ -260,4 +268,13 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows){
 
     refreshWindows();
     refresh();
+}
+
+void setCustomDateAndTime(ProgramArguments arguments){
+    char errorBuffer[512];
+
+    setNewTime(timeStruct, arguments.datetime, errorBuffer);
+    setNewDate(timeStruct, arguments.datetime, errorBuffer);
+
+    verifyForDateAndTimeErrors(timeStruct, errorBuffer);
 }

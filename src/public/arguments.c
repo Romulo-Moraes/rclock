@@ -1,4 +1,5 @@
 #include "./../../include/public/arguments.h"
+#include "./../../include/private/arguments.h"
 
 ProgramArguments defaultProgramArguments = {
      .colors = {.clockColor = DEFAULT_CLOCK_COLOR, .colonColor = NULL, .dateColor = DEFAULT_CLOCK_COLOR , .digitColor = {NULL},
@@ -8,12 +9,12 @@ ProgramArguments defaultProgramArguments = {
                   .customMinute = UNDEFINED, .customMonth = UNDEFINED, .customSecond = UNDEFINED,
                   .customTime = NULL, .customYear = UNDEFINED, .dateFormat = NULL},
 
-     .DatetimeScreenManagerDesigner = {.hideTheDate = false/*DEFAULT_HIDE_THE_DATE_STATE*/, .hideTheSeconds = DEFAULT_HIDE_THE_SECONDS_STATE}
+     .DatetimeScreenManagerDesigner = {.hideTheDate = DEFAULT_HIDE_THE_DATE_STATE, .hideTheSeconds = DEFAULT_HIDE_THE_SECONDS_STATE}
 };
 
 // This procedure uses the Anemone third-party library to define all
 // user arguments that will be fetched by the fetchProgramArguments()
-void createProgramArguments(int argc, char *argv[]){
+anemone_struct createProgramArguments(int argc, char *argv[]){
     anemone_struct anemone;
 
     initialize_lib(&anemone, "Rclock", "1.0", "Digital terminal clock", "Rômulo Moraes (Cypher)", NULL, NULL);
@@ -38,18 +39,22 @@ void createProgramArguments(int argc, char *argv[]){
     create_optional_argument(&anemone, "--custom-month", "-O", ANEMONE_TRUE, ANEMONE_FALSE);
     create_optional_argument(&anemone, "--custom-year", "-Y", ANEMONE_TRUE, ANEMONE_FALSE);
     create_optional_argument(&anemone, "--custom-date", "-D", ANEMONE_TRUE, ANEMONE_FALSE);
-    create_optional_argument(&anemone, "--hide-seconds", "-i", ANEMONE_TRUE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--hide-seconds", "-i", ANEMONE_FALSE, ANEMONE_FALSE);
 
+    
     compile(&anemone, argc, argv);
+
+    return anemone;
 }
 
 // This function will fetch and return all user arguments given by command-line arguments
-ProgramArguments fetchProgramArguments(anemone_struct *anemone){
-    anemone_optional_return_value argument;
-        
-    if((argument = get_optional_argument(*anemone, "--hide-date")).set == ANEMONE_TRUE){
-        defaultProgramArguments.DatetimeScreenManagerDesigner.hideTheDate = true;
-    }
+ProgramArguments fetchProgramArguments(anemone_struct *anemone, char *errorOutput){
+
+    _fetchColorsArguments(anemone, errorOutput, &defaultProgramArguments);
+    
+    _fetchDatetimeArguments(anemone, errorOutput, &defaultProgramArguments);
+
+    _fetchScreenManagementArguments(anemone, errorOutput, &defaultProgramArguments);
 
     return defaultProgramArguments;
 }

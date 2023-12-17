@@ -14,4 +14,6 @@
 #include <unistd.h>
 #include <math.h>
 
+#include "./../../lib/Anemone/public/anemone_ap.h"
+
 #endif

@@ -6,18 +6,18 @@
 void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments){
     WINDOW *segmentToFill[2];
 
-    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour);
-    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min);
+    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour, HOURS_INDEX);
+    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX);
 
     if(userArguments.hideTheSeconds == false && checkIfTheSecondsIsVisible() == true)
-        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec);
+        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec, SECONDS_INDEX);
 
     _fillClockColons(userArguments);
 
     refreshWindows();
 }
 
-void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
+void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsigned char windowIndex){
     Digit segmentDigits[2];
     ClockPixel (*theDigit)[3];
     ColorID digitColorID;
@@ -26,7 +26,7 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw){
 
     for(short i = 0; i < 2; i++){
         theDigit = getDigitShape(segmentDigits[i]);
-        digitColorID = getDigitColor(0);
+        digitColorID = getDigitColor(windowIndex++);
 
         _drawClockWindow(clockWindows[i], theDigit, digitColorID);
     }

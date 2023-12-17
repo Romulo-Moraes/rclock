@@ -26,6 +26,9 @@
 #define DEFAULT_COLOR BLUE_ID
 #define DEFAULT_DATE_COLOR DATE_BLUE_ID
 #define MAX_DIGIT_COLORS 6
+#define HOURS_INDEX 0
+#define MINUTES_INDEX 2
+#define SECONDS_INDEX 4
 
 typedef int ColorID;
 
