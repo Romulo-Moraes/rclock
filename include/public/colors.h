@@ -1,7 +1,6 @@
 #ifndef COLORS_GUARD
 #define COLORS_GUARD
 
-// #include "includes.h"
 #include "global-includes.h"
 #include "errors.h"
 #include "arguments.h"

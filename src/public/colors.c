@@ -25,8 +25,6 @@ void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
     // The color arguments have priority order,
     // from specific to general
 
-    // For the digits and colons - Low priority order
-    _setClockColor(userArguments, errorOutput, &colonsColor, digitColors, availableColors, sizeof(availableColors));
 
     // For all digit windows
     _setGlobalDigitsColor(userArguments, errorOutput, availableColors, sizeof(availableColors), digitColors);
@@ -37,29 +35,9 @@ void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
     // For the colons
     _setColonColor(userArguments, errorOutput, &colonsColor, availableColors, sizeof(availableColors));
 
-/*
-    for(int i = 0; i < 6; i++){
-        if(userArguments.digitColor[i] != NULL){
-            printw("%s ", userArguments.digitColor[i]);
-        }else{
-            printw("NULL ");
-        }
-
-        refresh();
-    }
-
-    sleep(10);
-    */
-
     // For each clock digit - High priority order
     _setColorForEachClockDigit(userArguments, errorOutput, digitColors, availableColors, sizeof(availableColors));
 
-    // for(int i = 0; i < MAX_DIGIT_COLORS; i++){
-    //     printw("%d ", digitColors[i]);
-    // }
-    // refresh();
-
-    // sleep(10);
 }
 
 void loadBuiltinColors(){

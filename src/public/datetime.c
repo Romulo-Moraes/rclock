@@ -1,6 +1,10 @@
 #include "./../../include/public/datetime.h"
 #include "./../../include/private/datetime.h"
 
+static struct tm initialOfficialTime;
+static struct tm initialProgramTime;
+static bool customDatetimeGiven = false;
+
 // Public functions
 
 struct tm* generateDateAndTime(){
@@ -11,9 +15,19 @@ struct tm* generateDateAndTime(){
     return timeStruct;
 }
 
+
+void saveInitialProgramTime(struct tm *finalDatetime){
+    time_t tm;
+
+    tm = mktime(finalDatetime);
+    initialProgramTime = *localtime(&tm);
+}
+
 // Wrapper procedure to set custom time
 void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
     
+    time_t now;
+
     // The time arguments have priority order, from specific to general
 
     // Set new time by xx:xx:xx format    
@@ -21,11 +35,19 @@ void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArgumen
 
     // Set new time by specifying each clock segment
     _setCustomHourMinuteAndSecond(datetimeStruct, dateTimeArguments);
+    
+    // Saving the initial time
+    if(memcmp(&initialOfficialTime, &(struct tm){0}, sizeof(struct tm)) == 0 && (dateTimeArguments.customTime != NULL || dateTimeArguments.customHour != UNDEFINED || dateTimeArguments.customMinute != UNDEFINED || dateTimeArguments.customSecond != UNDEFINED)){
+        now = time(NULL);
+        initialOfficialTime = *localtime(&now);
+        customDatetimeGiven = true;
+    }
 }
 
 // Wrapper procedure to set custom date
 void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
-    
+    time_t now;
+
     // The date arguments have priority order, from specific to general
 
     // Set new date by DD/MM/YYY format
@@ -33,6 +55,13 @@ void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArgumen
 
     // Set new date by specifying the day, month and year
     _setCustomDayMonthAndYear(datetimeStruct, datetimeArguments);
+
+    // Saving the initial time
+    if(memcmp(&initialOfficialTime, &(struct tm){0}, sizeof(struct tm)) == 0 && (datetimeArguments.customDate != NULL || datetimeArguments.customDay != UNDEFINED || datetimeArguments.customMonth != UNDEFINED || datetimeArguments.customYear != UNDEFINED)){
+        now = time(NULL);
+        initialOfficialTime = *localtime(&now);
+        customDatetimeGiven = true;
+    }
 }
 
 // Function that returns the date that will be shown below the clock
@@ -85,4 +114,33 @@ void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput){
     if(datetimeStruct->tm_hour != datetimeStructCopy.tm_hour || datetimeStruct->tm_min != datetimeStructCopy.tm_min || datetimeStruct->tm_sec != datetimeStructCopy.tm_sec){
         generateErrorMessage(CUSTOM_TIME_RANGE, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
     }
+}
+
+void tryToUpdateTheClock(struct tm *timeStruct){
+    time_t programTime;
+    time_t officialTime;
+    time_t now;
+    double diff;
+    double diff2;
+
+
+    now = time(NULL);
+
+    if(customDatetimeGiven == true){
+
+        programTime = mktime(&initialProgramTime);
+        officialTime = mktime(&initialOfficialTime);
+        diff = difftime(now, officialTime);
+        diff2 = difftime(mktime(timeStruct), programTime);
+    
+    
+        if(diff > diff2 + 5){
+            timeStruct->tm_sec += difftime(diff, diff2);
+
+            mktime(timeStruct);
+        }
+    }else{
+        *timeStruct = *localtime(&now);
+    }
+    
 }

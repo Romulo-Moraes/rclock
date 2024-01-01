@@ -29,5 +29,7 @@ char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetim
 void incrementClockSecond(struct tm *datetimeStruct);
 void sleepClock(unsigned int milliseconds);
 void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput);
+void saveInitialProgramTime(struct tm *finalDatetime);
+void tryToUpdateTheClock(struct tm *timeStruct);
 
 #endif

@@ -19,9 +19,9 @@ void _drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], Col
     for(short j = 0; j < 5; j++){
         for(short k = 0; k < 3; k++){
             if(shapeToBeDrawn[j][k] == COLOR){
-                wattron(targetWindow, COLOR_PAIR(digitColorID));
+                wattron(targetWindow, COLOR_PAIR(BLUE_ID));
                 wprintw(targetWindow, "  ");
-                wattroff(targetWindow, COLOR_PAIR(digitColorID));
+                wattroff(targetWindow, COLOR_PAIR(BLUE_ID));
                 wrefresh(targetWindow);
             }else{
                 wprintw(targetWindow, "  ");

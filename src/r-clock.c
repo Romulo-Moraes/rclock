@@ -4,7 +4,7 @@
 #include "../include/public/design.h"
 #include "../include/public/datetime.h"
 
-struct tm *timeStruct;
+struct tm timeStruct;
 
 void signalHandler(int signal);
 void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows);
@@ -19,8 +19,8 @@ void setCustomDateAndTime(ProgramArguments arguments);
 int main(int argc, char *argv[]){
     ProgramArguments arguments;
     anemone_struct anemone;
-    timeStruct = generateDateAndTime();
-    struct tm timeStructCopy = *timeStruct;
+    timeStruct = *generateDateAndTime();
+    struct tm timeStructCopy = timeStruct;
     char errorBuffer[512];
     struct TerminalSizeError sizeError;
     bool windowsNeedToBeDestroyed;
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
     anemone = createProgramArguments(argc, argv);
     
     arguments = fetchProgramArguments(&anemone, errorBuffer);
-    
+
     setCustomDateAndTime(arguments);
 
     configureNcurses();
@@ -74,21 +74,27 @@ int main(int argc, char *argv[]){
             // that update the seconds, the timeStruct will be 
             // compared with its older version, the timeStructCopy,
             // if both are different, the clock is updated
-            if(timeStruct->tm_sec != timeStructCopy.tm_sec){
+            if(timeStruct.tm_sec != timeStructCopy.tm_sec){
 
-                if(timeStruct->tm_hour != timeStructCopy.tm_hour)
-                    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour, HOURS_INDEX);
+                if(timeStruct.tm_hour != timeStructCopy.tm_hour)
+                    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct.tm_hour, HOURS_INDEX);
         
-                if(timeStruct->tm_min != timeStructCopy.tm_min)
-                    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX);
+                if(timeStruct.tm_min != timeStructCopy.tm_min)
+                    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct.tm_min, MINUTES_INDEX);
 
                 if(checkIfTheSecondsIsVisible() == true){
-                    fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec, SECONDS_INDEX);
+                    fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct.tm_sec, SECONDS_INDEX);
                 }
 
+                if(timeStruct.tm_hour < timeStructCopy.tm_hour){
+                    mktime(&timeStruct);
+                    drawDate(&timeStruct, arguments.datetime, arguments.colors);
+                }
+                
                 // Making both have the same value for the next alarm
-                timeStructCopy = *timeStruct;
+                timeStructCopy = timeStruct;
             }
+
         }
 
         refreshWindows();
@@ -107,7 +113,8 @@ int main(int argc, char *argv[]){
 // all features that the Rclock requires
 void configureNcurses(){
     initscr();
-    cbreak();
+    raw();
+    noecho();
     start_color();
     use_default_colors();
     curs_set(0);
@@ -146,13 +153,13 @@ void initializeTheClock(ProgramArguments arguments){
     
 
     if(checkIfTheDateIsVisible() == true){
-        drawDate(timeStruct, arguments.datetime, arguments.colors);
+        drawDate(&timeStruct, arguments.datetime, arguments.colors);
         moveDateWindowToPlaceholder();
     }
     
     refresh();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
+    drawAllClockWindows(&timeStruct, arguments.DatetimeScreenManagerDesigner);
 
 }
 
@@ -179,7 +186,12 @@ void signalHandler(int signal){
         // triggered once in 1 second and
         // update the time struct
         case SIGALRM:
-            incrementClockSecond(timeStruct);
+            incrementClockSecond(&timeStruct);
+            
+            if(timeStruct.tm_sec % 5 == 0){
+                tryToUpdateTheClock(&timeStruct);
+            }
+
             alarm(1);
             break;
     }
@@ -261,10 +273,10 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows){
 
     refreshWindows();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
+    drawAllClockWindows(&timeStruct, arguments.DatetimeScreenManagerDesigner);
 
     if(checkIfTheDateIsVisible() == true){
-        drawDate(timeStruct, arguments.datetime, arguments.colors);
+        drawDate(&timeStruct, arguments.datetime, arguments.colors);
     }
 
     refreshWindows();
@@ -274,8 +286,10 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows){
 void setCustomDateAndTime(ProgramArguments arguments){
     char errorBuffer[512];
 
-    setNewTime(timeStruct, arguments.datetime, errorBuffer);
-    setNewDate(timeStruct, arguments.datetime, errorBuffer);
+    setNewTime(&timeStruct, arguments.datetime, errorBuffer);
+    setNewDate(&timeStruct, arguments.datetime, errorBuffer);
 
-    verifyForDateAndTimeErrors(timeStruct, errorBuffer);
+    verifyForDateAndTimeErrors(&timeStruct, errorBuffer);
+
+    saveInitialProgramTime(&timeStruct);
 }
