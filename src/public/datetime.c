@@ -68,13 +68,17 @@ void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArgumen
 // if the user provided a custom date format, the new format will be
 // used instead of the default one
 char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer){
+    char zerosPadding[8] = {0};
+    char timeFormatBuffer[MAX_CLOCK_DATE_BUFFER_LEN];
+
     if(datetimeArguments.dateFormat != NULL){
         strftime(outputBuffer, MAX_CLOCK_DATE_BUFFER_LEN, datetimeArguments.dateFormat, &datetimeStruct);
     }else{
-        strftime(outputBuffer, MAX_CLOCK_DATE_BUFFER_LEN, "%A, %b %d %Y", &datetimeStruct);
+        strftime(timeFormatBuffer, MAX_CLOCK_DATE_BUFFER_LEN, "%A, %b %d %%s%Y", &datetimeStruct);
+        sprintf(outputBuffer, timeFormatBuffer, _createZerosPaddingForTheYear(datetimeStruct.tm_year, zerosPadding));
     }
 
-    return outputBuffer;
+    return outputBuffer;    
 }
 
 void incrementClockSecond(struct tm *datetimeStruct){

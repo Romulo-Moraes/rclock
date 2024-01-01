@@ -1,5 +1,22 @@
 #include "./../../include/private/datetime.h"
 
+char *_createZerosPaddingForTheYear(int year, char *outputPadding){
+    size_t digitsCount = 0;
+
+    year += 1900;
+
+    while(year > 0){
+        year /= 10;
+        digitsCount++;
+    }
+
+    if(digitsCount < 4){
+        memset(outputPadding, '0', 4 - digitsCount);
+    }
+
+    return outputPadding;
+}
+
 // This function will validate the full date and the
 // full time given by the user. Both values have a similar
 // structure that is xx?xx?xx(xx). Examples: 12:12:12 and 01/01/1970

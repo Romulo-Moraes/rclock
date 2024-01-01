@@ -3,6 +3,7 @@
 
 #include "./../public/datetime.h"
 
+char *_createZerosPaddingForTheYear(int year, char *outputPadding);
 bool _checkIfDateOrTimesSegmentsAreDigits(char *customDateTime);
 struct DateStruct _parseDate(struct DatetimeModule datetimeArguments);
 struct TimeStruct _parseTime(struct DatetimeModule datetimeArguments);
