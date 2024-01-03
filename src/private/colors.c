@@ -8,16 +8,15 @@ void _setColorToTheDigits(ColorID newColor, ColorID digitColors[]){
     }
 }
 
-void _setColorToTheClock(ColorID newColor, ColorID *colonsColor, ColorID digitColors[]){
+void _setColorToTheClock(ColorID newColor, ColorID *colonsColor, ColorID digitColors[]){\
     _setColorToTheDigits(newColor, digitColors);
 
     *colonsColor = newColor;
 }
 
 struct RclockColor* _searchForColor(char *colorName, struct RclockColor *availableColors, size_t sizeOfAvailableColors){
-    size_t colorsArraySize = sizeOfAvailableColors / sizeof(availableColors[0]);
 
-    for(short i = 0; i < colorsArraySize; i++){
+    for(short i = 0; i < sizeOfAvailableColors; i++){
         if(strcmp(colorName, availableColors[i].colorName) == 0){
             return &availableColors[i];
         }
@@ -44,6 +43,7 @@ void _setClockColor(struct ColorsModule userArguments, char *errorOutput, ColorI
     struct RclockColor *colorSearchResult;
 
     if(userArguments.clockColor != NULL){
+        
         colorSearchResult = _searchForColor(userArguments.clockColor, availableColors, sizeOfAvailableColors);
 
         if(colorSearchResult != NULL){

@@ -68,7 +68,7 @@ bool _checkIfArgumentIsNumeric(char *argument){
 }
 
 
-void _fetchColorsArguments(anemone_struct *anemone, char *errorOutput, ProgramArguments *arguments){
+void _fetchColorsArguments(anemone_struct *anemone, ProgramArguments *arguments){
     anemone_optional_return_value argument;
 
     if((argument = get_optional_argument(*anemone, "--clock-color")).set == ANEMONE_TRUE){

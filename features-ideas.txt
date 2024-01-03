@@ -1,1 +1,1 @@
-Make the year hold 4 digits on the clock even if the number is smaller than 1000 by padding with zeros
+Make the year show 4 digits on the clock even if the number is smaller than 1000 by padding with zeros

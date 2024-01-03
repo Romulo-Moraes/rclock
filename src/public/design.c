@@ -3,20 +3,6 @@
 
 // Public functions
 
-void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments){
-    WINDOW *segmentToFill[2];
-
-    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour, HOURS_INDEX);
-    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX);
-
-    if(userArguments.hideTheSeconds == false && checkIfTheSecondsIsVisible() == true)
-        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec, SECONDS_INDEX);
-
-    _fillClockColons(userArguments);
-
-    refreshWindows();
-}
-
 void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsigned char windowIndex){
     Digit segmentDigits[2];
     ClockPixel (*theDigit)[3];
@@ -32,6 +18,21 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsign
     }
 }
 
+void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments){
+    WINDOW *segmentToFill[2];
+
+    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour, HOURS_INDEX);
+    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX);
+
+    if(userArguments.hideTheSeconds == false && checkIfTheSecondsIsVisible() == true)
+        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec, SECONDS_INDEX);
+
+    _fillClockColons(userArguments);
+
+    refreshWindows();
+}
+
+
 // Get the date window and draw the date stored in the program,
 // given by the user or by the OS
 void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struct ColorsModule colorArguments){
@@ -39,51 +40,30 @@ void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struc
     WINDOW *dateWindow;
     size_t dateStringLen;
 
+    // Asking to the screen-manager module
+    // return a reference to the date's window
     dateWindow = getDateWindow();
 
+    // Using the datetime module to stringify the date
     generateDateString(*theTime, datetimeArguments, dateBuffer);
     dateStringLen = strlen(dateBuffer) + 2;
 
+    // Using the screen-manager to configure
+    // and move the window to its placeholder.
+    // Set the string's length is necessary to
+    // align the text to the center of the screen.
     setDateStringLength(dateStringLen);
     moveDateWindowToPlaceholder();
     
+    // Configuring and drawing the date
     wattron(dateWindow, COLOR_PAIR(getDateColor()));
+    wattron(dateWindow, A_BOLD);
+
     mvwprintw(dateWindow, 1, 1, dateBuffer);
-    wattroff(dateWindow, COLOR_PAIR(getDateColor()));
-    wrefresh(dateWindow);
-    refresh();
-}
-
-void writeErrorMessageOnErrorWindow(char *msg, size_t windowWidth, WINDOW *errorWindow){
-    size_t msgLen = strlen(msg);
-    size_t requiredLines;
-    size_t remainder;
-    short i;
     
-
-    wclear(errorWindow);
-    wrefresh(errorWindow);
-
-    requiredLines = msgLen / (float) windowWidth;
-    remainder = msgLen % windowWidth;
-
-    wattron(errorWindow, COLOR_PAIR(ERROR_MESSAGE_RED_ID));
-
-    // Write chunks of the error message with the     
-    // max length that each line support
-    for(i = 1; i <= requiredLines; i++){
-        mvwaddnstr(errorWindow, i, 0, msg, windowWidth);
-
-        msg += windowWidth;
-    }
-
-    // Write the rest of the message that doesn't
-    // fill the whole line aligned to the center
-    mvwaddnstr(errorWindow, i, windowWidth / 2 - remainder / 2, msg, remainder);
-
-    wattroff(errorWindow, COLOR_PAIR(ERROR_MESSAGE_RED_ID));
-
-    wrefresh(errorWindow);
+    wattroff(dateWindow, COLOR_PAIR(getDateColor()));
+    wattroff(dateWindow, A_BOLD);
+    wrefresh(dateWindow);
     refresh();
 }
 
@@ -92,17 +72,12 @@ void writeErrorMessageOnErrorWindow(char *msg, size_t windowWidth, WINDOW *error
 // to be possible draw the date without a include, that 
 // would generate a circular dependency
 void drawProgramErrorCallback(void *arguments){
-    struct UpdateErrorFramesCallbackArguments *typecastedArguments = (struct UpdateErrorFramesCallbackArguments*) arguments;
+    struct ErrorUpdateCallbacksArguments *typecastedArguments = (struct ErrorUpdateCallbacksArguments*) arguments;
 
     clear();
     refresh();
-    
-    if(false){
-        wclear(typecastedArguments->windows.exitMessageWindow);
-        wrefresh(typecastedArguments->windows.exitMessageWindow);
-    }
 
-    writeErrorMessageOnErrorWindow(typecastedArguments->errorMsg, typecastedArguments->windows.measures.errorWindowWidth, typecastedArguments->windows.errorWindow);
+    _writeErrorMessageOnErrorWindow(typecastedArguments->errorMsg, typecastedArguments->windows.measures.errorWindowWidth, typecastedArguments->windows.errorWindow);
 
     refresh();
 }

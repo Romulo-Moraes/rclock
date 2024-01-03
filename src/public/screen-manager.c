@@ -1,10 +1,10 @@
 #include "./../../include/public/screen-manager.h"
 #include "./../../include/private/screen-manager.h"
 
-struct Windows programWindows;
-struct WindowSize winSize;
-bool theClocksSecondsIsVisible;
-bool theClocksDateIsVisible;
+static struct Windows programWindows;
+static struct WindowSize winSize;
+static bool theClocksSecondsIsVisible;
+static bool theClocksDateIsVisible;
 
 
 // Public functions
@@ -55,6 +55,8 @@ void setDateStringLength(size_t newLength){
     programWindows.windowsAttributes.dateStringLength = newLength;
 }
 
+// Once called, this function returns the
+// pointer of the date window
 WINDOW *getDateWindow(){
     return programWindows.dateWindow.window;
 }
@@ -88,7 +90,7 @@ void setValuesForClockStates(ProgramArguments arguments){
 
 // Generates error and exit message windows that will be the place to
 // draw the respective messages
-struct ErrorWindows generateErrorWindows(char *msg, float errorWindowWidthFraction, bool enableExitMessage){
+struct ErrorWindows generateErrorWindows(float errorWindowWidthFraction, bool enableExitMessage){
     struct ErrorWindows errorWindows;
 
     _getTerminalSize(&winSize.width, &winSize.height);
@@ -181,9 +183,17 @@ void setPlaceHolders(ProgramArguments arguments){
     _getTerminalSize(&winSize.width, &winSize.height);
     size_t windowsLimit;
 
+    // Calculating the Y axis that the clock windows will be placed
     int windowsYPosition = winSize.height / 2 - (int)((TIME_WINDOW_HEIGHT / 2));
     int firstWindowXPosition;
 
+
+    // The first window X-axis position is relative to the count
+    // of windows that the clock will have, if we want to align
+    // the clock to the center, we need to define different margins
+    // for when the seconds are visible and for when the seconds are hidden.
+    // The positions of the subsequent windows will be defined by a constant margin that will be 
+    // added for each window
     if(theClocksSecondsIsVisible == true){
         firstWindowXPosition = (winSize.width - (TIME_WINDOW_WIDTH * WINDOWS_COUNT_WITH_VISIBLE_SECONDS)) / 2 - 3;
         windowsLimit = WINDOWS_COUNT_WITH_VISIBLE_SECONDS;
@@ -192,10 +202,14 @@ void setPlaceHolders(ProgramArguments arguments){
         windowsLimit = WINDOWS_COUNT_WITH_HIDDEN_SECONDS;
     }
 
+    // For each created window do...
     for(int i = 0; i < windowsLimit; i++){
+        // Assign the same Y-axis position for all of them
         programWindows.clockWindows[i].position.y = windowsYPosition;
+        // Assign the X axis position
         programWindows.clockWindows[i].position.x = firstWindowXPosition;
 
+        // Increment the current X-axis position by the width of the window + 1
         firstWindowXPosition += TIME_WINDOW_WIDTH + 1;
     }
 
@@ -255,7 +269,7 @@ void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidt
             refresh();
 
             // Update the measures for each loop
-            ((struct UpdateErrorFramesCallbackArguments*) drawErrorArguments)->windows.measures = measures;
+            ((struct ErrorUpdateCallbacksArguments*) drawErrorArguments)->windows.measures = measures;
 
             drawProgramErrorCallback(drawErrorArguments);
 

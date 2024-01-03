@@ -169,11 +169,13 @@ void initializeTheClock(ProgramArguments arguments){
 void createTerminalSizeError(struct TerminalSizeError sizeError){
     char errorBuffer[512];
     struct ErrorWindows errorWindows;
-    struct UpdateErrorFramesCallbackArguments callbackArguments;
+    struct ErrorUpdateCallbacksArguments callbackArguments;
 
-    errorWindows =  generateErrorWindows(generateErrorMessage(sizeError.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer), 0.75, false);
+    errorWindows =  generateErrorWindows(0.75, false);
 
-    callbackArguments = (struct UpdateErrorFramesCallbackArguments){.windows = errorWindows, .errorMsg = errorBuffer, .exitErrorMsg = NULL};
+    generateErrorMessage(sizeError.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer);
+
+    callbackArguments = (struct ErrorUpdateCallbacksArguments){.windows = errorWindows, .errorMsg = errorBuffer, .exitErrorMsg = NULL};
 
     updateErrorMessageFrames(errorWindows, 0.75, errorBuffer, drawProgramErrorCallback, &callbackArguments, sizeError.validationCallback, false);
 }
@@ -263,7 +265,6 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows){
         generateWindows(arguments.DatetimeScreenManagerDesigner);
     }
     
-
     setPlaceHolders(arguments);
     moveTimeWindowsToPlaceholders();
 

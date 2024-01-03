@@ -12,22 +12,22 @@ struct RclockColor availableColors[] = {
     (struct RclockColor){.colorName = "white", .clockID = WHITE_ID, .dateID = DATE_WHITE_ID}
 };
 
-ColorID digitColors[MAX_DIGIT_COLORS] = {BLUE_ID};
-ColorID dateColor;
-ColorID colonsColor;
+static ColorID digitsColors[MAX_DIGIT_COLORS] = {BLUE_ID};
+static ColorID dateColor;
+static ColorID colonsColor;
 
 
 // Public functions
-
 
 void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
 
     // The color arguments have priority order,
     // from specific to general
 
+    _setClockColor(userArguments, errorOutput, &colonsColor, digitsColors, availableColors, sizeof(availableColors) / sizeof(availableColors[0]));
 
     // For all digit windows
-    _setGlobalDigitsColor(userArguments, errorOutput, availableColors, sizeof(availableColors), digitColors);
+    _setGlobalDigitsColor(userArguments, errorOutput, availableColors, sizeof(availableColors), digitsColors);
 
     // For the date
     _setDateColor(userArguments, errorOutput, &dateColor, availableColors, sizeof(availableColors));
@@ -36,7 +36,7 @@ void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
     _setColonColor(userArguments, errorOutput, &colonsColor, availableColors, sizeof(availableColors));
 
     // For each clock digit - High priority order
-    _setColorForEachClockDigit(userArguments, errorOutput, digitColors, availableColors, sizeof(availableColors));
+    _setColorForEachClockDigit(userArguments, errorOutput, digitsColors, availableColors, sizeof(availableColors));
 
 }
 
@@ -69,7 +69,7 @@ void loadBuiltinColors(){
 
 ColorID getDigitColor(unsigned char digitIndex){
     if(digitIndex >= 0 && digitIndex <= 5){
-        return digitColors[digitIndex];
+        return digitsColors[digitIndex];
     }else{
         return DEFAULT_COLOR;
     }

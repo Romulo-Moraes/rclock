@@ -74,7 +74,7 @@ struct TerminalSizeError{
     bool (*validationCallback)(void *arguments);
 };
 
-struct UpdateErrorFramesCallbackArguments{
+struct ErrorUpdateCallbacksArguments{
   struct ErrorWindows windows;
   char *errorMsg;
   char *exitErrorMsg;
@@ -82,7 +82,7 @@ struct UpdateErrorFramesCallbackArguments{
 
 bool checkIfTheDateShouldBeInvisible();
 bool checkIfTheSecondsShouldBeInvisible();
-struct ErrorWindows generateErrorWindows(char *msg, float errorWindowWidthFraction, bool enableExitMessage);
+struct ErrorWindows generateErrorWindows(float errorWindowWidthFraction, bool enableExitMessage);
 void moveTimeWindowsToPlaceholders();
 void moveDateWindowToPlaceholder();
 void loadInitialTerminalSize();

@@ -19,9 +19,9 @@ void _drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], Col
     for(short j = 0; j < 5; j++){
         for(short k = 0; k < 3; k++){
             if(shapeToBeDrawn[j][k] == COLOR){
-                wattron(targetWindow, COLOR_PAIR(BLUE_ID));
+                wattron(targetWindow, COLOR_PAIR(digitColorID));
                 wprintw(targetWindow, "  ");
-                wattroff(targetWindow, COLOR_PAIR(BLUE_ID));
+                wattroff(targetWindow, COLOR_PAIR(digitColorID));
                 wrefresh(targetWindow);
             }else{
                 wprintw(targetWindow, "  ");
@@ -42,4 +42,37 @@ void _fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments)
     // The last colon is drawn only if the seconds is visible
     if(userArguments.hideTheSeconds == false && checkIfTheSecondsIsVisible() == true)
         _drawClockWindow(getClockSegment(SECOND_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor);
+}
+
+void _writeErrorMessageOnErrorWindow(char *msg, size_t windowWidth, WINDOW *errorWindow){
+    size_t msgLen = strlen(msg);
+    size_t requiredLines;
+    size_t remainder;
+    short i;
+    
+
+    wclear(errorWindow);
+    wrefresh(errorWindow);
+
+    requiredLines = msgLen / (float) windowWidth;
+    remainder = msgLen % windowWidth;
+
+    wattron(errorWindow, COLOR_PAIR(ERROR_MESSAGE_RED_ID));
+
+    // Write chunks of the error message with the     
+    // max length that each line support
+    for(i = 1; i <= requiredLines; i++){
+        mvwaddnstr(errorWindow, i, 0, msg, windowWidth);
+
+        msg += windowWidth;
+    }
+
+    // Write the rest of the message that doesn't
+    // fill the whole line aligned to the center
+    mvwaddnstr(errorWindow, i, windowWidth / 2 - remainder / 2, msg, remainder);
+
+    wattroff(errorWindow, COLOR_PAIR(ERROR_MESSAGE_RED_ID));
+
+    wrefresh(errorWindow);
+    refresh();
 }

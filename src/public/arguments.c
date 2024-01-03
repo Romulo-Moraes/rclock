@@ -50,7 +50,7 @@ anemone_struct createProgramArguments(int argc, char *argv[]){
 // This function will fetch and return all user arguments given by command-line arguments
 ProgramArguments fetchProgramArguments(anemone_struct *anemone, char *errorOutput){
 
-    _fetchColorsArguments(anemone, errorOutput, &defaultProgramArguments);
+    _fetchColorsArguments(anemone, &defaultProgramArguments);
     
     _fetchDatetimeArguments(anemone, errorOutput, &defaultProgramArguments);
 
