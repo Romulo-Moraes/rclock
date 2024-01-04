@@ -1,7 +1,7 @@
 <div align="center">
     <img width=500" src="./assets/Project image.png">
     <h1></h1>
-    <h3>A terminal digital clock written for POSIX system fully customizable with colors and datetime features</h3>
+    <h3>A digital terminal clock written for POSIX systems, fully customizable with colors and datetime features</h3>
 </div>
 
 <img src="./assets/Rclock.png">
@@ -66,7 +66,17 @@ The compiler used for developing the project was the GCC 13.2.1. Using the same 
 The meson build system documentation can be found on this link: https://mesonbuild.com/Getting-meson.html
 
 ### Ncurses library
-The Ncurses library is also necessary to run the Rclock. This library is a part of POSIX, so a Linux system typically has this library by default.
+The Ncurses library is also necessary to run the Rclock. This library is part of POSIX, so a Linux system typically has this library by default.
 
 ### Anemone library
 The Anemone is a library used for command-line argument parsing, 
+
+# Running the program for the first time
+Once succesfully installed, the Rclock executable is globally visible and can already be ran. To call the executable just type the following command on terminal:
+
+> $ rclock
+
+Running this command, the digital clock should be visible on screen with the default configurations.
+
+# Configuring a new color to the clock
+One of the most attractive features of the Rclock is the hability of set new colors for each component, there's a variety of command-line flags that can define new colors for each piece of the clock,
