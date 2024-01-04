@@ -60,6 +60,8 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Development documentation](#development-documentation)
 
+[Gallery]()
+
 # Technical informations
 This software is built using the following technologies:
 <ul>
@@ -328,3 +330,22 @@ This repository constains the whole software documentation inside the docs/ dire
 </ul>
 
 The documentation files are designed to help developers understand the project when creating new functionalities or for maintenance purposes.
+
+# Gallery
+
+<div align="center">
+    <h2>Happy new year!</h2>
+    <img src="./assets/Example1.png"/>
+    <br/>
+    <h2>Fall</h2>
+    <img src="./assets/Example2.png"/>
+    <br/>
+    <h2>Moonlight</h2>
+    <img src="./assets/Example3.png"/>
+    <br/>
+    <h2>Amsterdam</h2>
+    <img src="./assets/Example4.png"/>
+    <br/>
+    <h2>Rose valley</h2>
+    <img src="./assets/Example5.png"/>
+</div>
