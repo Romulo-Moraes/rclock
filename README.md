@@ -60,7 +60,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Development documentation](#development-documentation)
 
-[Gallery]()
+[Gallery](#gallery)
 
 # Technical informations
 This software is built using the following technologies:
