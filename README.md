@@ -32,23 +32,25 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Installing the Rclock](#installing-the-rclock)
 
- - [Downloading the source code]()
+ - [Dependencies](#dependencies)
 
- - [Building the Anemone library]()
+ - [Downloading the source code](#downloading-the-source-code)
 
- - [Setting up the Meson]()
+ - [Building the Anemone library](#building-the-anemone-library)
 
- - [Compiling the source code]()
+ - [Setting up the Meson](#setting-up-the-meson)
+
+ - [Compiling the source code](#compiling-the-source-code)
 
 [Running the program for the first time](#running-the-program-for-the-first-time)
 
 [Configuring a new color to the clock](#configuring-a-new-color-to-the-clock)
 
- - [Available colors]()
+ - [Available colors](#available-colors)
 
- - [Rclock components]()
+ - [Rclock components](#rclock-components)
 
- - [Applying a new color]()
+ - [Applying a new color](#applying-a-new-color)
 
 [Displaying a custom date](#displaying-a-custom-date)
 
@@ -76,13 +78,16 @@ Tests performed on this software:
 The software has a documentation, the description of the documentation is a [separete topic](#development-documentation).
 
 # Installing the Rclock
+Here is all you need to know for installing the Rclock.
+
+## Dependencies
 This software requires the following technologies to be installed in your machine:
 
 ### A compiler for the C language
 The compiler used for developing the project was the GCC 13.2.1. Using the same compiler and the same version or newer is advisable.
 
-### The meson build system
-The meson build system documentation can be found on this link: https://mesonbuild.com/Getting-meson.html
+### The Meson build system
+The Meson build system documentation can be found on this link: https://mesonbuild.com/Getting-meson.html
 
 ### Ncurses library
 The Ncurses library is also necessary to run the Rclock. This library is part of POSIX, so a Linux system typically has this library by default.
