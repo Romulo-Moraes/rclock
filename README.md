@@ -69,12 +69,55 @@ The meson build system documentation can be found on this link: https://mesonbui
 The Ncurses library is also necessary to run the Rclock. This library is part of POSIX, so a Linux system typically has this library by default.
 
 ### Anemone library
-The Anemone is a library used for command-line argument parsing, 
+The Anemone is a library used for command-line argument parsing. This library is defined as a submodule of this repository, so you don't need to worry about downloading it manually, however, a couple of commands will be necessary to pull and compile the source code.
+
+## Downloading the source code
+The source code of this repository can be downloaded with the following git command:
+
+```sh
+git clone --recursive https://github.com/Romulo-Moraes/Rclock.git
+```
+
+The *--recursive* flag is used for downloading the submodules beyond the repository source code.
+
+## Building the Anemone library
+The Anemone repository provides its own script for building the library, it's located on the root of the project. So to build the Anemone we need to run the following commands with the premise that you are currently at the root of the Rclock repository:
+
+```sh
+cd ./lib/Anemone
+sh ./make_lib.sh
+cd ../../
+```
+## Setting up the Meson
+Once back to the Rclock root, we need to setup the Meson build system for compiling the repository. Use these commands to accomplish this task:
+
+```sh
+meson setup build
+cd build
+```
+## Compiling the source code
+After setting up the Meson, there are two options for compilation.
+
+### Compiling
+This option just compiles the project and creates the executable in the current directory.
+
+```sh
+meson compile
+```
+
+### Installing
+This option compiles and also installs the executable globally on your machine.
+
+```sh
+sudo meson install
+```
 
 # Running the program for the first time
-Once succesfully installed, the Rclock executable is globally visible and can already be ran. To call the executable just type the following command on terminal:
+Once succesfully installed, the Rclock executable is visible globally and can now be run. To call the executable, simply type the following command in the terminal:
 
-> $ rclock
+```sh
+rclock
+```
 
 Running this command, the digital clock should be visible on screen with the default configurations.
 
