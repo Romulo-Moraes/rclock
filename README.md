@@ -44,7 +44,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Development documentation](#development-documentation)
 
-## Technical informations
+# Technical informations
 This software is built using the following technologies:
 <ul>
     <li>C programming language</li>
@@ -254,7 +254,7 @@ The default format used by the project is the following:
 "%A, %b %d %Y"
 ```
 
-## Displaying a custom time
+# Displaying a custom time
 It is also possible to set a custom time to the Rclock, either individually or using a time format.
 
 ### Custom hour
