@@ -32,9 +32,23 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Installing the Rclock](#installing-the-rclock)
 
+ - [Downloading the source code]()
+
+ - [Building the Anemone library]()
+
+ - [Setting up the Meson]()
+
+ - [Compiling the source code]()
+
 [Running the program for the first time](#running-the-program-for-the-first-time)
 
 [Configuring a new color to the clock](#displaying-a-custom-date)
+
+ - [Available colors]()
+
+ - [Rclock components]()
+
+ - [Applying a new color]()
 
 [Displaying a custom date](#displaying-a-custom-date)
 
