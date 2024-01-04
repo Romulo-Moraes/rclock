@@ -348,4 +348,7 @@ The documentation files are designed to help developers understand the project w
     <br/>
     <h2>Rose valley</h2>
     <img src="./assets/Example5.png"/>
+    <br/>
+    <h2>Japan</h2>
+    <img src="./assets/Example6.png"/>
 </div>
