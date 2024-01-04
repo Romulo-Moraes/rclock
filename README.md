@@ -28,7 +28,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 </ul>
 
 # Table of contents
-[Technical informations]()
+[Technical informations](#technical-informations)
 
 [Installing the Rclock]()
 
