@@ -42,7 +42,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Running the program for the first time](#running-the-program-for-the-first-time)
 
-[Configuring a new color to the clock](#displaying-a-custom-date)
+[Configuring a new color to the clock](#configuring-a-new-color-to-the-clock)
 
  - [Available colors]()
 
@@ -56,9 +56,9 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Making the clock smaller](#making-the-clock-smaller)
 
-[Development documentation]()
+[Development documentation](#development-documentation)
 
-## Technical informations
+# Technical informations
 This software is built using the following technologies:
 <ul>
     <li>C programming language</li>
@@ -73,7 +73,7 @@ Tests performed on this software:
     <li>Integration testing</li>
 </ul>
 
-The software has a documentation, the description of the documentation is a [separete topic]().
+The software has a documentation, the description of the documentation is a [separete topic](#development-documentation).
 
 # Installing the Rclock
 This software requires the following technologies to be installed in your machine:
@@ -268,7 +268,7 @@ The default format used by the project is the following:
 "%A, %b %d %Y"
 ```
 
-## Displaying a custom time
+# Displaying a custom time
 It is also possible to set a custom time to the Rclock, either individually or using a time format.
 
 ### Custom hour
@@ -313,7 +313,7 @@ This flag instructs the Rclock to hide the seconds until the end of its executio
 ### The passive ability
 This project was designed to hide the date and the seconds automatically, so whenever the terminal be small enough to can't display the entire clock, the seconds will be hidden if the width is not large enough and the date will be hidden if the height not be big enough.
 
-## Development documentation
+# Development documentation
 This repository constains the whole software documentation inside the docs/ directory. The documentation is divided into three kinds of files:
 
 <ul>
