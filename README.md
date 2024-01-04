@@ -59,7 +59,7 @@ Tests performed on this software:
     <li>Integration testing</li>
 </ul>
 
-The software has a documentation, the description of the documentation is a [separete topic]().
+The software has a documentation, the description of the documentation is a [separete topic](#development-documentation).
 
 # Installing the Rclock
 This software requires the following technologies to be installed in your machine:
