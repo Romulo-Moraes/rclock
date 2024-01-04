@@ -30,19 +30,17 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 # Table of contents
 [Technical informations](#technical-informations)
 
-[Installing the Rclock]()
+[Installing the Rclock](#installing-the-rclock)
 
-[Running the program for the first time]()
+[Running the program for the first time](#running-the-program-for-the-first-time)
 
-[Configuring a new color to the clock]()
+[Configuring a new color to the clock](#displaying-a-custom-date)
 
-[Configuring a custom date]()
+[Displaying a custom date](#displaying-a-custom-date)
 
-[Configuring a custom date format]()
+[Displaying a custom time](#displaying-a-custom-time)
 
-[Configuring a custom time]()
-
-[Making the clock smaller]()
+[Making the clock smaller](#making-the-clock-smaller)
 
 [Development documentation]()
 
@@ -183,7 +181,7 @@ This flag changes the color of all clock digits.
 --digits-color or -l <color>
 ```
 
-## Displaying a custom date
+# Displaying a custom date
 It is possible to set a custom date to the Rclock, either individually or even using a date format.
 
 ### Custom day
@@ -276,7 +274,7 @@ This flag sets a new hour, minute and second using a time format.
 --custom-time or -T <XX:XX:XX>
 ```
 
-## Making the clock smaller
+# Making the clock smaller
 The Rclock can hide parts of itself to appear smaller than the normal.
 
 ### Hiding the date
