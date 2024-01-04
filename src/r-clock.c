@@ -285,7 +285,7 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows){
 }
 
 void setCustomDateAndTime(ProgramArguments arguments){
-    char errorBuffer[512];
+    char errorBuffer[512] = {0};
 
     setNewTime(&timeStruct, arguments.datetime, errorBuffer);
     setNewDate(&timeStruct, arguments.datetime, errorBuffer);
