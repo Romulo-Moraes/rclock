@@ -47,7 +47,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 [Development documentation]()
 
 ## Technical informations
-This software was built using the following technologies
+This software is built using the following technologies:
 <ul>
     <li>C programming language</li>
     <li>Meson build system</li>
@@ -55,6 +55,13 @@ This software was built using the following technologies
     <li>Anemone library</li>
 </ul>
 
+Tests performed on this software:
+<ul>
+    <li>Unit testing</li>
+    <li>Integration testing</li>
+</ul>
+
+The software has a documentation, the description of the documentation is a [separete topic]().
 
 # Installing the Rclock
 This software requires the following technologies to be installed in your machine:
@@ -138,7 +145,7 @@ The Rclock has a set o built-in colors that are available to be used in any Rclo
 </ul>
 
 ## Rclock components
-The Rclock is divided into components, this approach makes the developement easier and increase the ways of customizations.
+The Rclock is divided into components, this approach makes the development easier and increase the ways of customizations.
 
 <ul>
     <li>Digits (Individually)</li>
@@ -161,7 +168,7 @@ This flag changes the color of the date.
 ```
 
 ### Changing the color of the digits individually
-The Rclock has the feature of change the color of each digit individually, this is compound by 6 flags. The digits are identified by a Roman number from 1 (I) to 6 (VI).
+The Rclock has the feature of change the color of each digit individually, this is compound by 6 flags. The digits are identified by a Roman number between 1 (I) to 6 (VI).
 ```txt
 --color-I or -q <color>
 --color-II or -Q <color>
@@ -293,3 +300,14 @@ This flag instructs the Rclock to hide the seconds until the end of its executio
 
 ### The passive ability
 This project was designed to hide the date and the seconds automatically, so whenever the terminal be small enough to can't display the entire clock, the seconds will be hidden if the width is not large enough and the date will be hidden if the height not be big enough.
+
+## Development documentation
+This repository constains the whole software documentation inside the docs/ directory. The documentation is divided into three kinds of files:
+
+<ul>
+    <li>Requirements document</li>
+    <li>The general Rclock documentation</li>
+    <li>The documentation of each Rclock module</li>
+</ul>
+
+The documentation files are designed to help developers understand the project when creating new functionalities or for maintenance purposes.
