@@ -42,7 +42,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Making the clock smaller](#making-the-clock-smaller)
 
-[Development documentation]()
+[Development documentation](#development-documentation)
 
 ## Technical informations
 This software is built using the following technologies:
@@ -299,7 +299,7 @@ This flag instructs the Rclock to hide the seconds until the end of its executio
 ### The passive ability
 This project was designed to hide the date and the seconds automatically, so whenever the terminal be small enough to can't display the entire clock, the seconds will be hidden if the width is not large enough and the date will be hidden if the height not be big enough.
 
-## Development documentation
+# Development documentation
 This repository constains the whole software documentation inside the docs/ directory. The documentation is divided into three kinds of files:
 
 <ul>
