@@ -34,7 +34,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Running the program for the first time](#running-the-program-for-the-first-time)
 
-[Configuring a new color to the clock](#displaying-a-custom-date)
+[Configuring a new color to the clock](#configuring-a-new-color-to-the-clock)
 
 [Displaying a custom date](#displaying-a-custom-date)
 
