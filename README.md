@@ -187,7 +187,7 @@ This flag changes the color of the date.
 ```
 
 ### Changing the color of the digits individually
-The Rclock has the feature of change the color of each digit individually, this is compound by 6 flags. The digits are identified by a Roman number between 1 (I) to 6 (VI).
+The Rclock has the feature of change the color of each digit individually, this is compound by 6 flags. The digits are identified by a Roman number between 1 (I) and 6 (VI).
 ```txt
 --color-I or -q <color>
 --color-II or -Q <color>
