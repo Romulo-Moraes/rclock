@@ -151,7 +151,7 @@ Running this command, the digital clock should be visible on screen with the def
 One of the most attractive features of the Rclock is the ability of set new colors for each component, there's a variety of command-line flags that can define new colors for each piece of the clock.
 
 ## Available colors
-The Rclock has a set o built-in colors that are available to be used in any Rclock component.
+The Rclock has a set of built-in colors that are available to be used in any Rclock component.
 
 <ul>
     <li>black</li>
@@ -187,7 +187,7 @@ This flag changes the color of the date.
 ```
 
 ### Changing the color of the digits individually
-The Rclock has the feature of change the color of each digit individually, this is compound by 6 flags. The digits are identified by a Roman number between 1 (I) to 6 (VI).
+The Rclock has the feature of change the color of each digit individually, this is compound by 6 flags. The digits are identified by a Roman number between 1 (I) and 6 (VI).
 ```txt
 --color-I or -q <color>
 --color-II or -Q <color>
