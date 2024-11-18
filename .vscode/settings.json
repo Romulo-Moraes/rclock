@@ -2,6 +2,11 @@
     "files.associations": {
         "datetime.h": "c",
         "shapes.h": "c",
-        "screen-manager.h": "c"
+        "screen-manager.h": "c",
+        "startup.h": "c",
+        "arguments.h": "c",
+        "terminal-size.h": "c",
+        "ncurses.h": "c",
+        "design.h": "c"
     }
 }
