@@ -6,8 +6,8 @@
  * See the file COPYING.
  */
 
-#include "./../../include/public/arguments.h"
-#include "./../../include/private/arguments.h"
+#include <public/arguments.h>
+#include <private/arguments.h>
 
 ProgramArguments defaultProgramArguments = {
      .colors = {.clockColor = DEFAULT_CLOCK_COLOR, .colonColor = NULL, .dateColor = DEFAULT_CLOCK_COLOR , .digitColor = {NULL},

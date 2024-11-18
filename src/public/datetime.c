@@ -6,8 +6,8 @@
  * See the file COPYING.
  */
 
-#include "./../../include/public/datetime.h"
-#include "./../../include/private/datetime.h"
+#include <public/datetime.h>
+#include <private/datetime.h>
 
 static struct tm initialOfficialTime;
 static struct tm initialProgramTime;

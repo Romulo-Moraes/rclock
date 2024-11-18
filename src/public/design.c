@@ -6,8 +6,8 @@
  * See the file COPYING.
  */
 
-#include "./../../include/public/design.h"
-#include "./../../include/private/design.h"
+#include <public/design.h>
+#include <private/design.h>
 
 // Public functions
 

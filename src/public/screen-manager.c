@@ -6,8 +6,8 @@
  * See the file COPYING.
  */
 
-#include "./../../include/public/screen-manager.h"
-#include "./../../include/private/screen-manager.h"
+#include <public/screen-manager.h>
+#include <private/screen-manager.h>
 
 static struct Windows programWindows;
 static struct WindowSize winSize;

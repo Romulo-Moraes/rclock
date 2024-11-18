@@ -6,7 +6,7 @@
  * See the file COPYING.
  */
 
-#include "./../../include/public/errors.h"
+#include <public/errors.h>
 
 struct Error errors[] = {
     (struct Error){.message = "The custom day was out of range", .id = MONTH_DAY_OUT_OF_RANGE},

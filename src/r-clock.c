@@ -6,11 +6,11 @@
  * See the file COPYING.
  */
 
-#include "../include/public/global-includes.h"
-#include "../include/public/arguments.h"
-#include "../include/public/screen-manager.h"
-#include "../include/public/design.h"
-#include "../include/public/datetime.h"
+#include <public/global-includes.h>
+#include <public/arguments.h>
+#include <public/screen-manager.h>
+#include <public/design.h>
+#include <public/datetime.h>
 
 struct tm timeStruct;
 

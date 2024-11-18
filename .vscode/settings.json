@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "datetime.h": "c",
+        "shapes.h": "c",
+        "screen-manager.h": "c"
+    }
+}

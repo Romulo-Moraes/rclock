@@ -7,7 +7,7 @@
  */
 
 
-#include "./../../include/private/colors.h"
+#include <private/colors.h>
 
 // Private functions
 

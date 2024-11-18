@@ -7,7 +7,7 @@
  */
 
 
-#include "./../../include/public/screen-manager.h"
+#include <public/screen-manager.h>
 
 void _getTerminalSize(unsigned int *width, unsigned int *height){
     getmaxyx(stdscr, *height, *width);

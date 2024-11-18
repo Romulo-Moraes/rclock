@@ -6,7 +6,7 @@
  * See the file COPYING.
  */
 
-#include "./../../include/public/shapes.h"
+#include <public/shapes.h>
 
 ClockPixel digitShapes[10][5][3] = {
     {

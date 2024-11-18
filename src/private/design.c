@@ -6,7 +6,7 @@
  * See the file COPYING.
  */
 
-#include "./../../include/private/design.h"
+#include <private/design.h>
 
 // Procedure that split a number into two digits, if the number is smaller than 10
 // a zero will placed before the number. For instance: 9 -> 09, 4 -> 04

@@ -6,7 +6,7 @@
  * See the file COPYING.
  */
 
-#include "../../include/private/arguments.h"
+#include <private/arguments.h>
 
 
 ErrorID _validateHoursMinutesSecondsDaysMonthsAndYears(struct DatetimeModule *argumentsOutput, anemone_struct *anemone){

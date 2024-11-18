@@ -6,8 +6,8 @@
  * See the file COPYING.
  */
 
-#include "./../../include/public/colors.h"
-#include "./../../include/private/colors.h"
+#include <public/colors.h>
+#include <private/colors.h>
 
 struct RclockColor availableColors[] = {
     (struct RclockColor){.colorName = "black", .clockID = BLACK_ID, .dateID = DATE_BLACK_ID},
