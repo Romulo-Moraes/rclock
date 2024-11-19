@@ -45,7 +45,7 @@ bool _checkIfDateOrTimesSegmentsAreDigits(char *customDateTime){
 // This function parses the date given with the DD/MM/YYYY format.
 // string length and digits checking are used to make sure that it is
 // a valid value
-struct DateStruct _parseDate(struct DatetimeModule datetimeArguments){
+struct DateStruct _parseDate(struct DatetimeModuleArguments datetimeArguments){
     struct DateStruct fetchedDate = {0};
     int parsedDateItems;
 
@@ -66,7 +66,7 @@ struct DateStruct _parseDate(struct DatetimeModule datetimeArguments){
     return fetchedDate;
 }
 
-struct TimeStruct _parseTime(struct DatetimeModule datetimeArguments){
+struct TimeStruct _parseTime(struct DatetimeModuleArguments datetimeArguments){
     struct TimeStruct fetchedTime = {0};
     int fetchedTimeItems;
 
@@ -87,7 +87,7 @@ struct TimeStruct _parseTime(struct DatetimeModule datetimeArguments){
     return fetchedTime;
 }
 
-void _setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
+void _setCustomTime(struct tm *datetimeStruct, struct DatetimeModuleArguments dateTimeArguments, char *errorOutput){
     struct TimeStruct parsedTime;
 
     if(dateTimeArguments.customTime != NULL){
@@ -103,7 +103,7 @@ void _setCustomTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArg
     }
 }
 
-void _setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments){
+void _setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeModuleArguments dateTimeArguments){
     if(dateTimeArguments.customHour != UNDEFINED){
         datetimeStruct->tm_hour = dateTimeArguments.customHour;
     }
@@ -117,7 +117,7 @@ void _setCustomHourMinuteAndSecond(struct tm *datetimeStruct, struct DatetimeMod
     }
 }
 
-void _setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
+void _setCustomDate(struct tm *datetimeStruct, struct DatetimeModuleArguments datetimeArguments, char *errorOutput){
     struct DateStruct parsedDate;
 
     if(datetimeArguments.customDate != NULL){
@@ -133,7 +133,7 @@ void _setCustomDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArg
     }
 }
 
-void _setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments){
+void _setCustomDayMonthAndYear(struct tm *datetimeStruct, struct DatetimeModuleArguments datetimeArguments){
 
     if(datetimeArguments.customDay != UNDEFINED){
         datetimeStruct->tm_mday = datetimeArguments.customDay;

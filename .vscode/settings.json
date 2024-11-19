@@ -7,6 +7,7 @@
         "arguments.h": "c",
         "terminal-size.h": "c",
         "ncurses.h": "c",
-        "design.h": "c"
+        "design.h": "c",
+        "modes.h": "c"
     }
 }

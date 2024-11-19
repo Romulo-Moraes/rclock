@@ -3,7 +3,7 @@
 
 #include <public/arguments.h>
 
-void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModules arguments);
+void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModulesArguments arguments);
 struct TerminalSizeError checkIfTerminalSizeIsCritical(ProgramArguments arguments);
 
 #endif

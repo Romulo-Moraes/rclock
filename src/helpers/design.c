@@ -24,7 +24,7 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows, st
 
     refreshWindows();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
+    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
 
     if(checkIfTheDateIsVisible() == true){
         drawDate(timeStruct, arguments.datetime, arguments.colors);

@@ -11,10 +11,11 @@
 
 #include "./../public/arguments.h"
 
-ErrorID _validateHoursMinutesSecondsDaysMonthsAndYears(struct DatetimeModule *argumentsOutput, anemone_struct *anemone);
+ErrorID _validateHoursMinutesSecondsDaysMonthsAndYears(struct DatetimeModuleArguments *argumentsOutput, anemone_struct *anemone);
 bool _checkIfArgumentIsNumeric(char *argument);
 void _fetchColorsArguments(anemone_struct *anemone, ProgramArguments *arguments);
 ErrorID _fetchDatetimeArguments(anemone_struct *anemone, char *errorOutput, ProgramArguments *arguments);
+void _fetchRclockModeArguments(anemone_struct *anemone, ProgramArguments *arguments);
 void _fetchScreenManagementArguments(anemone_struct *anemone, char *errorOutput, ProgramArguments *arguments);
 
 #endif

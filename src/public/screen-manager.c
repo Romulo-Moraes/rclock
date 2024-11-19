@@ -172,7 +172,7 @@ WINDOW** getClockSegment(unsigned int windowIndex, WINDOW *output[2]){
 }
 
 
-void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments){
+void generateWindows(struct DatetimeScreenManagerDesignerModulesArguments userArguments){
     programWindows.windowsAttributes.clockWindowsCount = userArguments.hideTheSeconds == true ? WINDOWS_COUNT_WITH_HIDDEN_SECONDS : WINDOWS_COUNT_WITH_VISIBLE_SECONDS;
 
     for(short i = 0; i < programWindows.windowsAttributes.clockWindowsCount; i++){

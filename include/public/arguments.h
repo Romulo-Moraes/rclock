@@ -17,8 +17,10 @@
 #define DEFAULT_CLOCK_COLOR "blue"
 #define DEFAULT_HIDE_THE_DATE_STATE false
 #define DEFAULT_HIDE_THE_SECONDS_STATE false
+#define CLOCK_MODE 1
+#define POMODORO_MODE 2
 
-struct DatetimeModule{
+struct DatetimeModuleArguments{
     short customHour;
     short customMinute;
     short customSecond;
@@ -30,7 +32,7 @@ struct DatetimeModule{
     char *dateFormat;
 };
 
-struct ColorsModule{
+struct ColorsModuleArguments{
     char *digitColor[MAX_DIGIT_COLORS];
     char *globalDigitsColor;
     char *dateColor;
@@ -38,15 +40,18 @@ struct ColorsModule{
     char *colonColor;
 };
 
-struct DatetimeScreenManagerDesignerModules{
+struct DatetimeScreenManagerDesignerModulesArguments{
     bool hideTheDate;
     bool hideTheSeconds;
 };
 
+typedef uint8_t RclockMode;
+
 typedef struct{
-    struct DatetimeModule datetime;
-    struct ColorsModule colors;
-    struct DatetimeScreenManagerDesignerModules DatetimeScreenManagerDesigner;
+    RclockMode mode;
+    struct DatetimeModuleArguments datetime;
+    struct ColorsModuleArguments colors;
+    struct DatetimeScreenManagerDesignerModulesArguments DatetimeScreenManagerDesigner;
 } ProgramArguments;
 
 anemone_struct createProgramArguments(int argc, char *argv[]);

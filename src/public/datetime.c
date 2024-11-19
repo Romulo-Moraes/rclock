@@ -32,7 +32,7 @@ void saveInitialProgramTime(struct tm *finalDatetime){
 }
 
 // Wrapper procedure to set custom time
-void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput){
+void setNewTime(struct tm *datetimeStruct, struct DatetimeModuleArguments dateTimeArguments, char *errorOutput){
     
     time_t now;
 
@@ -53,7 +53,7 @@ void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArgumen
 }
 
 // Wrapper procedure to set custom date
-void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput){
+void setNewDate(struct tm *datetimeStruct, struct DatetimeModuleArguments datetimeArguments, char *errorOutput){
     time_t now;
 
     // The date arguments have priority order, from specific to general
@@ -75,7 +75,7 @@ void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArgumen
 // Function that returns the date that will be shown below the clock
 // if the user provided a custom date format, the new format will be
 // used instead of the default one
-char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer){
+char* generateDateString(struct tm datetimeStruct, struct DatetimeModuleArguments datetimeArguments, char *outputBuffer){
     char zerosPadding[8] = {0};
     char timeFormatBuffer[MAX_CLOCK_DATE_BUFFER_LEN];
 
@@ -87,6 +87,14 @@ char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetim
     }
 
     return outputBuffer;    
+}
+
+void decrementClockSecond(struct tm *datetimeStruct) {
+    datetimeStruct->tm_sec -= 1;
+
+    if(datetimeStruct->tm_sec < 0){
+        mktime(datetimeStruct);
+    }
 }
 
 void incrementClockSecond(struct tm *datetimeStruct){

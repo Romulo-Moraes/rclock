@@ -34,7 +34,7 @@ struct RclockColor* _searchForColor(char *colorName, struct RclockColor *availab
     return NULL;
 }
 
-void _setGlobalDigitsColor(struct ColorsModule userArguments, char *errorOutput, struct RclockColor availableColors[], size_t sizeOfAvailableColors, ColorID digitColors[]){
+void _setGlobalDigitsColor(struct ColorsModuleArguments userArguments, char *errorOutput, struct RclockColor availableColors[], size_t sizeOfAvailableColors, ColorID digitColors[]){
     struct RclockColor *colorSearchResult;
 
    if(userArguments.globalDigitsColor != NULL){
@@ -48,7 +48,7 @@ void _setGlobalDigitsColor(struct ColorsModule userArguments, char *errorOutput,
     }
 }
 
-void _setClockColor(struct ColorsModule userArguments, char *errorOutput, ColorID *colonsColor, ColorID digitsColor[], struct RclockColor availableColors[], size_t sizeOfAvailableColors){
+void _setClockColor(struct ColorsModuleArguments userArguments, char *errorOutput, ColorID *colonsColor, ColorID digitsColor[], struct RclockColor availableColors[], size_t sizeOfAvailableColors){
     struct RclockColor *colorSearchResult;
 
     if(userArguments.clockColor != NULL){
@@ -63,7 +63,7 @@ void _setClockColor(struct ColorsModule userArguments, char *errorOutput, ColorI
     }
 }
 
-void _setDateColor(struct ColorsModule userArguments, char* errorOutput, ColorID *dateColor, struct RclockColor availableColors[], size_t sizeOfAvailableColors){
+void _setDateColor(struct ColorsModuleArguments userArguments, char* errorOutput, ColorID *dateColor, struct RclockColor availableColors[], size_t sizeOfAvailableColors){
     struct RclockColor *colorSearchResult;
 
     if(userArguments.dateColor != NULL){
@@ -77,7 +77,7 @@ void _setDateColor(struct ColorsModule userArguments, char* errorOutput, ColorID
     }
 }
 
-void _setColonColor(struct ColorsModule userArguments, char* errorOutput, ColorID *colonsColor, struct RclockColor availableColors[], size_t sizeOfAvailableColors){
+void _setColonColor(struct ColorsModuleArguments userArguments, char* errorOutput, ColorID *colonsColor, struct RclockColor availableColors[], size_t sizeOfAvailableColors){
     struct RclockColor *colorSearchResult;
 
     if(userArguments.colonColor != NULL){
@@ -92,7 +92,7 @@ void _setColonColor(struct ColorsModule userArguments, char* errorOutput, ColorI
     }
 }
 
-void _setColorForEachClockDigit(struct ColorsModule userArguments, char* errorOutput, ColorID digitColors[], struct RclockColor availableColors[], size_t sizeOfAvailableColors){
+void _setColorForEachClockDigit(struct ColorsModuleArguments userArguments, char* errorOutput, ColorID digitColors[], struct RclockColor availableColors[], size_t sizeOfAvailableColors){
     struct RclockColor *colorSearchResult;
 
     for(int i = 0; i < MAX_DIGIT_COLORS; i++){

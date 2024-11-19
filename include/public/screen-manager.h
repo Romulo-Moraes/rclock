@@ -96,7 +96,7 @@ bool detectTerminalResizes();
 WINDOW** getClockSegment(unsigned int windowIndex, WINDOW *output[2]);
 void setDateStringLength(size_t newLength);
 WINDOW *getDateWindow();
-void generateWindows(struct DatetimeScreenManagerDesignerModules userArguments);
+void generateWindows(struct DatetimeScreenManagerDesignerModulesArguments userArguments);
 void setPlaceHolders(ProgramArguments arguments);
 void refreshWindows();
 bool checkIfTerminalHeightIsCritical();

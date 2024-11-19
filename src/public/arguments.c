@@ -48,6 +48,7 @@ anemone_struct createProgramArguments(int argc, char *argv[]){
     create_optional_argument(&anemone, "--custom-year", "-Y", ANEMONE_TRUE, ANEMONE_FALSE);
     create_optional_argument(&anemone, "--custom-date", "-D", ANEMONE_TRUE, ANEMONE_FALSE);
     create_optional_argument(&anemone, "--hide-seconds", "-i", ANEMONE_FALSE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--pomodoro", "-t", ANEMONE_FALSE, ANEMONE_FALSE);
 
     
     compile(&anemone, argc, argv);
@@ -63,6 +64,8 @@ ProgramArguments fetchProgramArguments(anemone_struct *anemone, char *errorOutpu
     _fetchDatetimeArguments(anemone, errorOutput, &defaultProgramArguments);
 
     _fetchScreenManagementArguments(anemone, errorOutput, &defaultProgramArguments);
+
+    _fetchRclockModeArguments(anemone, &defaultProgramArguments);
 
     return defaultProgramArguments;
 }

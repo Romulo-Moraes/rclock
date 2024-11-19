@@ -23,7 +23,7 @@ struct TerminalSizeError checkIfTerminalSizeIsCritical(ProgramArguments argument
 // the clock shall hide the seconds or the date if the 
 // terminal dimensions aren't great enough to support them.
 // This procedure checks the dimentions and set control variables
-void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModules arguments){
+void checkIfTheClockShouldBeSmaller(struct DatetimeScreenManagerDesignerModulesArguments arguments){
 
     // If the seconds is already not being shown
     // this is useless

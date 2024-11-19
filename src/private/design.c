@@ -21,7 +21,7 @@ void _normalizeSegment(unsigned char number, Digit segmentDigits[2]){
 }
 
 // Draws the given digit shape to the given window
-void _drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID){
+void _drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], ColorID digitColorID, ColorID digitBackground){
     wmove(targetWindow, 0, 0);
 
     for(short j = 0; j < 5; j++){
@@ -32,7 +32,9 @@ void _drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], Col
                 wattroff(targetWindow, COLOR_PAIR(digitColorID));
                 wrefresh(targetWindow);
             }else{
+                wattron(targetWindow, COLOR_PAIR(digitBackground));
                 wprintw(targetWindow, "  ");
+                wattroff(targetWindow, COLOR_PAIR(digitBackground));
                 wrefresh(targetWindow);
             }
         }
@@ -40,16 +42,16 @@ void _drawClockWindow(WINDOW *targetWindow, ClockPixel (*shapeToBeDrawn)[3], Col
 }
 
 // Draws the colons of the clock
-void _fillClockColons(struct DatetimeScreenManagerDesignerModules userArguments){
+void _fillClockColons(struct DatetimeScreenManagerDesignerModulesArguments userArguments, ColorID colonBackgroundColor){
     ClockPixel (*colonShape)[3] = getColonShape();
     ColorID colonColor = getColonColor();
     WINDOW *segmentToFill[2];
 
-    _drawClockWindow(getClockSegment(FIRST_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor);
+    _drawClockWindow(getClockSegment(FIRST_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor, colonBackgroundColor);
 
     // The last colon is drawn only if the seconds is visible
     if(userArguments.hideTheSeconds == false && checkIfTheSecondsIsVisible() == true)
-        _drawClockWindow(getClockSegment(SECOND_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor);
+        _drawClockWindow(getClockSegment(SECOND_CLOCK_COLON, segmentToFill)[0], colonShape, colonColor, colonBackgroundColor);
 }
 
 void _writeErrorMessageOnErrorWindow(char *msg, size_t windowWidth, WINDOW *errorWindow){

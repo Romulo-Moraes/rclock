@@ -9,7 +9,7 @@
 #include <private/arguments.h>
 
 
-ErrorID _validateHoursMinutesSecondsDaysMonthsAndYears(struct DatetimeModule *argumentsOutput, anemone_struct *anemone){
+ErrorID _validateHoursMinutesSecondsDaysMonthsAndYears(struct DatetimeModuleArguments *argumentsOutput, anemone_struct *anemone){
     anemone_optional_return_value argument;
 
     if((argument = get_optional_argument(*anemone, "--custom-hour")).set == ANEMONE_TRUE){
@@ -75,6 +75,17 @@ bool _checkIfArgumentIsNumeric(char *argument){
     return true;
 }
 
+void _fetchRclockModeArguments(anemone_struct *anemone, ProgramArguments *arguments) {
+    RclockMode mode;
+
+    if(get_optional_argument(*anemone, "--pomodoro").set == ANEMONE_TRUE) {
+        mode = POMODORO_MODE;
+    } else {
+        mode = CLOCK_MODE;
+    }
+
+    arguments->mode = mode;
+}
 
 void _fetchColorsArguments(anemone_struct *anemone, ProgramArguments *arguments){
     anemone_optional_return_value argument;

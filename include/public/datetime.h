@@ -31,10 +31,11 @@ struct TimeStruct{
 };
 
 struct tm* generateDateAndTime();
-void setNewTime(struct tm *datetimeStruct, struct DatetimeModule dateTimeArguments, char *errorOutput);
-void setNewDate(struct tm *datetimeStruct, struct DatetimeModule datetimeArguments, char *errorOutput);
-char* generateDateString(struct tm datetimeStruct, struct DatetimeModule datetimeArguments, char *outputBuffer);
+void setNewTime(struct tm *datetimeStruct, struct DatetimeModuleArguments dateTimeArguments, char *errorOutput);
+void setNewDate(struct tm *datetimeStruct, struct DatetimeModuleArguments datetimeArguments, char *errorOutput);
+char* generateDateString(struct tm datetimeStruct, struct DatetimeModuleArguments datetimeArguments, char *outputBuffer);
 void incrementClockSecond(struct tm *datetimeStruct);
+void decrementClockSecond(struct tm *datetimeStruct);
 void sleepClock(unsigned int milliseconds);
 void verifyForDateAndTimeErrors(struct tm *datetimeStruct, char *errorOutput);
 void saveInitialProgramTime(struct tm *finalDatetime);

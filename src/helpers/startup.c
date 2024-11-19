@@ -60,7 +60,7 @@ void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
     
     refresh();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner);
+    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
 
 }
 

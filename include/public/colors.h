@@ -30,6 +30,8 @@
 #define DATE_CYAN_ID 15
 #define DATE_WHITE_ID 16
 #define ERROR_MESSAGE_RED_ID 17
+#define BACKGROUND_RED_ID 18
+#define BACKGROUND_TRANSPARENT_ID 19
 #define DEFAULT_COLOR BLUE_ID
 #define DEFAULT_DATE_COLOR DATE_BLUE_ID
 #define MAX_DIGIT_COLORS 6
@@ -45,7 +47,7 @@ struct RclockColor{
     ColorID dateID;
 };
 
-void setComponentsColors(struct ColorsModule userArguments, char* errorOutput);
+void setComponentsColors(struct ColorsModuleArguments userArguments, char* errorOutput);
 void loadBuiltinColors();
 ColorID getDigitColor(unsigned char digitIndex);
 ColorID getColonColor();

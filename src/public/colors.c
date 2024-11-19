@@ -27,7 +27,7 @@ static ColorID colonsColor;
 
 // Public functions
 
-void setComponentsColors(struct ColorsModule userArguments, char* errorOutput){
+void setComponentsColors(struct ColorsModuleArguments userArguments, char* errorOutput){
 
     // The color arguments have priority order,
     // from specific to general
@@ -70,6 +70,10 @@ void loadBuiltinColors(){
     init_pair(DATE_MAGENTA_ID, COLOR_MAGENTA, -1);
     init_pair(DATE_CYAN_ID, COLOR_CYAN, -1);
     init_pair(DATE_WHITE_ID, COLOR_WHITE, -1);
+
+    // System colors
+    init_pair(BACKGROUND_RED_ID, COLOR_RED, COLOR_RED);
+    init_pair(BACKGROUND_TRANSPARENT_ID, 0, -1);
 
     // Error message
     init_pair(ERROR_MESSAGE_RED_ID, 19, -1);

@@ -11,7 +11,12 @@
 
 // Public functions
 
-void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsigned char windowIndex){
+void changeMainWindowBackgroundColor(int colorID) {
+    bkgd(COLOR_PAIR(colorID));
+    refresh();
+}
+
+void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsigned char windowIndex, ColorID digitBackgroundColor){
     Digit segmentDigits[2];
     ClockPixel (*theDigit)[3];
     ColorID digitColorID;
@@ -22,20 +27,20 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsign
         theDigit = getDigitShape(segmentDigits[i]);
         digitColorID = getDigitColor(windowIndex++);
 
-        _drawClockWindow(clockWindows[i], theDigit, digitColorID);
+        _drawClockWindow(clockWindows[i], theDigit, digitColorID, digitBackgroundColor);
     }
 }
 
-void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModules userArguments){
+void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModulesArguments userArguments, ColorID digitBackgroundColor){
     WINDOW *segmentToFill[2];
 
-    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour, HOURS_INDEX);
-    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX);
+    fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour, HOURS_INDEX, digitBackgroundColor);
+    fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX, digitBackgroundColor);
 
     if(userArguments.hideTheSeconds == false && checkIfTheSecondsIsVisible() == true)
-        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec, SECONDS_INDEX);
+        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct->tm_sec, SECONDS_INDEX, digitBackgroundColor);
 
-    _fillClockColons(userArguments);
+    _fillClockColons(userArguments, digitBackgroundColor);
 
     refreshWindows();
 }
@@ -43,7 +48,7 @@ void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesi
 
 // Get the date window and draw the date stored in the program,
 // given by the user or by the OS
-void drawDate(struct tm *theTime, struct DatetimeModule datetimeArguments, struct ColorsModule colorArguments){
+void drawDate(struct tm *theTime, struct DatetimeModuleArguments datetimeArguments, struct ColorsModuleArguments colorArguments){
     char dateBuffer[MAX_CLOCK_DATE_BUFFER_LEN + 1];
     WINDOW *dateWindow;
     size_t dateStringLen;
