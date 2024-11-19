@@ -11,11 +11,6 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows, st
 
     wclear(stdscr);
     refresh();
-
-    if(destroyTheWindows){
-        destroyRclockWindows(arguments);
-        generateWindows(arguments.DatetimeScreenManagerDesigner, arguments.mode);
-    }
     
     setPlaceHolders(arguments);
     moveTimeWindowsToPlaceholders();

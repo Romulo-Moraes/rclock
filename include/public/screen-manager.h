@@ -18,6 +18,7 @@
 #define DEFAULT_CLOCK_WIDTH 60
 #define MINIMUM_TERMINAL_WIDTH 35
 #define MINIMUM_TERMINAL_HEIGHT 7
+#define MINIMUM_TERMINAL_HEIGHT_FOR_POMODORO 13
 #define MAX_CLOCK_TIME_WINDOWS 8
 #define MAX_CLOCK_DIGIT_WINDOWS 6
 #define WINDOWS_COUNT_WITH_HIDDEN_SECONDS 5
@@ -79,7 +80,7 @@ struct ErrorWindows{
 struct TerminalSizeError{
     bool thereIsAnError;
     ErrorID errorID;
-    bool (*validationCallback)(void *arguments);
+    bool (*validationCallback)(RclockMode mode);
 };
 
 struct ErrorUpdateCallbacksArguments{
@@ -103,15 +104,15 @@ WINDOW *getOptionsWindow();
 void generateWindows(struct DatetimeScreenManagerDesignerModulesArguments userArguments, RclockMode mode);
 void setPlaceHolders(ProgramArguments arguments);
 void refreshWindows();
-bool checkIfTerminalHeightIsCritical();
+bool checkIfTerminalHeightIsCritical(RclockMode mode);
 void movePomodoroStatusWindowToPlaceholder();
 WINDOW *getPomodoroStatusWindow();
-bool checkIfTerminalWidthIsCritical();
+bool checkIfTerminalWidthIsCritical(RclockMode mode);
 void toggleSecondsVisibility();
 void toggleDatesVisibility();
 void setValuesForClockStates(ProgramArguments arguments);
 void destroyRclockWindows(ProgramArguments arguments);
-void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage);
+void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(RclockMode mode), bool enableExitMessage);
 bool checkIfTheSecondsIsVisible();
 bool checkIfTheDateIsVisible();
 

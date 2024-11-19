@@ -9,6 +9,8 @@ deps += cc.find_library('m', required : true)
 
 src = files()
 
+add_project_arguments('-g',  language : 'c')
+
 subdir('src')
 subdir('lib')
 

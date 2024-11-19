@@ -10,9 +10,9 @@ struct TerminalSizeError checkIfTerminalSizeIsCritical(ProgramArguments argument
 
     errorStruct.thereIsAnError = false;
 
-    if(checkIfTerminalWidthIsCritical(NULL) == true){
+    if(checkIfTerminalWidthIsCritical(0) == true){
         errorStruct = (struct TerminalSizeError){.thereIsAnError = true, .errorID = TERMINAL_WIDTH_TOO_SMALL, .validationCallback = checkIfTerminalWidthIsCritical};
-    }else if(checkIfTerminalHeightIsCritical(&arguments.DatetimeScreenManagerDesigner) == true){
+    }else if(checkIfTerminalHeightIsCritical(arguments.mode) == true){
         errorStruct = (struct TerminalSizeError){.thereIsAnError = true, .errorID = TERMINAL_HEIGHT_TOO_SMALL, .validationCallback = checkIfTerminalHeightIsCritical};
     }
 

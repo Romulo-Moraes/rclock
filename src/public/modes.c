@@ -3,6 +3,21 @@
 #include <public/design.h>
 #include <helpers/design.h>
 
+struct tm generateTimeStructToBeRenderedBasedOnClockMode(RclockMode mode, struct tm timeStruct) {
+    struct tm tmp;
+
+    if (mode == POMODORO_MODE && checkIfTheSecondsIsVisible() == false) {
+        tmp = (struct tm) {
+            .tm_hour = timeStruct.tm_min,
+            .tm_min = timeStruct.tm_sec
+        };
+    } else {
+        tmp = timeStruct;
+    }
+
+    return tmp;
+}
+
 void pomodoroMode(struct tm *timeStruct, struct tm *timeStructOldValue, void (*timeoutHandler)(int)){
     if(timeStruct->tm_sec != timeStructOldValue->tm_sec){
         updateClock(*timeStruct, *timeStructOldValue, POMODORO_MODE);

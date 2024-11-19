@@ -17,11 +17,11 @@ static bool theClocksDateIsVisible;
 
 // Public functions
 
-bool checkIfTerminalHeightIsCritical(){
-    return !(winSize.height >= MINIMUM_TERMINAL_HEIGHT);
+bool checkIfTerminalHeightIsCritical(RclockMode mode) {
+    return mode == POMODORO_MODE ? !(winSize.height >= MINIMUM_TERMINAL_HEIGHT_FOR_POMODORO) : !(winSize.height >= MINIMUM_TERMINAL_HEIGHT);
 }
 
-bool checkIfTerminalWidthIsCritical(){
+bool checkIfTerminalWidthIsCritical(RclockMode mode){
     return !(winSize.width >= MINIMUM_TERMINAL_WIDTH);
 }
 
@@ -312,7 +312,7 @@ void refreshWindows(){
 }
 
 
-void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(), bool enableExitMessage){
+void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidthFraction, char *errorMessage, void (*drawProgramErrorCallback)(void *arguments), void *drawErrorArguments, bool (*errorVerificationCallback)(RclockMode mode), bool enableExitMessage){
     struct ErrorWindowsMeasures measures;
 
     while(true){
@@ -341,7 +341,7 @@ void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidt
 
             drawProgramErrorCallback(drawErrorArguments);
 
-            if(!errorVerificationCallback()){
+            if(!errorVerificationCallback(POMODORO_MODE)){
                 delwin(windows.errorWindow);
                 if(enableExitMessage)
                     delwin(windows.exitMessageWindow);

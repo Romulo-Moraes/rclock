@@ -61,11 +61,13 @@ void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
     if (arguments.mode == POMODORO_MODE) {
         moveOptionsWindowToPlaceholder();
         movePomodoroStatusWindowToPlaceholder();
+        drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+        drawPomodoroStatusWindow(OPTIONS_BACKGROUND_TRANSPARENT_ID);
     }
     
     refresh();
 
-    if (arguments.mode == POMODORO_MODE) {
+    if (arguments.mode == POMODORO_MODE && checkIfTheSecondsIsVisible() == false) {
         struct tm tmp = (struct tm) {
             .tm_hour = timeStruct->tm_min,
             .tm_min = timeStruct->tm_sec
@@ -76,7 +78,6 @@ void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
         drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
     }
     
-
 }
 
 // Calls a couple of functions that will load
