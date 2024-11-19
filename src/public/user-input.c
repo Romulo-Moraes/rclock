@@ -7,6 +7,8 @@
 #include <public/datetime.h>
 #include <public/design.h>
 
+#define EXIT_DELAY_THRESHOLD 350
+
 static uint8_t clicksInOneSecond = 0;
 long long clickSequenceBegin;
 
@@ -15,15 +17,20 @@ static void pausePomodoroTimer();
 static void unpausePomodoroTimer();
 static void finishTimeoutAlert(ProgramArguments arguments, struct tm *timeStruct, void (*pomodoroSignalHandler)(int));
 
-void resetClicksInOneSeconds() {
-    clicksInOneSecond = 0;
-}
 
 long long current_time_in_milliseconds() {
     struct timespec ts;
     clock_gettime(CLOCK_REALTIME, &ts);
     // Convert seconds to milliseconds and add nanoseconds as milliseconds
     return ts.tv_sec * 1000LL + ts.tv_nsec / 1000000LL;
+}
+
+void tryToResetTheClicks() {
+    long long now = current_time_in_milliseconds();
+
+    if (clicksInOneSecond != 0 && now - clickSequenceBegin > EXIT_DELAY_THRESHOLD) {
+        clicksInOneSecond = 0;
+    }
 }
 
 void handleUserInput(char input, ProgramArguments arguments, struct tm *timeStruct, struct tm *timeStructOldValue, void (*pomodoroSignalHandler)(int), bool *keepRunningProgram) {
@@ -55,7 +62,7 @@ void handleUserInput(char input, ProgramArguments arguments, struct tm *timeStru
                 now = current_time_in_milliseconds();
 
                 if (clicksInOneSecond == 3) {
-                    if (now - clickSequenceBegin < 350) {
+                    if (now - clickSequenceBegin < EXIT_DELAY_THRESHOLD) {
                         *keepRunningProgram = false;
                     } else {
                         clicksInOneSecond = 0;

@@ -3,7 +3,7 @@
 
 #include <public/arguments.h>
 
-void resetClicksInOneSeconds();
+void tryToResetTheClicks();
 void handleUserInput(char input, ProgramArguments arguments, struct tm *timeStruct, struct tm *timeStructOldValue, void (*pomodoroSignalHandler)(int), bool *keepRunningProgram);
 
 #endif

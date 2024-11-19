@@ -2,6 +2,7 @@
 #include <public/colors.h>
 #include <public/pomodoro.h>
 #include <public/design.h>
+#include <public/user-input.h>
 
 static bool backgroundIsRed = false;
 static struct tm *timeStruct;
@@ -19,6 +20,7 @@ void configureSignalHandlerModule(struct tm *time) {
 
 void pomodoroTimeoutHandler(int signal) {
     if (signal == SIGALRM) {
+        tryToResetTheClicks();
         
         switch(backgroundIsRed) {
             case true:
@@ -36,6 +38,7 @@ void pomodoroTimeoutHandler(int signal) {
 
 void pomodoroSignalHandler(int signal) {
     if (signal == SIGALRM) {
+        tryToResetTheClicks();
         struct PomodoroState state = getPomodoroState();
 
         if (getPomodoroState().paused == false && state.hasStarted == true) {
@@ -48,6 +51,7 @@ void pomodoroSignalHandler(int signal) {
 
 void clockSignalHandler(int signal){
     if (signal == SIGALRM) {
+        tryToResetTheClicks();
         incrementClockSecond(timeStruct);
             
         if(timeStruct->tm_sec % 5 == 0){
