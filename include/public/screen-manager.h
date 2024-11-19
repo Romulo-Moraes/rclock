@@ -57,6 +57,8 @@ struct WindowsAttributes{
 struct Windows{
     struct RclockWindow clockWindows[8];
     struct RclockWindow dateWindow;
+    struct RclockWindow optionsWindow;
+    struct RclockWindow pomodoroStatusWindow;
     struct WindowsAttributes windowsAttributes;
 };
 
@@ -91,15 +93,19 @@ bool checkIfTheSecondsShouldBeInvisible();
 struct ErrorWindows generateErrorWindows(float errorWindowWidthFraction, bool enableExitMessage);
 void moveTimeWindowsToPlaceholders();
 void moveDateWindowToPlaceholder();
+void moveOptionsWindowToPlaceholder();
 void loadInitialTerminalSize();
 bool detectTerminalResizes();
 WINDOW** getClockSegment(unsigned int windowIndex, WINDOW *output[2]);
 void setDateStringLength(size_t newLength);
 WINDOW *getDateWindow();
-void generateWindows(struct DatetimeScreenManagerDesignerModulesArguments userArguments);
+WINDOW *getOptionsWindow();
+void generateWindows(struct DatetimeScreenManagerDesignerModulesArguments userArguments, RclockMode mode);
 void setPlaceHolders(ProgramArguments arguments);
 void refreshWindows();
 bool checkIfTerminalHeightIsCritical();
+void movePomodoroStatusWindowToPlaceholder();
+WINDOW *getPomodoroStatusWindow();
 bool checkIfTerminalWidthIsCritical();
 void toggleSecondsVisibility();
 void toggleDatesVisibility();

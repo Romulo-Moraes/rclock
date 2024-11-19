@@ -1,6 +1,8 @@
 #include <helpers/modes.h>
 #include <helpers/datetime.h>
 
+// start time
+
 void setModeData(ProgramArguments *arguments, struct tm *timeStruct){
     if (arguments->mode == CLOCK_MODE) {
         setCustomDateAndTime(*arguments, timeStruct);
@@ -9,7 +11,7 @@ void setModeData(ProgramArguments *arguments, struct tm *timeStruct){
         
         arguments->DatetimeScreenManagerDesigner.hideTheDate = true;
         timeStruct->tm_hour = time.hours;
-        timeStruct->tm_min = 0;
-        timeStruct->tm_sec = 2;
+        timeStruct->tm_min = time.minutes;
+        timeStruct->tm_sec = time.seconds;
     }
 }

@@ -8,12 +8,54 @@
 
 #include <public/design.h>
 #include <private/design.h>
+#include <public/pomodoro.h>
+#include <private/screen-manager.h>
 
 // Public functions
 
 void changeMainWindowBackgroundColor(int colorID) {
     bkgd(COLOR_PAIR(colorID));
     refresh();
+}
+
+void drawOptions(ColorID backgroundColor) {
+    struct WindowSize size;
+    struct PomodoroState status = getPomodoroState();
+    char *optionsText = (char*) calloc(sizeof(char) * 1024, 1);
+    WINDOW *win = getOptionsWindow();
+
+    _getTerminalSize(&size.width, &size.height);
+
+    if (status.hasStarted == false) {
+        if (status.turn == POMODORO) {
+            strcpy(optionsText, "[S] Start Pomodoro");
+        } else {
+            strcpy(optionsText, "[S] Start Rest");
+        }
+    } else {
+        if (status.timeoutStatus.timeout == true) {
+            strcpy(optionsText, "[O] OK");
+        } else {
+            if (status.paused == true) {
+                strcpy(optionsText, "[U] Unpause");
+            } else {
+                strcpy(optionsText, "[P] Pause");
+            }
+        }
+    }
+
+    wclear(win);
+
+    if (backgroundColor == OPTIONS_BACKGROUND_RED_ID) {
+        wbkgd(win, COLOR_PAIR(BACKGROUND_RED_ID));
+    } else {
+        wbkgd(win, COLOR_PAIR(BACKGROUND_TRANSPARENT_ID));
+    }
+
+    wattron(win, COLOR_PAIR(backgroundColor));
+    mvwprintw(win, 2, size.width / 2 - strlen(optionsText) / 2, optionsText);
+    wattroff(win, COLOR_PAIR(backgroundColor));
+    wrefresh(win);
 }
 
 void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsigned char windowIndex, ColorID digitBackgroundColor){
@@ -29,6 +71,23 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsign
 
         _drawClockWindow(clockWindows[i], theDigit, digitColorID, digitBackgroundColor);
     }
+}
+
+void drawPomodoroStatusWindow(ColorID backgroundColorID) {
+    struct WindowSize size;
+    struct PomodoroState state = getPomodoroState();
+    char *message = state.turn == POMODORO ? "+-=-=-=-=-=-=-=-=-=- POMODORO TIME -=-=-=-=-=-=-=-=-=-+" : "+-=-=-=-=-=-=-=-=-=-=- REST TIME -=-=-=-=-=-=-=-=-=-=-+";
+    WINDOW* win = getPomodoroStatusWindow();
+
+    _getTerminalSize(&size.width, &size.height);
+
+    wclear(win);
+
+    wbkgd(win, COLOR_PAIR(backgroundColorID));
+
+    mvwprintw(win, 2, size.width / 2 - strlen(message) / 2, message);
+
+    wrefresh(win);
 }
 
 void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModulesArguments userArguments, ColorID digitBackgroundColor){

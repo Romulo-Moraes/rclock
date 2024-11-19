@@ -8,6 +8,8 @@
         "terminal-size.h": "c",
         "ncurses.h": "c",
         "design.h": "c",
-        "modes.h": "c"
+        "modes.h": "c",
+        "pomodoro.h": "c",
+        "format": "c"
     }
 }

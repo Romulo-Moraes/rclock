@@ -35,7 +35,7 @@ void configureRclock(ProgramArguments arguments, char *errorBuffer, void (*signa
 void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
     struct TerminalSizeError sizeError;
     
-    generateWindows(arguments.DatetimeScreenManagerDesigner);
+    generateWindows(arguments.DatetimeScreenManagerDesigner, arguments.mode);
 
     setPlaceHolders(arguments);
 
@@ -56,6 +56,11 @@ void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
     if(checkIfTheDateIsVisible() == true){
         drawDate(timeStruct, arguments.datetime, arguments.colors);
         moveDateWindowToPlaceholder();
+    }
+
+    if (arguments.mode == POMODORO_MODE) {
+        moveOptionsWindowToPlaceholder();
+        movePomodoroStatusWindowToPlaceholder();
     }
     
     refresh();

@@ -23,5 +23,7 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsign
 void drawDate(struct tm *theTime, struct DatetimeModuleArguments datetimeArguments, struct ColorsModuleArguments colorArguments);
 void changeMainWindowBackgroundColor(int colorID);
 void drawProgramErrorCallback(void *arguments);
+void drawOptions(ColorID backgroundColor);
+void drawPomodoroStatusWindow(ColorID backgroundColorID);
 
 #endif

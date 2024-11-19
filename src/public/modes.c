@@ -1,3 +1,4 @@
+#include <public/pomodoro.h>
 #include <public/arguments.h>
 #include <public/design.h>
 
@@ -15,10 +16,13 @@ static void updateClock(struct tm timeStruct, struct tm timeStructOldValue){
 void pomodoroMode(struct tm *timeStruct, struct tm *timeStructOldValue, void (*timeoutHandler)(int)){
     if(timeStruct->tm_sec != timeStructOldValue->tm_sec){
         updateClock(*timeStruct, *timeStructOldValue);
+        
         *timeStructOldValue = *timeStruct;
 
         if (timeStruct->tm_min == 0 && timeStruct->tm_sec == 0) {
             signal(SIGALRM, timeoutHandler);
+            setTimeout(POMODORO_TIMEOUT);
+            drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
             return;
         }
     }

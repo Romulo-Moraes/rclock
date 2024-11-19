@@ -28,12 +28,25 @@ void pomodoroSignalHandler(int signal);
 void pomodoroTimeoutHandler(int signal);
 bool showTerminalSizeErrorIfNecessary(ProgramArguments arguments);
 
+// redundancy
+static void updateClock(struct tm timeStruct, struct tm timeStructOldValue){
+    WINDOW *segmentToFill[2];
+
+    if(timeStruct.tm_hour != timeStructOldValue.tm_hour)
+        fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct.tm_hour, HOURS_INDEX, BACKGROUND_TRANSPARENT_ID);
+    if(timeStruct.tm_min != timeStructOldValue.tm_min)
+        fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct.tm_min, MINUTES_INDEX, BACKGROUND_TRANSPARENT_ID);
+    if(checkIfTheSecondsIsVisible() == true)
+        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct.tm_sec, SECONDS_INDEX, BACKGROUND_TRANSPARENT_ID);
+}
+
 int main(int argc, char *argv[]){
     ProgramArguments arguments;
     anemone_struct anemone;
     timeStruct = *generateDateAndTime();
     char errorBuffer[512];
     bool windowsNeedToBeDestroyed;
+    char userInput;
 
     anemone = createProgramArguments(argc, argv);
     
@@ -47,9 +60,64 @@ int main(int argc, char *argv[]){
     initializeTheClock(arguments, &timeStruct);
 
     // alarm that will update the clock value
+
     alarm(1);
 
-    while(getch() != 10){
+    if (arguments.mode == POMODORO_MODE) {
+        drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+        drawPomodoroStatusWindow(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+    }
+
+    while(true){
+        userInput = getch();
+
+        if (userInput == 's' && arguments.mode == POMODORO_MODE) {
+            startTimer();
+            drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+            alarm(1);
+        }
+
+        if (userInput == 'p' && arguments.mode == POMODORO_MODE && getPomodoroState().paused == false) {
+            togglePauseState();
+            drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+        }
+
+        if (userInput == 'u' && arguments.mode == POMODORO_MODE && getPomodoroState().paused == true) {
+            togglePauseState();
+            drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+        }
+
+        if (userInput == 'o' && arguments.mode == POMODORO_MODE && getPomodoroState().timeoutStatus.timeout == true) {
+            incrementIntervalsCount();
+            togglePomodoroTurn();
+            restartTimer();
+
+            drawOptions(BACKGROUND_TRANSPARENT_ID);
+            drawPomodoroStatusWindow(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+            signal(SIGALRM, pomodoroSignalHandler);
+            struct TimeStruct time;
+
+            if (getPomodoroState().turn == POMODORO) {
+                time = getPomodoroTime();
+            } else {
+                time = getRestTime();
+            }
+
+            timeStruct.tm_min = time.minutes;
+            timeStruct.tm_sec = time.seconds;
+
+            bkgd(COLOR_PAIR(BACKGROUND_TRANSPARENT_ID));
+            refresh();
+
+            drawAllClockWindows(&timeStruct, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
+            drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+            drawPomodoroStatusWindow(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+        }
+
+        if (userInput == 10) {
+            break;
+        }
+
         // For each terminal resize, the clock is redrawn
         if(detectTerminalResizes()){
             windowsNeedToBeDestroyed = showTerminalSizeErrorIfNecessary(arguments);
@@ -101,10 +169,14 @@ void pomodoroTimeoutHandler(int signal) {
             case true:
                 changeMainWindowBackgroundColor(BACKGROUND_TRANSPARENT_ID);
                 drawAllClockWindows(&timeStruct, (struct DatetimeScreenManagerDesignerModulesArguments) {.hideTheSeconds = false}, BACKGROUND_TRANSPARENT_ID);
+                drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+                drawPomodoroStatusWindow(OPTIONS_BACKGROUND_TRANSPARENT_ID);
                 break;
             case false:
                 changeMainWindowBackgroundColor(BACKGROUND_RED_ID);
                 drawAllClockWindows(&timeStruct, (struct DatetimeScreenManagerDesignerModulesArguments) {.hideTheSeconds = false}, BACKGROUND_RED_ID);
+                drawOptions(OPTIONS_BACKGROUND_RED_ID);
+                drawPomodoroStatusWindow(OPTIONS_BACKGROUND_RED_ID);
                 break;
         }
 
@@ -115,7 +187,11 @@ void pomodoroTimeoutHandler(int signal) {
 
 void pomodoroSignalHandler(int signal) {
     if (signal == SIGALRM) {
-        decrementClockSecond(&timeStruct);
+        struct PomodoroState state = getPomodoroState();
+
+        if (getPomodoroState().paused == false && state.hasStarted == true) {
+            decrementClockSecond(&timeStruct);
+        }
 
         alarm(1);
     }

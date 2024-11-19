@@ -56,7 +56,6 @@ bool checkIfTheSecondsShouldBeInvisible(){
 
 void loadInitialTerminalSize(){
     _getTerminalSize(&winSize.width, &winSize.height);
-    
 }
 
 void setDateStringLength(size_t newLength){
@@ -67,6 +66,14 @@ void setDateStringLength(size_t newLength){
 // pointer of the date window
 WINDOW *getDateWindow(){
     return programWindows.dateWindow.window;
+}
+
+WINDOW *getPomodoroStatusWindow() {
+    return programWindows.pomodoroStatusWindow.window;
+}
+
+WINDOW *getOptionsWindow() {
+    return programWindows.optionsWindow.window;
 }
 
 void destroyRclockWindows(ProgramArguments arguments){
@@ -130,6 +137,40 @@ void moveTimeWindowsToPlaceholders(){
     }
 }
 
+void movePomodoroStatusWindowToPlaceholder() {
+    const int pomodoroStatusWindowXPosition = 0;
+
+    refresh();
+
+    #ifdef DEBUG
+    #pragma comment ("DEBUG MODE ON! The box of the date window will be clean on each move")
+        wborder(programWindows.optionsWindow.window, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');   
+        wrefresh(programWindows.optionsWindow.window);
+    #endif
+
+    _getTerminalSize(&winSize.width, &winSize.height);
+
+    wresize(programWindows.pomodoroStatusWindow.window, 3, winSize.width);
+    mvwin(programWindows.pomodoroStatusWindow.window, programWindows.pomodoroStatusWindow.position.y, pomodoroStatusWindowXPosition);
+}
+
+void moveOptionsWindowToPlaceholder() {
+    const int optionsWindowXPosition = 0;
+
+    refresh();
+
+    #ifdef DEBUG
+    #pragma comment ("DEBUG MODE ON! The box of the date window will be clean on each move")
+        wborder(programWindows.optionsWindow.window, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');   
+        wrefresh(programWindows.optionsWindow.window);
+    #endif
+
+    _getTerminalSize(&winSize.width, &winSize.height);
+
+    wresize(programWindows.optionsWindow.window, 3, winSize.width);
+    mvwin(programWindows.optionsWindow.window, programWindows.optionsWindow.position.y, optionsWindowXPosition);
+}
+
 void moveDateWindowToPlaceholder(){
     int dateWindowXPosition = winSize.width / 2 - programWindows.windowsAttributes.dateStringLength / 2;
 
@@ -172,7 +213,7 @@ WINDOW** getClockSegment(unsigned int windowIndex, WINDOW *output[2]){
 }
 
 
-void generateWindows(struct DatetimeScreenManagerDesignerModulesArguments userArguments){
+void generateWindows(struct DatetimeScreenManagerDesignerModulesArguments userArguments, RclockMode mode){
     programWindows.windowsAttributes.clockWindowsCount = userArguments.hideTheSeconds == true ? WINDOWS_COUNT_WITH_HIDDEN_SECONDS : WINDOWS_COUNT_WITH_VISIBLE_SECONDS;
 
     for(short i = 0; i < programWindows.windowsAttributes.clockWindowsCount; i++){
@@ -181,6 +222,11 @@ void generateWindows(struct DatetimeScreenManagerDesignerModulesArguments userAr
 
     if(userArguments.hideTheDate != true){
         programWindows.dateWindow.window = newwin(0, 0, 0, 0);
+    }
+
+    if (mode == POMODORO_MODE) {
+        programWindows.optionsWindow.window = newwin(0, 0, 0, 0);
+        programWindows.pomodoroStatusWindow.window = newwin(0, 0, 0, 0);
     }
 }
 
@@ -227,6 +273,10 @@ void setPlaceHolders(ProgramArguments arguments){
         programWindows.dateWindow.position.y = windowsYPosition + TIME_WINDOW_HEIGHT;
     }
     
+    if (arguments.mode == POMODORO_MODE) {
+        programWindows.optionsWindow.position.y = windowsYPosition + TIME_WINDOW_HEIGHT;
+        programWindows.pomodoroStatusWindow.position.y = windowsYPosition - TIME_WINDOW_HEIGHT + 1;
+    }
 }
 
 void refreshWindows(){
@@ -243,6 +293,11 @@ void refreshWindows(){
     #ifdef DEBUG
     #pragma message ("DEBUG MODE ON! The date window has a border")
         box(programWindows.dateWindow.window, 0, 0);
+    #endif
+
+    #ifdef DEBUG
+    #pragma message ("DEBUG MODE ON! The options window has a border")
+        box(programWindows.optionsWindow.window, 0, 0);
     #endif
 
     if(theClocksDateIsVisible == true)
