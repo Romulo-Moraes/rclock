@@ -44,8 +44,8 @@ struct TimeStruct getPomodoroTime(){
 
     taskTime = (struct TimeStruct) {
         .hours = 0,
-        .minutes = 0,
-        .seconds = 2
+        .minutes = 25,
+        .seconds = 0
     };
 
     return taskTime;
