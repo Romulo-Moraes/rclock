@@ -1,15 +1,33 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include <public/colors.h>
 #include <public/pomodoro.h>
 #include <time.h>
+#include <stdio.h>
 #include <public/datetime.h>
 #include <public/design.h>
+
+static uint8_t clicksInOneSecond = 0;
+long long clickSequenceBegin;
 
 static void startPomodoroTimer();
 static void pausePomodoroTimer();
 static void unpausePomodoroTimer();
 static void finishTimeoutAlert(ProgramArguments arguments, struct tm *timeStruct, void (*pomodoroSignalHandler)(int));
 
+void resetClicksInOneSeconds() {
+    clicksInOneSecond = 0;
+}
+
+long long current_time_in_milliseconds() {
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    // Convert seconds to milliseconds and add nanoseconds as milliseconds
+    return ts.tv_sec * 1000LL + ts.tv_nsec / 1000000LL;
+}
+
 void handleUserInput(char input, ProgramArguments arguments, struct tm *timeStruct, struct tm *timeStructOldValue, void (*pomodoroSignalHandler)(int), bool *keepRunningProgram) {
+    long long now;
     if (arguments.mode == POMODORO_MODE) {
         switch (input) {
             case 's':
@@ -28,9 +46,28 @@ void handleUserInput(char input, ProgramArguments arguments, struct tm *timeStru
     }
 
     if (input == '\n') {
-        *keepRunningProgram = false;
+        if (arguments.mode == POMODORO_MODE) {
+                clicksInOneSecond++;
+
+        if (clicksInOneSecond == 1) {
+            clickSequenceBegin = current_time_in_milliseconds();
+        } else {
+                now = current_time_in_milliseconds();
+
+                if (clicksInOneSecond == 3) {
+                    if (now - clickSequenceBegin < 350) {
+                        *keepRunningProgram = false;
+                    } else {
+                        clicksInOneSecond = 0;
+                    }
+                }
+            }
+        } else {
+            *keepRunningProgram = false;
+        }
     }
 }
+
 
 static void startPomodoroTimer() {
     startTimer();

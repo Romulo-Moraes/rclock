@@ -19,6 +19,7 @@ void configureSignalHandlerModule(struct tm *time) {
 
 void pomodoroTimeoutHandler(int signal) {
     if (signal == SIGALRM) {
+        
         switch(backgroundIsRed) {
             case true:
                 blinkPomodoroClock(BACKGROUND_TRANSPARENT_ID);
