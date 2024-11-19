@@ -65,7 +65,17 @@ void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
     
     refresh();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
+    if (arguments.mode == POMODORO_MODE) {
+        struct tm tmp = (struct tm) {
+            .tm_hour = timeStruct->tm_min,
+            .tm_min = timeStruct->tm_sec
+        };
+
+        drawAllClockWindows(&tmp, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
+    } else {
+        drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
+    }
+    
 
 }
 

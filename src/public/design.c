@@ -77,6 +77,7 @@ void drawPomodoroStatusWindow(ColorID backgroundColorID) {
     struct WindowSize size;
     struct PomodoroState state = getPomodoroState();
     char *message = state.turn == POMODORO ? "+-=-=-=-=-=-=-=-=-=- POMODORO TIME -=-=-=-=-=-=-=-=-=-+" : "+-=-=-=-=-=-=-=-=-=-=- REST TIME -=-=-=-=-=-=-=-=-=-=-+";
+    char *hiddenSecondsMessage = state.turn == POMODORO ? "+-=-=-=-=- POMODORO TIME =-=-=-=-+" : "+-=-=-=-=-=-=-=-= REST TIME =-=-=-=-=-=-=-=-+";
     WINDOW* win = getPomodoroStatusWindow();
 
     _getTerminalSize(&size.width, &size.height);
@@ -85,7 +86,12 @@ void drawPomodoroStatusWindow(ColorID backgroundColorID) {
 
     wbkgd(win, COLOR_PAIR(backgroundColorID));
 
-    mvwprintw(win, 2, size.width / 2 - strlen(message) / 2, message);
+    if (checkIfTheSecondsIsVisible()) {
+        mvwprintw(win, 2, size.width / 2 - strlen(message) / 2, message);
+    } else {
+        mvwprintw(win, 2, size.width / 2 - strlen(hiddenSecondsMessage) / 2, hiddenSecondsMessage);
+    }
+    
 
     wrefresh(win);
 }

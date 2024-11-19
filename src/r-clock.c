@@ -28,18 +28,6 @@ void pomodoroSignalHandler(int signal);
 void pomodoroTimeoutHandler(int signal);
 bool showTerminalSizeErrorIfNecessary(ProgramArguments arguments);
 
-// redundancy
-static void updateClock(struct tm timeStruct, struct tm timeStructOldValue){
-    WINDOW *segmentToFill[2];
-
-    if(timeStruct.tm_hour != timeStructOldValue.tm_hour)
-        fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct.tm_hour, HOURS_INDEX, BACKGROUND_TRANSPARENT_ID);
-    if(timeStruct.tm_min != timeStructOldValue.tm_min)
-        fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct.tm_min, MINUTES_INDEX, BACKGROUND_TRANSPARENT_ID);
-    if(checkIfTheSecondsIsVisible() == true)
-        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct.tm_sec, SECONDS_INDEX, BACKGROUND_TRANSPARENT_ID);
-}
-
 int main(int argc, char *argv[]){
     ProgramArguments arguments;
     anemone_struct anemone;
@@ -124,7 +112,16 @@ int main(int argc, char *argv[]){
 
             checkIfTheClockShouldBeSmaller(arguments.DatetimeScreenManagerDesigner);
 
-            redrawTheEntireClock(arguments, windowsNeedToBeDestroyed, &timeStruct);
+            if (arguments.mode == POMODORO_MODE && checkIfTheSecondsIsVisible() == false) {
+                struct tm tmp = (struct tm) {
+                    .tm_hour = timeStruct.tm_min,
+                    .tm_min = timeStruct.tm_sec
+                };
+
+                redrawTheEntireClock(arguments, windowsNeedToBeDestroyed, &tmp);
+            } else {
+                redrawTheEntireClock(arguments, windowsNeedToBeDestroyed, &timeStruct);
+            }
         }else{
             switch(arguments.mode) {
                 case CLOCK_MODE:

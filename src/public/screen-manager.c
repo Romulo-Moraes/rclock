@@ -85,6 +85,11 @@ void destroyRclockWindows(ProgramArguments arguments){
         delwin(programWindows.dateWindow.window);
     }
 
+    if (arguments.mode == POMODORO_MODE) {
+        delwin(programWindows.optionsWindow.window);
+        delwin(programWindows.pomodoroStatusWindow.window);
+    }
+
     wclear(stdscr);
     refresh();
 }   

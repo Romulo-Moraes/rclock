@@ -1,21 +1,11 @@
 #include <public/pomodoro.h>
 #include <public/arguments.h>
 #include <public/design.h>
-
-static void updateClock(struct tm timeStruct, struct tm timeStructOldValue){
-    WINDOW *segmentToFill[2];
-
-    if(timeStruct.tm_hour != timeStructOldValue.tm_hour)
-        fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct.tm_hour, HOURS_INDEX, BACKGROUND_TRANSPARENT_ID);
-    if(timeStruct.tm_min != timeStructOldValue.tm_min)
-        fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct.tm_min, MINUTES_INDEX, BACKGROUND_TRANSPARENT_ID);
-    if(checkIfTheSecondsIsVisible() == true)
-        fillClockSegment(getClockSegment(SECONDS_SEGMENT, segmentToFill), timeStruct.tm_sec, SECONDS_INDEX, BACKGROUND_TRANSPARENT_ID);
-}
+#include <helpers/design.h>
 
 void pomodoroMode(struct tm *timeStruct, struct tm *timeStructOldValue, void (*timeoutHandler)(int)){
     if(timeStruct->tm_sec != timeStructOldValue->tm_sec){
-        updateClock(*timeStruct, *timeStructOldValue);
+        updateClock(*timeStruct, *timeStructOldValue, POMODORO_MODE);
         
         *timeStructOldValue = *timeStruct;
 
@@ -32,7 +22,7 @@ void clockMode(struct DatetimeModuleArguments datetime, struct ColorsModuleArgum
 
     if(timeStruct.tm_sec != timeStructOldValue.tm_sec){
 
-        updateClock(timeStruct, timeStructOldValue);
+        updateClock(timeStruct, timeStructOldValue, CLOCK_MODE);
 
         if(timeStruct.tm_hour < timeStructOldValue.tm_hour){
             mktime(&timeStruct);
