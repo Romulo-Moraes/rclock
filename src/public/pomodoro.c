@@ -20,13 +20,15 @@ void incrementIntervalsCount() {
 struct TimeStruct getRestTime(){
     struct TimeStruct restTime;
 
-    if (intervalCount < 4) {
+    if (intervalCount <= 4) {
         restTime = (struct TimeStruct) {
             .hours = 0,
             .minutes = 5,
             .seconds = 0
         };
     } else {
+        intervalCount = 0;
+
         restTime = (struct TimeStruct) {
             .hours = 0,
             .minutes = 15,

@@ -88,7 +88,6 @@ int main(int argc, char *argv[]){
         }
 
         if (userInput == 'o' && arguments.mode == POMODORO_MODE && getPomodoroState().timeoutStatus.timeout == true) {
-            incrementIntervalsCount();
             togglePomodoroTurn();
             restartTimer();
 
@@ -100,6 +99,7 @@ int main(int argc, char *argv[]){
             if (getPomodoroState().turn == POMODORO) {
                 time = getPomodoroTime();
             } else {
+                incrementIntervalsCount();
                 time = getRestTime();
             }
 
