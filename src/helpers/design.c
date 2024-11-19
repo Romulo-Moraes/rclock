@@ -30,6 +30,13 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows, st
         drawDate(timeStruct, arguments.datetime, arguments.colors);
     }
 
+    if (arguments.mode == POMODORO_MODE) {
+        moveOptionsWindowToPlaceholder();
+        movePomodoroStatusWindowToPlaceholder();
+        drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+        drawPomodoroStatusWindow(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+    }
+
     refreshWindows();
     refresh();
 }
