@@ -5,7 +5,7 @@
 #include <public/screen-manager.h>
 
 void configureNcurses();
-void configureRclock(ProgramArguments arguments, char *errorBuffer, void (*signalHandler)(int signal));
+void configureRclock(ProgramArguments arguments);
 void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct);
 void createTerminalSizeError(struct TerminalSizeError sizeError);
 

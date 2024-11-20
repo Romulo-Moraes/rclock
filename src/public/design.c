@@ -10,16 +10,19 @@
 #include <private/design.h>
 #include <public/pomodoro.h>
 #include <private/screen-manager.h>
+#include <public/colors.h>
 
 // Public functions
 
-void changeMainWindowBackgroundColor(int colorID) {
-    bkgd(COLOR_PAIR(colorID));
+void changeMainWindowBackgroundColor(bool warning) {
+    bkgd(COLOR_PAIR(warning ? BACKGROUND_RED_ID : BACKGROUND_TRANSPARENT_ID));
     refresh();
 }
 
-void drawOptions(ColorID backgroundColor) {
+void drawOptions(bool warning) {
     struct WindowSize size;
+    PomodoroLabelColorPair labelColors;
+    ColorID color;
     struct PomodoroState status = getPomodoroState();
     char *optionsText = (char*) calloc(sizeof(char) * 1024, 1);
     WINDOW *win = getOptionsWindow();
@@ -46,16 +49,25 @@ void drawOptions(ColorID backgroundColor) {
 
     wclear(win);
 
-    if (backgroundColor == OPTIONS_BACKGROUND_RED_ID) {
+    labelColors = getPomodoroLabelColorPair();
+
+    fprintf(stderr, "color! %d\n", labelColors.pomodoroLabelNormalID);
+
+    if (warning) {
         wbkgd(win, COLOR_PAIR(BACKGROUND_RED_ID));
+        color = labelColors.pomodoroLabelWarningID; 
     } else {
         wbkgd(win, COLOR_PAIR(BACKGROUND_TRANSPARENT_ID));
+        color = labelColors.pomodoroLabelNormalID;
     }
 
+
     wattron(win, A_BOLD);
-    wattron(win, COLOR_PAIR(backgroundColor));
+
+    wattron(win, COLOR_PAIR(color));
     mvwprintw(win, 2, size.width / 2 - strlen(optionsText) / 2, optionsText);
-    wattroff(win, COLOR_PAIR(backgroundColor));
+    wattroff(win, COLOR_PAIR(color));
+
     wattroff(win, A_BOLD);
     wrefresh(win);
 }
@@ -75,8 +87,9 @@ void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsign
     }
 }
 
-void drawPomodoroStatusWindow(ColorID backgroundColorID) {
+void drawPomodoroStatusWindow(bool warning) {
     struct WindowSize size;
+    ColorID color;
     struct PomodoroState state = getPomodoroState();
     char *message = state.turn == POMODORO ? "+-=-=-=-=-=-=-=-=-=- POMODORO TIME -=-=-=-=-=-=-=-=-=-+" : "+-=-=-=-=-=-=-=-=-=-=- REST TIME -=-=-=-=-=-=-=-=-=-=-+";
     char *hiddenSecondsMessage = state.turn == POMODORO ? "+-=-=-=-=- POMODORO TIME =-=-=-=-+" : "+-=-=-=-=-=-=-=-= REST TIME =-=-=-=-=-=-=-=-+";
@@ -86,9 +99,17 @@ void drawPomodoroStatusWindow(ColorID backgroundColorID) {
 
     wclear(win);
 
-    wbkgd(win, COLOR_PAIR(backgroundColorID));
+    if (warning) {
+        wbkgd(win, COLOR_PAIR(BACKGROUND_RED_ID));
+        color = getPomodoroLabelColorPair().pomodoroLabelWarningID;
+    } else {
+        wbkgd(win, COLOR_PAIR(BACKGROUND_TRANSPARENT_ID));
+        color = getPomodoroLabelColorPair().pomodoroLabelNormalID;
+    }
+    
 
     wattron(win, A_BOLD);
+    wattron(win, COLOR_PAIR(color));
 
     if (checkIfTheSecondsIsVisible()) {
         mvwprintw(win, 2, size.width / 2 - strlen(message) / 2, message);
@@ -96,14 +117,17 @@ void drawPomodoroStatusWindow(ColorID backgroundColorID) {
         mvwprintw(win, 2, size.width / 2 - strlen(hiddenSecondsMessage) / 2, hiddenSecondsMessage);
     }
 
+    wattroff(win, COLOR_PAIR(color));
     wattroff(win, A_BOLD);
     
 
     wrefresh(win);
 }
 
-void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModulesArguments userArguments, ColorID digitBackgroundColor){
+void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModulesArguments userArguments, bool warning){
     WINDOW *segmentToFill[2];
+
+    ColorID digitBackgroundColor = warning ? BACKGROUND_RED_ID : BACKGROUND_TRANSPARENT_ID;
 
     fillClockSegment(getClockSegment(HOURS_SEGMENT, segmentToFill), timeStruct->tm_hour, HOURS_INDEX, digitBackgroundColor);
     fillClockSegment(getClockSegment(MINUTES_SEGMENT, segmentToFill), timeStruct->tm_min, MINUTES_INDEX, digitBackgroundColor);

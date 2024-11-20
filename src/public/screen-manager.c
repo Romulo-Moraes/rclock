@@ -8,6 +8,7 @@
 
 #include <public/screen-manager.h>
 #include <private/screen-manager.h>
+#include <public/colors.h>
 
 static struct Windows programWindows;
 static struct WindowSize winSize;
@@ -346,6 +347,7 @@ void updateErrorMessageFrames(struct ErrorWindows windows, float errorWindowWidt
                 if(enableExitMessage)
                     delwin(windows.exitMessageWindow);
 
+                bkgd(COLOR_PAIR(BACKGROUND_TRANSPARENT_ID));
                 break;
             }
 

@@ -4,6 +4,7 @@
 #include <helpers/terminal-size.h>
 #include <public/colors.h>
 #include <public/design.h>
+#include <public/signal-handler.h>
 
 
 // Create and call update routines to show an error screen 
@@ -13,7 +14,10 @@ void createTerminalSizeError(struct TerminalSizeError sizeError){
     struct ErrorWindows errorWindows;
     struct ErrorUpdateCallbacksArguments callbackArguments;
 
-    errorWindows =  generateErrorWindows(0.75, false);
+    errorWindows = generateErrorWindows(0.75, false);
+
+    bkgd(COLOR_PAIR(BACKGROUND_TRANSPARENT_ID));
+    refresh();
 
     generateErrorMessage(sizeError.errorID, USELESS_ERROR_MESSAGE_ARGUMENTS, errorBuffer);
 
@@ -24,12 +28,23 @@ void createTerminalSizeError(struct TerminalSizeError sizeError){
 
 // Calls a couple of functions that will load
 // default values and populate control variables
-void configureRclock(ProgramArguments arguments, char *errorBuffer, void (*signalHandler)(int signal)){
+void configureRclock(ProgramArguments arguments){
+    char errorBuffer[1024] = {0};
+
     loadBuiltinColors();
     setComponentsColors(arguments.colors, errorBuffer);
+
+    if (strlen(errorBuffer) != 0) {
+        endwin();
+        
+        printf("[ERROR] %s\n", errorBuffer);
+
+        exit(EXIT_FAILURE);
+    }
+
     loadInitialTerminalSize();
     setValuesForClockStates(arguments);
-    signal(SIGALRM, signalHandler);
+    signal(SIGALRM, arguments.mode == POMODORO_MODE ?  pomodoroSignalHandler : clockSignalHandler);
 }
 
 void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
@@ -61,8 +76,8 @@ void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
     if (arguments.mode == POMODORO_MODE) {
         moveOptionsWindowToPlaceholder();
         movePomodoroStatusWindowToPlaceholder();
-        drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
-        drawPomodoroStatusWindow(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+        drawOptions(false);
+        drawPomodoroStatusWindow(false);
     }
     
     refresh();
@@ -73,9 +88,9 @@ void initializeTheClock(ProgramArguments arguments, struct tm *timeStruct){
             .tm_min = timeStruct->tm_sec
         };
 
-        drawAllClockWindows(&tmp, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
+        drawAllClockWindows(&tmp, arguments.DatetimeScreenManagerDesigner, false);
     } else {
-        drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
+        drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, false);
     }
     
 }

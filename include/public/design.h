@@ -18,12 +18,12 @@
 
 typedef unsigned char Digit;
 
-void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModulesArguments userArguments, ColorID digitBackgroundColor);
+void drawAllClockWindows(struct tm *timeStruct, struct DatetimeScreenManagerDesignerModulesArguments userArguments, bool warning);
 void fillClockSegment(WINDOW *clockWindows[], unsigned char numberToDraw, unsigned char windowIndex, ColorID digitBackgroundColor);
 void drawDate(struct tm *theTime, struct DatetimeModuleArguments datetimeArguments, struct ColorsModuleArguments colorArguments);
-void changeMainWindowBackgroundColor(int colorID);
+void changeMainWindowBackgroundColor(bool warning);
 void drawProgramErrorCallback(void *arguments);
-void drawOptions(ColorID backgroundColor);
-void drawPomodoroStatusWindow(ColorID backgroundColorID);
+void drawOptions(bool warning);
+void drawPomodoroStatusWindow(bool warning);
 
 #endif

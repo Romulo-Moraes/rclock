@@ -1,6 +1,7 @@
 #include <helpers/design.h>
 #include <public/design.h>
 #include <ncurses.h>
+#include <public/signal-handler.h>
 
 int lastSecondsIsVisibleStateValue = -1;
 
@@ -8,6 +9,7 @@ int lastSecondsIsVisibleStateValue = -1;
 // if necessary, it will destroy the clock windows and recreate again, else it will 
 // just update the windows to display the time again
 void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows, struct tm *timeStruct){
+    bool pomodoroIsInWarningState = checkIfClockIsInPomodoroWarningState();
 
     wclear(stdscr);
     refresh();
@@ -21,7 +23,7 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows, st
 
     refreshWindows();
 
-    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, BACKGROUND_TRANSPARENT_ID);
+    drawAllClockWindows(timeStruct, arguments.DatetimeScreenManagerDesigner, pomodoroIsInWarningState);
 
     if(checkIfTheDateIsVisible() == true){
         drawDate(timeStruct, arguments.datetime, arguments.colors);
@@ -30,8 +32,8 @@ void redrawTheEntireClock(ProgramArguments arguments, bool destroyTheWindows, st
     if (arguments.mode == POMODORO_MODE) {
         moveOptionsWindowToPlaceholder();
         movePomodoroStatusWindowToPlaceholder();
-        drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
-        drawPomodoroStatusWindow(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+        drawOptions(pomodoroIsInWarningState);
+        drawPomodoroStatusWindow(pomodoroIsInWarningState);
     }
 
     refreshWindows();

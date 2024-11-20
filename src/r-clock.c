@@ -24,9 +24,6 @@
 struct tm timeStruct;
 struct tm timeStructOldValue;
 
-void clockSignalHandler(int signal);
-void pomodoroSignalHandler(int signal);
-void pomodoroTimeoutHandler(int signal);
 bool showTerminalSizeErrorIfNecessary(ProgramArguments arguments);
 
 int main(int argc, char *argv[]){
@@ -45,7 +42,7 @@ int main(int argc, char *argv[]){
     configureSignalHandlerModule(&timeStruct);
     setModeData(&arguments, &timeStruct);
     configureNcurses();
-    configureRclock(arguments, errorBuffer, arguments.mode == POMODORO_MODE ? pomodoroSignalHandler : clockSignalHandler);
+    configureRclock(arguments);
 
     initializeTheClock(arguments, &timeStruct);
 
@@ -55,7 +52,7 @@ int main(int argc, char *argv[]){
     while(keepRunningProgram){
         input = getch();
 
-        handleUserInput(input, arguments, &timeStruct, &timeStructOldValue, pomodoroSignalHandler, &keepRunningProgram);
+        handleUserInput(input, arguments, &timeStruct, &timeStructOldValue, &keepRunningProgram);
 
         // For each terminal resize, the clock is redrawn
         if(detectTerminalResizes()){

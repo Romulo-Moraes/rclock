@@ -129,6 +129,10 @@ void _fetchColorsArguments(anemone_struct *anemone, ProgramArguments *arguments)
     if((argument = get_optional_argument(*anemone, "--digits-color")).set == ANEMONE_TRUE){
         arguments->colors.globalDigitsColor = argument.value;
     }
+
+    if ((argument = get_optional_argument(*anemone, "--labels-color")).set == ANEMONE_TRUE) {
+        arguments->colors.pomodoroLabelColor = argument.value;
+    }
 }
 
 ErrorID _fetchDatetimeArguments(anemone_struct *anemone, char *errorOutput, ProgramArguments *arguments){

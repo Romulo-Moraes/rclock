@@ -11,6 +11,7 @@
 
 #include "./../public/colors.h"
 
+void _setPomodoroLabelColorPair(struct ColorsModuleArguments userArguments, PomodoroLabelColorPair *pair, char *errorOutput, struct RclockColor availableColors[], size_t sizeOfAvailableColors);
 void _setColorToTheDigits(ColorID newColor, ColorID *digitColors);
 void _setColorToTheClock(ColorID newColor, ColorID *colonsColor, ColorID digitColors[]);
 struct RclockColor* _searchForColor(char *colorName, struct RclockColor *availableColors, size_t sizeOfAvailableColors);

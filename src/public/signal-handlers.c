@@ -3,15 +3,29 @@
 #include <public/pomodoro.h>
 #include <public/design.h>
 #include <public/user-input.h>
+#include <public/notification.h>
 
-static bool backgroundIsRed = false;
+static bool backgroundIsRed = true;
 static struct tm *timeStruct;
+static uint8_t secondsElapsedSinceTimeout = 0;
 
-static void blinkPomodoroClock(ColorID backgroundID) {
-    changeMainWindowBackgroundColor(backgroundID);
-    drawAllClockWindows(timeStruct, (struct DatetimeScreenManagerDesignerModulesArguments) {.hideTheSeconds = false}, backgroundID);
-    drawOptions(backgroundID == BACKGROUND_TRANSPARENT_ID ? OPTIONS_BACKGROUND_TRANSPARENT_ID : OPTIONS_BACKGROUND_RED_ID);
-    drawPomodoroStatusWindow(backgroundID == BACKGROUND_TRANSPARENT_ID ? OPTIONS_BACKGROUND_TRANSPARENT_ID : OPTIONS_BACKGROUND_RED_ID);
+void resetPomodoroWarningState() {
+    backgroundIsRed = true;
+}
+
+bool checkIfClockIsInPomodoroWarningState() {
+    return !backgroundIsRed;
+}
+
+void resetTimeElapsedSinceTimeout() {
+    secondsElapsedSinceTimeout = 0;
+}
+
+static void blinkPomodoroClock(bool warning) {
+    changeMainWindowBackgroundColor(warning);
+    drawAllClockWindows(timeStruct, (struct DatetimeScreenManagerDesignerModulesArguments) {.hideTheSeconds = false}, warning);
+    drawOptions(warning);
+    drawPomodoroStatusWindow(warning);
 }
 
 void configureSignalHandlerModule(struct tm *time) {
@@ -20,17 +34,23 @@ void configureSignalHandlerModule(struct tm *time) {
 
 void pomodoroTimeoutHandler(int signal) {
     if (signal == SIGALRM) {
-        tryToResetTheClicks();
         
-        switch(backgroundIsRed) {
-            case true:
-                blinkPomodoroClock(BACKGROUND_TRANSPARENT_ID);
-                break;
-            case false:
-                blinkPomodoroClock(BACKGROUND_RED_ID);
-                break;
+        if (secondsElapsedSinceTimeout == 0) {
+            if (getPomodoroState().turn == POMODORO) {
+                sendNotification("Rclock - Pomodoro", "The pomodoro is over, time to rest!");    
+            } else {
+                sendNotification("Rclock - Pomodoro", "The rest time is over, time to focus!");
+            }
         }
 
+        secondsElapsedSinceTimeout = (secondsElapsedSinceTimeout + 1) % 20;
+
+        tryToResetTheClicks();
+        
+        if (checkIfTerminalHeightIsCritical(POMODORO_MODE) == false && checkIfTerminalWidthIsCritical(POMODORO_MODE) == false){
+            blinkPomodoroClock(backgroundIsRed);
+        }
+        
         backgroundIsRed = !backgroundIsRed;
         alarm(1);
     }

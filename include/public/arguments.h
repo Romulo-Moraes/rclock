@@ -38,6 +38,7 @@ struct ColorsModuleArguments{
     char *dateColor;
     char *clockColor;
     char *colonColor;
+    char *pomodoroLabelColor;
 };
 
 struct DatetimeScreenManagerDesignerModulesArguments{

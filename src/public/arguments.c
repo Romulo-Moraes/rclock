@@ -10,14 +10,31 @@
 #include <private/arguments.h>
 
 ProgramArguments defaultProgramArguments = {
-     .colors = {.clockColor = DEFAULT_CLOCK_COLOR, .colonColor = NULL, .dateColor = DEFAULT_CLOCK_COLOR , .digitColor = {NULL},
-                .globalDigitsColor = NULL},
+    .colors = {
+        .clockColor = DEFAULT_CLOCK_COLOR,
+        .colonColor = NULL,
+        .dateColor = DEFAULT_CLOCK_COLOR,
+        .digitColor = {NULL},
+        .globalDigitsColor = NULL,
+        .pomodoroLabelColor = NULL
+    },
 
-     .datetime = {.customDate = NULL, .customDay = UNDEFINED, .customHour = UNDEFINED,
-                  .customMinute = UNDEFINED, .customMonth = UNDEFINED, .customSecond = UNDEFINED,
-                  .customTime = NULL, .customYear = UNDEFINED, .dateFormat = NULL},
+    .datetime = {
+        .customDate = NULL,
+        .customDay = UNDEFINED,
+        .customHour = UNDEFINED,
+        .customMinute = UNDEFINED,
+        .customMonth = UNDEFINED,
+        .customSecond = UNDEFINED,
+        .customTime = NULL,
+        .customYear = UNDEFINED,
+        .dateFormat = NULL
+    },
 
-     .DatetimeScreenManagerDesigner = {.hideTheDate = DEFAULT_HIDE_THE_DATE_STATE, .hideTheSeconds = DEFAULT_HIDE_THE_SECONDS_STATE}
+    .DatetimeScreenManagerDesigner = {
+        .hideTheDate = DEFAULT_HIDE_THE_DATE_STATE,
+        .hideTheSeconds = DEFAULT_HIDE_THE_SECONDS_STATE
+    }
 };
 
 // This procedure uses the Anemone third-party library to define all
@@ -49,8 +66,8 @@ anemone_struct createProgramArguments(int argc, char *argv[]){
     create_optional_argument(&anemone, "--custom-date", "-D", ANEMONE_TRUE, ANEMONE_FALSE);
     create_optional_argument(&anemone, "--hide-seconds", "-i", ANEMONE_FALSE, ANEMONE_FALSE);
     create_optional_argument(&anemone, "--pomodoro", "-t", ANEMONE_FALSE, ANEMONE_FALSE);
+    create_optional_argument(&anemone, "--labels-color", "-L", ANEMONE_TRUE, ANEMONE_FALSE);
 
-    
     compile(&anemone, argc, argv);
 
     return anemone;

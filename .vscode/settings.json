@@ -10,6 +10,8 @@
         "design.h": "c",
         "modes.h": "c",
         "pomodoro.h": "c",
-        "format": "c"
+        "format": "c",
+        "signal-handler.h": "c",
+        "colors.h": "c"
     }
 }

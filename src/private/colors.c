@@ -17,7 +17,7 @@ void _setColorToTheDigits(ColorID newColor, ColorID digitColors[]){
     }
 }
 
-void _setColorToTheClock(ColorID newColor, ColorID *colonsColor, ColorID digitColors[]){\
+void _setColorToTheClock(ColorID newColor, ColorID *colonsColor, ColorID digitColors[]){
     _setColorToTheDigits(newColor, digitColors);
 
     *colonsColor = newColor;
@@ -44,6 +44,24 @@ void _setGlobalDigitsColor(struct ColorsModuleArguments userArguments, char *err
             _setColorToTheDigits(colorSearchResult->clockID, digitColors);
         }else{
             generateErrorMessage(UNKNOWN_DIGITS_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
+        }
+    }
+}
+
+
+void _setPomodoroLabelColorPair(struct ColorsModuleArguments userArguments, PomodoroLabelColorPair *pair, char *errorOutput, struct RclockColor availableColors[], size_t sizeOfAvailableColors) {
+    struct RclockColor *colorSearchResult;
+
+    if (userArguments.pomodoroLabelColor != NULL) {
+        colorSearchResult = _searchForColor(userArguments.pomodoroLabelColor, availableColors, sizeOfAvailableColors);
+
+        if (colorSearchResult != NULL) {
+            *pair = (PomodoroLabelColorPair) {
+                .pomodoroLabelWarningID = colorSearchResult->pomodoroLabelIDs.pomodoroLabelWarningID,
+                .pomodoroLabelNormalID = colorSearchResult->pomodoroLabelIDs.pomodoroLabelNormalID
+            };
+        } else {
+            generateErrorMessage(UNKNOWN_POMODORO_LABELS_COLOR, USELESS_ERROR_MESSAGE_ARGUMENTS, errorOutput);
         }
     }
 }

@@ -27,7 +27,7 @@ void pomodoroMode(struct tm *timeStruct, struct tm *timeStructOldValue, void (*t
         if (timeStruct->tm_min == 0 && timeStruct->tm_sec == 0) {
             signal(SIGALRM, timeoutHandler);
             setTimeout(POMODORO_TIMEOUT);
-            drawOptions(OPTIONS_BACKGROUND_TRANSPARENT_ID);
+            drawOptions(false);
             return;
         }
     }
