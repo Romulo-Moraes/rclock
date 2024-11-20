@@ -52,9 +52,11 @@ void drawOptions(ColorID backgroundColor) {
         wbkgd(win, COLOR_PAIR(BACKGROUND_TRANSPARENT_ID));
     }
 
+    wattron(win, A_BOLD);
     wattron(win, COLOR_PAIR(backgroundColor));
     mvwprintw(win, 2, size.width / 2 - strlen(optionsText) / 2, optionsText);
     wattroff(win, COLOR_PAIR(backgroundColor));
+    wattroff(win, A_BOLD);
     wrefresh(win);
 }
 
@@ -86,11 +88,15 @@ void drawPomodoroStatusWindow(ColorID backgroundColorID) {
 
     wbkgd(win, COLOR_PAIR(backgroundColorID));
 
+    wattron(win, A_BOLD);
+
     if (checkIfTheSecondsIsVisible()) {
         mvwprintw(win, 2, size.width / 2 - strlen(message) / 2, message);
     } else {
         mvwprintw(win, 2, size.width / 2 - strlen(hiddenSecondsMessage) / 2, hiddenSecondsMessage);
     }
+
+    wattroff(win, A_BOLD);
     
 
     wrefresh(win);

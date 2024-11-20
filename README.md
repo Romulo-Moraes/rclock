@@ -5,9 +5,9 @@
 </div>
 
 <img src="./assets/Rclock example.png">
-Rclock is a highly customizable digital clock for terminal interfaces written in C that runs on POSIX platforms, the included features of the clock are change the color of the components, optionally hide the date and the seconds, set a custom date and so on...
+Rclock is a highly customizable digital clock for terminal interfaces written in C that runs on POSIX platforms, the included features of the Rclock are the possibility of change the color of the components, optionally hide the date and the seconds, set a custom date and so on...
 
-## Features
+## Features list
 <ul>
     <li>Set a color to the clock</li>
     <li>Set a color to the date</li>
@@ -25,6 +25,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
     <li>Set a custom date using the format DD/MM/YYYY</li>
     <li>Hide the seconds</li>
     <li>Hide the date</li>
+    <li>Pomodoro mode</li>
 </ul>
 
 # Table of contents
@@ -58,7 +59,7 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Making the clock smaller](#making-the-clock-smaller)
 
-[Development documentation](#development-documentation)
+[Pomodoro mode](#pomodoro-mode)
 
 [Gallery](#gallery)
 
@@ -77,22 +78,22 @@ Tests performed on this software:
     <li>Integration testing</li>
 </ul>
 
-The software has a documentation, the description of the documentation is a [separate topic](#development-documentation).
+<br>
 
 # Installing the Rclock
-Here is all you need to know for installing the Rclock.
+Here is all you need to know to install and run the Rclock.
 
 ## Dependencies
-This software requires the following technologies to be installed in your machine:
+
 
 ### A compiler for the C language
-The compiler used for developing the project was the GCC 13.2.1. Using the same compiler and the same version or newer is advisable.
+The compiler used for developing the Rclock was the GCC 13.2.1. Using the same compiler and the same/newer versions is advisable.
 
 ### The Meson build system
 The Meson build system documentation can be found on this link: https://mesonbuild.com/Getting-meson.html
 
 ### Ncurses library
-The Ncurses library is also necessary to run the Rclock. This library is part of POSIX, so a Linux system typically has this library by default.
+The Rclock uses the Ncurses library to create and manipulate components on screen. This library is part of POSIX, a Linux system typically has this library by default.
 
 ### Anemone library
 The Anemone is a library used for command-line argument parsing. This library is defined as a submodule of this repository, so you don't need to worry about downloading it manually, however, a couple of commands will be necessary to pull and compile the source code.
@@ -104,7 +105,7 @@ The source code of this repository can be downloaded with the following git comm
 git clone --recursive https://github.com/Romulo-Moraes/Rclock.git
 ```
 
-The *--recursive* flag is used for downloading the submodules beyond the repository source code.
+The *--recursive* flag is used for downloading the submodules beyond the repository source code itself.
 
 ## Building the Anemone library
 The Anemone repository provides its own script for building the library, it's located on the root of the project. So to build the Anemone we need to run the following commands with the premise that you are currently at the root of the Rclock repository:
@@ -115,14 +116,14 @@ sh ./make_lib.sh
 cd ../../
 ```
 ## Setting up the Meson
-Once back to the Rclock root, we need to setup the Meson build system for compiling the repository. Use these commands to accomplish this task:
+Once back to the Rclock root, we need to setup the Meson build system for compiling the repository. Running these commands should accomplish this task:
 
 ```sh
 meson setup build
 cd build
 ```
 ## Compiling the source code
-After setting up the Meson, there are two options for compilation.
+After setting up the Meson, there are two possible ways to build the application.
 
 ### Compiling
 This option just compiles the project and creates the executable in the current directory.
@@ -139,16 +140,16 @@ sudo meson install
 ```
 
 # Running the program for the first time
-Once succesfully installed, the Rclock executable is visible globally and can now be run. To call the executable, simply type the following command in the terminal:
+Once succesfully installed, the Rclock executable is visible globally on your system and can now be ran. To launch the application, simply type the following command on the terminal:
 
 ```sh
 rclock
 ```
 
-Running this command, the digital clock should be visible on screen with the default configurations.
+After running this command, the digital clock should be visible on screen with the default configurations.
 
 # Configuring a new color to the clock
-One of the most attractive features of the Rclock is the ability of set new colors for each component, there's a variety of command-line flags that can define new colors for each piece of the clock.
+One of the most attractive features of the Rclock is the ability of set new colors for each component, there is a variety of command-line flags that can define new colors for each piece of the clock.
 
 ## Available colors
 The Rclock has a set of built-in colors that are available to be used in any Rclock component.
@@ -181,13 +182,12 @@ This flag changes the color of all digits and all colons of the clock.
 ```
 
 ### Date color
-This flag changes the color of the date.
 ```txt
 --date-color or -d <color>
 ```
 
 ### Changing the color of the digits individually
-The Rclock has the feature of change the color of each digit individually, this is compound by 6 flags. The digits are identified by a Roman number between 1 (I) and 6 (VI).
+You can change the color of the digits individually by passing the flag `--color` with a roman number between 1 (I) and 6 (VI), or its corresponding short version.
 ```txt
 --color-I or -q <color>
 --color-II or -Q <color>
@@ -197,36 +197,31 @@ The Rclock has the feature of change the color of each digit individually, this 
 --color-VI or -k <color>
 ```
 
-### Colon color
-This flag changes the color of both clock colons.
+### Colons color
 ```txt
 --colon-color or -o <color>
 ```
 
 ### Digits color
-This flag changes the color of all clock digits.
+
 ```txt
 --digits-color or -l <color>
 ```
 
 # Displaying a custom date
-It is possible to set a custom date to the Rclock, either individually or even using a date format.
+It is possible to set a custom date to the Rclock, either individually or using a date format.
 
 ### Custom day
-The following flag sets a new day to the clock.
 ```txt
 --custom-day or -D <month-day>
 ```
 
 ### Custom month
-The following flag sets a new month to the clock.
-
 ```txt
 --custom-month or -O <1-12>
 ```
 
 ### Custom year
-The following flag sets a new year to the clock.
 ```txt
 --custom-year or -Y <positive value>
 ```
@@ -238,12 +233,12 @@ The following flag sets a new day, month and year using a date format.
 ```
 
 ### Custom date format
-By default, the date is shown using a built-in format, however you can declare a new date format and the Rclock will use this instead of the default format.
+By default, the date is shown using a built-in format, however, you can declare a new date format and the Rclock will use it instead of the default format.
 ```txt
 --date-format or -f <strftime format>
 ```
 
-This feature uses the format of the strftime C function. Here is the cheatsheet to help you design your own format:
+This feature uses the replacement strategy of the strftime C function, so here is the cheatsheet to help you design your own format:
 
 | **Specifier** | **Replaced By**                                                        | **Example**              |
 |:-------------:|:----------------------------------------------------------------------:|:------------------------:|
@@ -270,7 +265,7 @@ This feature uses the format of the strftime C function. Here is the cheatsheet 
 | %Z            | Timezone name or abbreviation                                          | CDT                      |
 | %%            | A % sign                                                               | %                        |
 
-The default format used by the project is the following:
+This is the default format used by the project:
 ```txt
 "%A, %b %d %Y"
 ```
@@ -279,19 +274,16 @@ The default format used by the project is the following:
 It is also possible to set a custom time to the Rclock, either individually or using a time format.
 
 ### Custom hour
-This flag sets a new hour to the clock.
 ```txt
---custom-hour or H <0-23>
+--custom-hour or -H <0-23>
 ```
 
 ### Custom minute
-This flag sets a new minute to the clock.
 ```txt
---custom-minute or-M <0-59>
+--custom-minute or -M <0-59>
 ```
 
 ### Custom second
-This flag sets a new second to the clock.
 ```txt
 --custom-second or -S <0-59>
 ```
@@ -303,33 +295,42 @@ This flag sets a new hour, minute and second using a time format.
 ```
 
 # Making the clock smaller
-The Rclock can hide parts of itself to appear smaller than the normal.
+The Rclock can hide a group of components to make itself smaller, useful for limited space or personal taste.
 
 ### Hiding the date
-This flag instructs the Rclock to hide the date until the end of its execution. This flag does not require a value.
 ```txt
 --hide-date or -h
 ```
 
 ### Hiding the seconds
-This flag instructs the Rclock to hide the seconds until the end of its execution. This flag does not require a value.
 ```txt
 --hide-seconds or -i
 ```
 
 ### The passive ability
-This project was designed to hide the date and the seconds automatically, so whenever the terminal be small enough to can't display the entire clock, the seconds will be hidden if the width is not large enough and the date will be hidden if the height not be big enough.
+This Rclock was designed to hide the date and seconds automatically, so whenever the terminal be small enough  at the point of not being possible to render the clock correctly, the seconds will be hidden to free horizontal space, and the date will be hidden to free vertical space.
 
-# Development documentation
-This repository constains the whole software documentation inside the docs/ directory. The documentation is divided into three kinds of files:
+# Pomodoro mode
+In the newer versions of the Rclock, the Pomodoro mode was implemented and can now be easily accessed through a new optional flag
 
-<ul>
-    <li>Requirements document</li>
-    <li>The general Rclock documentation</li>
-    <li>The documentation of each Rclock module</li>
-</ul>
+## How does it work ?
+The Pomodoro mode is a implementation of the Pomodoro Technique, that is a time management method that breaks work into intervals of 25 minutes, separated by short breaks. Each interval is known as a <i>Pomodoro</i>, and each short break is known as a Rest time on Rclock.
 
-The documentation files are designed to help developers understand the project when creating new functionalities or for maintenance purposes.
+By default, the rest time is 5 minutes length, but after completing 3 pomodoro sessions, you will be given a rest time of 15 minutes, restarting the process after that.
+
+## Using the Pomodoro mode
+To launch the Rclock on Pomodoro mode, you must pass the flag `--pomodoro` to the program. This command shall make the clock show up, ready to start a new pomodoro.
+
+<img src="./assets/Pomodoro.png"/>
+
+The Rclock itself lists the possible commands below the clock, so you can perform operations based on the current progress of your pomodoro, like start, pause, unpause and stop the alarm once the clock has reached `00:00`.
+
+## Leaving the pomodoro mode
+Differently from the normal clock, you can't leave the pomodoro by just hitting enter on your keyboard.
+
+With the goal of avoid leaving the pomodoro session by accident and yet, keeping the practicality of a menuless approach, you must hit enter 3 times in a interval of `350` milliseconds. This should close the application and return the terminal to its default configuration.
+
+<br/>
 
 # Gallery
 
