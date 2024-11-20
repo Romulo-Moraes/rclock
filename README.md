@@ -125,7 +125,7 @@ meson setup build
 cd build
 ```
 ## Compiling the source code
-After setting up the Meson, there are two possible ways to build the application.
+After configuring Meson, you have two options for building the application.
 
 ### Compiling
 This option just compiles the project and creates the executable in the current directory.
@@ -142,7 +142,7 @@ sudo meson install
 ```
 
 # Running the program for the first time
-Once succesfully installed, the Rclock executable is visible globally on your system and can now be ran. To launch the application, simply type the following command on the terminal:
+Once successfully installed, the Rclock executable is globally accessible on your system and can be run. To launch the application, simply type the following command in the terminal:
 
 ```sh
 rclock
@@ -235,7 +235,7 @@ The following flag sets a new day, month and year using a date format.
 ```
 
 ### Custom date format
-By default, the date is shown using a built-in format, however, you can declare a new date format and the Rclock will use it instead of the default format.
+By default, the date is displayed using a built-in format. However, you can specify a custom date format, and Rclock will use it instead of the default format.
 ```txt
 --date-format or -f <strftime format>
 ```
@@ -310,15 +310,15 @@ The Rclock can hide a group of components to make itself smaller, useful for lim
 ```
 
 ### The passive ability
-This Rclock was designed to hide the date and seconds automatically, so whenever the terminal be small enough  at the point of not being possible to render the clock correctly, the seconds will be hidden to free horizontal space, and the date will be hidden to free vertical space.
+Rclock is designed to automatically hide the date and seconds when needed. If the terminal becomes too small to render the clock properly, the seconds will be hidden to save horizontal space, and the date will be hidden to save vertical space.
 
 # Pomodoro mode
-In the newer versions of the Rclock, the Pomodoro mode was implemented and can now be easily accessed through a new optional flag
+In the newer versions of the Rclock, the Pomodoro mode was implemented and can now be easily accessed through a new optional flag.
 
 ## How does it work ?
 The Pomodoro mode is a implementation of the Pomodoro Technique, that is a time management method that breaks work into intervals of 25 minutes, separated by short breaks. Each interval is known as a <i>Pomodoro</i>, and each short break is known as a Rest time on Rclock.
 
-By default, the rest time is 5 minutes length, but after completing 3 pomodoro sessions, you will be given a rest time of 15 minutes, restarting the process after that.
+By default, the rest time is 5 minutes. However, after completing three pomodoro sessions, you'll receive a 15-minute rest before the cycle restarts.
 
 ## Using the Pomodoro mode
 To launch the Rclock on Pomodoro mode, you must pass the flag `--pomodoro` to the program. This command will make the clock show up, ready to start a new pomodoro.
@@ -336,9 +336,9 @@ Pomodoro mode introduces new color customization options. Use the following flag
 ```
 
 ## Leaving the pomodoro mode
-Differently from the normal clock, you can't leave the pomodoro by just hitting enter on your keyboard.
+Unlike the normal clock mode, you can't exit the pomodoro session by simply pressing Enter once.
 
-With the goal of avoid leaving the pomodoro session by accident and yet, keeping the practicality of a menuless approach, you must hit enter 3 times in a interval of `350` milliseconds. This should close the application and return the terminal to its default configuration.
+To prevent accidentally leaving the session while maintaining the practicality of a menuless design, you need to press Enter three times within 350 milliseconds. This will close the application and restore the terminal to its default configuration.
 
 <br/>
 
