@@ -321,11 +321,19 @@ The Pomodoro mode is a implementation of the Pomodoro Technique, that is a time 
 By default, the rest time is 5 minutes length, but after completing 3 pomodoro sessions, you will be given a rest time of 15 minutes, restarting the process after that.
 
 ## Using the Pomodoro mode
-To launch the Rclock on Pomodoro mode, you must pass the flag `--pomodoro` to the program. This command shall make the clock show up, ready to start a new pomodoro.
+To launch the Rclock on Pomodoro mode, you must pass the flag `--pomodoro` to the program. This command will make the clock show up, ready to start a new pomodoro.
 
 <img src="./assets/Pomodoro.png"/>
+Rclock displays a list of possible commands below the clock, allowing you to manage your pomodoro session. You can start, pause, resume, or stop the alarm when the clock reaches 00:00.
 
-The Rclock itself lists the possible commands below the clock, so you can perform operations based on the current progress of your pomodoro, like start, pause, unpause and stop the alarm once the clock has reached `00:00`.
+## Timeout alarm
+When the clock hits 00:00 in either the pomodoro or rest time, the terminal screen will start flashing alternately in red and transparent. Additionally, a push notification will appear on your desktop every 20 seconds until you turn off the alarm.
+
+## Labels color customization
+Pomodoro mode introduces new color customization options. Use the following flag to change the text color displayed above and below the clock:
+```sh
+--labels-color or -L <color>
+```
 
 ## Leaving the pomodoro mode
 Differently from the normal clock, you can't leave the pomodoro by just hitting enter on your keyboard.
