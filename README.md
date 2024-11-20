@@ -5,7 +5,9 @@
 </div>
 
 <img src="./assets/Rclock example.png">
+<p align="center">
 Rclock is a highly customizable digital clock for terminal interfaces written in C that runs on POSIX platforms, the included features of the Rclock are the possibility of change the color of the components, optionally hide the date and the seconds, set a custom date and so on...
+</p>
 
 ## Features list
 <ul>
