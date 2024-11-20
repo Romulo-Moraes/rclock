@@ -3,7 +3,7 @@
 #include <public/colors.h>
 #include <public/pomodoro.h>
 #include <time.h>
-#include <stdio.h>
+#include <ctype.h>
 #include <public/datetime.h>
 #include <public/design.h>
 
@@ -35,6 +35,9 @@ void tryToResetTheClicks() {
 
 void handleUserInput(char input, ProgramArguments arguments, struct tm *timeStruct, struct tm *timeStructOldValue, void (*pomodoroSignalHandler)(int), bool *keepRunningProgram) {
     long long now;
+    
+    input = tolower(input);
+
     if (arguments.mode == POMODORO_MODE) {
         switch (input) {
             case 's':
