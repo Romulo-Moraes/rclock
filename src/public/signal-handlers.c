@@ -73,7 +73,7 @@ void clockSignalHandler(int signal){
     if (signal == SIGALRM) {
         tryToResetTheClicks();
         incrementClockSecond(timeStruct);
-            
+
         if(timeStruct->tm_sec % 5 == 0){
             tryToUpdateTheClock(timeStruct);
         }

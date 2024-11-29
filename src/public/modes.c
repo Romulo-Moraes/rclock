@@ -33,19 +33,18 @@ void pomodoroMode(struct tm *timeStruct, struct tm *timeStructOldValue, void (*t
     }
 }
 
-void clockMode(struct DatetimeModuleArguments datetime, struct ColorsModuleArguments colors, struct tm timeStruct, struct tm timeStructOldValue) {
+void clockMode(struct DatetimeModuleArguments datetime, struct ColorsModuleArguments colors, struct tm *timeStruct, struct tm *timeStructOldValue) {
 
-    if(timeStruct.tm_sec != timeStructOldValue.tm_sec){
+    if(timeStruct->tm_sec != timeStructOldValue->tm_sec){
+        updateClock(*timeStruct, *timeStructOldValue, CLOCK_MODE);
 
-        updateClock(timeStruct, timeStructOldValue, CLOCK_MODE);
-
-        if(timeStruct.tm_hour < timeStructOldValue.tm_hour){
-            mktime(&timeStruct);
-            drawDate(&timeStruct, datetime, colors);
+        if(timeStruct->tm_hour < timeStructOldValue->tm_hour){
+            mktime(timeStruct);
+            drawDate(timeStruct, datetime, colors);
         }
                 
         // Making both have the same value for the next alarm
-        timeStructOldValue = timeStruct;
+        *timeStructOldValue = *timeStruct;
     }
 
 }

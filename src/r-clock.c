@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
         }else{
             switch(arguments.mode) {
                 case CLOCK_MODE:
-                    clockMode(arguments.datetime, arguments.colors, timeStruct, timeStructOldValue);
+                    clockMode(arguments.datetime, arguments.colors, &timeStruct, &timeStructOldValue);
                     break;
                 case POMODORO_MODE:
                     pomodoroMode(&timeStruct, &timeStructOldValue, pomodoroTimeoutHandler);
