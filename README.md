@@ -63,6 +63,16 @@ Rclock is a highly customizable digital clock for terminal interfaces written in
 
 [Pomodoro mode](#pomodoro-mode)
 
+ - [How does it work?](#how-does-it-work-)
+
+ - [Using the pomodoro mode](#using-the-pomodoro-mode)
+
+ - [Timeout alarm](#timeout-alarm)
+
+ - [Labels color customization](#labels-color-customization)
+
+ - [Leaving the pomodoro mode](#leaving-the-pomodoro-mode)
+
 [Gallery](#gallery)
 
 # Technical informations
@@ -79,8 +89,6 @@ Tests performed on this software:
     <li>Unit testing</li>
     <li>Integration testing</li>
 </ul>
-
-<br>
 
 # Installing the Rclock
 Here is all you need to know to install and run the Rclock.
@@ -149,6 +157,8 @@ rclock
 ```
 
 After running this command, the digital clock should be visible on screen with the default configurations.
+
+<b>Press `Enter` if you want to close the application.</b>
 
 # Configuring a new color to the clock
 One of the most attractive features of the Rclock is the ability of set new colors for each component, there is a variety of command-line flags that can define new colors for each piece of the clock.
