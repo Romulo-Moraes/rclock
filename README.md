@@ -1,5 +1,5 @@
 <div align="center">
-    <img width=500" src="./assets/Project image.png">
+    <img width="100%" src="./assets/Project image.png">
     <h1></h1>
     <h3>A digital terminal clock written for POSIX systems, fully customizable with colors and datetime features</h3>
 </div>
